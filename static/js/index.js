@@ -37,6 +37,14 @@ $(document).ready(function () {
 // function for autocomplete from google autocomplete
 
 function getSuggestions(query, cb) {
+	// var defaultBounds = new google.maps.LatLngBounds(
+	// 	new google.mapsLatLng(37.420734, -122.628001)
+	// 	new google.mapsLatLng(38.169499, -121.889170));
+	
+	// var options = {
+	// 	bounds: defaultBounds
+	// };
+
 	var service = new google.maps.places.AutocompleteService();
 	service.getQueryPredictions({ input: query }, function(predictions, status) {
 		if (status != google.maps.places.PlacesServiceStatus.OK) {
@@ -44,12 +52,16 @@ function getSuggestions(query, cb) {
 			return;
 		}
 		console.log(predictions);
-		return cb(predictions);
+		return cb(predictions, options);
 
 	});
+
+	
 }
 
 // function to submit and store variables for locations
+
+
 
 // function searchForSpot(evt) {
 // 	evt.preventDefault();
