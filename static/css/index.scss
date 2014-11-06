@@ -1,5 +1,7 @@
 $primary-color: #333;
-$primary-font: Josephin Sans;
+$primary-font: 'Josephin Sans';
+$margin-radius: 5px;
+
 body {
 	font-family: $primary-font;
 }
@@ -8,6 +10,7 @@ h1 {
     font-family: Monoton;
     text-align: center;
     font-size: 45px;
+    border-radius: $margin-radius;
 }
 
 form {

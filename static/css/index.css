@@ -1,14 +1,15 @@
 body {
-  font-family: Josephin Sans; }
+  font-family: "Josephin Sans"; }
 
 h1 {
   color: #333;
   font-family: Monoton;
   text-align: center;
-  font-size: 45px; }
+  font-size: 45px;
+  border-radius: 5px; }
 
 form {
-  font: Josephin Sans;
+  font: "Josephin Sans";
   text-align: center;
   border-radius: 5px;
   line-height: 1.5;
