@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 import os
 # from instagram import client, subscriptions
-
+import requests
 # from GOOGGOOG import user_venue_search
-
+from foursquare_engine import foursquare_search_by_category
 
 app = Flask(__name__)
 app.secret_key= 'katekuchinproject'
@@ -20,7 +20,7 @@ GOOGLE_MAPS_EMBED_KEY = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
 
 # unauthenticated_api = client.InstagramAPI(**CONFIG)
 
-@app.route("/")
+@app.route("/", methods = ['POST', 'GET'])
 def half_full_home():   
     return render_template("index.html")
 
@@ -28,10 +28,23 @@ def half_full_home():
 # def user_location():
 #     return user_venue_search()
 
-@app.route("/getlatlong")
+@app.route("/location", methods = ['POST'])
 def user_lat_long():
-    request.args.get("#lat_long_from_js")
-    return "hello"
+    r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?sensor=false&key=AIzaSyDjesZT-7Vc5qErTJjS2tDIvxLQdYBxOEY&address=" +\
+    request.form['user_location'])
+    user_latitude = r.json()['results'][0]['geometry']['location']['lat']
+    user_longitude = r.json()['results'][0]['geometry']['location']['lng']
+    user_longitude = str(user_longitude)
+    user_latitude = str(user_latitude)
+    location = user_latitude + ',' + user_longitude
+
+    print foursquare_search_by_category(location)
+
+
+
+
+
+    return render_template ('results.html', user_longitude=user_longitude, user_latitude=user_latitude, results = foursquare_search_by_category(location))
 
 
 

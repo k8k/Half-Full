@@ -10,22 +10,35 @@ function initialize() {
         var autocomplete = new google.maps.places.Autocomplete(input);
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var place = autocomplete.getPlace();
-        	console.log(place);
-        	userLat = place.geometry.location.k;
-        	userLon = place.geometry.location.B;
-        	// userLon = userLon + ''
-        	// userLat = userLat + ''
+            console.log(place);
+            userLat = place.geometry.location.k;
+            userLon = place.geometry.location.B;
+// userLon = userLon + ''
+// userLat = userLat + ''
 
-        	console.log(userLat);
-        	console.log(userLon);
+            console.log(userLat);
+            console.log(userLon);
 
-        	var userLocation = userLat + "," + userLon;
-        	console.log(userLocation);
-        	userLocation = userLocation + ''
-        	$("#lat_long_from_js").load(userLocation);
-        	return userLocation;
-        	debugger;
-        	// console.log(userLocation)
+            var userLocation = userLat + "," + userLon;
+            console.log(userLocation);
+            userLocation = userLocation + '';
+            // $("#lat_long_from_js").load(userLocation);
+            $.ajax({
+                type: "GET",
+                url: location,
+                data: JSON.stringify(userLocation),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(msg) {
+                alert("Data Saved:" + msg);
+                console.log(msg);
+            });
+
+
+
+            return userLocation;
+            // debugger;
+            // console.log(userLocation)
             // document.getElementById('cityLat').value = place.geometry.location.lat();
             // document.getElementById('cityLng').value = place.geometry.location.lng();
             // alert("This function is working!");
@@ -34,7 +47,7 @@ function initialize() {
 
         });
     }
-    google.maps.event.addDomListener(window, 'load', initialize); 
+    google.maps.event.addDomListener(window, 'load', initialize);
 	// this allows google autocomplete to display
 
 	$(".typeahead").typeahead({
