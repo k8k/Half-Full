@@ -16,13 +16,15 @@ function initialize() {
         	// userLon = userLon + ''
         	// userLat = userLat + ''
 
-        	console.log(userLat)
-        	console.log(userLon)
+        	console.log(userLat);
+        	console.log(userLon);
 
-        	var userLocation = userLat + "," + userLon
-        	console.log(userLocation)
-        	return userLocation
-        	debugger
+        	var userLocation = userLat + "," + userLon;
+        	console.log(userLocation);
+        	userLocation = userLocation + ''
+        	$("#lat_long_from_js").load(userLocation);
+        	return userLocation;
+        	debugger;
         	// console.log(userLocation)
             // document.getElementById('cityLat').value = place.geometry.location.lat();
             // document.getElementById('cityLng').value = place.geometry.location.lng();

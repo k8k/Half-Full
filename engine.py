@@ -1,8 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import os
 # from instagram import client, subscriptions
 
-from googlemaps import user_venue_search
+# from GOOGGOOG import user_venue_search
 
 
 app = Flask(__name__)
@@ -24,10 +24,14 @@ GOOGLE_MAPS_EMBED_KEY = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
 def half_full_home():   
     return render_template("index.html")
 
-@app.route("/location", methods=['POST', 'GET'])
-def user_location():
-    return user_venue_search()
-    
+# @app.route("/location", methods=['POST', 'GET'])
+# def user_location():
+#     return user_venue_search()
+
+@app.route("/getlatlong")
+def user_lat_long():
+    request.args.get("#lat_long_from_js")
+    return "hello"
 
 
 
