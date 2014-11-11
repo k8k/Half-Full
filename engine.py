@@ -4,6 +4,7 @@ from instagram import client
 import requests
 # from GOOGGOOG import user_venue_search
 from foursquare_engine import foursquare_search_by_category
+import instagram_engine
 
 app = Flask(__name__)
 app.secret_key= 'katekuchinproject'
@@ -38,6 +39,7 @@ def user_lat_long():
     user_latitude = str(user_latitude)
     
     venue_type = False
+
     location = user_latitude + ',' + user_longitude
     if request.form['venue-type'] == 'restaurant':
         venue_type = '4d4b7105d754a06374d81259'
@@ -53,12 +55,20 @@ def user_lat_long():
 
     return render_template ('results.html', user_longitude=user_longitude, 
                             user_latitude=user_latitude, 
-                            results = foursquare_search_by_category(location, venue_type))
+                            results = foursquare_search_by_category(location, venue_type), 
+                            )
 
 
 @app.route('/venuepics')
 def picture_finder():
-    pass
+    # pass
+
+
+    return render_template ('results.html', instagram_pics = instagram_engine.location_search(foursquareid))
+
+
+
+
 
 
 @app.route("/instagram")
@@ -137,6 +147,7 @@ def media_finder():
 		photos.append('<img src="%s"/>' % media.get_standard_resolution_url())
 	content += ''.join(photos)
     
+
         return content
 
 
