@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import os
-# from instagram import client, subscriptions
+from instagram import client
 import requests
 # from GOOGGOOG import user_venue_search
 from foursquare_engine import foursquare_search_by_category
@@ -11,14 +11,14 @@ app.secret_key= 'katekuchinproject'
 
 GOOGLE_MAPS_EMBED_KEY = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
 
-# CONFIG = {
+CONFIG = {
 
-#     'client_id': 'b8fc6f7c1c4d4d438b797bca091f80a4',
-#     'client_secret': '8207a32e412b4cc2b25c96bdf79c7188',
-#     'redirect_uri': 'http://localhost:5000/oauth_callback'
-# }
+    'client_id': 'b8fc6f7c1c4d4d438b797bca091f80a4',
+    'client_secret': '8207a32e412b4cc2b25c96bdf79c7188',
+    'redirect_uri': 'http://localhost:5000/oauth_callback'
+}
 
-# unauthenticated_api = client.InstagramAPI(**CONFIG)
+unauthenticated_api = client.InstagramAPI(**CONFIG)
 
 @app.route("/", methods = ['POST', 'GET'])
 def half_full_home():   
@@ -36,46 +36,64 @@ def user_lat_long():
     user_longitude = r.json()['results'][0]['geometry']['location']['lng']
     user_longitude = str(user_longitude)
     user_latitude = str(user_latitude)
+    
+    venue_type = False
     location = user_latitude + ',' + user_longitude
-
-    print foursquare_search_by_category(location)
-
-
-
-
-
-    return render_template ('results.html', user_longitude=user_longitude, user_latitude=user_latitude, results = foursquare_search_by_category(location))
-
-
-
-    # return render_template("results.html", GOOGLE_MAPS_EMBED_KEY=GOOGLE_MAPS_EMBED_KEY,
-                            # user_location=user_location)
-
-
-
-# @app.route("/instagram")
-# def instagram_connect():
-#         	url = unauthenticated_api.get_authorize_url(scope=["likes","comments"])
-#         	return '<a href="%s">Connect with Instagram</a>' % url
+    if request.form['venue-type'] == 'restaurant':
+        venue_type = '4d4b7105d754a06374d81259'
+    elif request.form['venue-type'] == 'bar':
+        venue_type = '4d4b7105d754a06376d81259'
+    elif request.form['venue-type'] == 'cafe':
+        venue_type = '4bf58dd8d48988d1e0931735'
 
 
 
 
-# @app.route('/oauth_callback')
-# def on_callback(): 
-#     code = request.args.get("code")
-#     if not code:
-#         return 'Missing code'
-#     try:
-#         access_token, user_info = unauthenticated_api.exchange_code_for_access_token(code)
-#         if not access_token:
-#             return 'Could not get access token'
-#         api = client.InstagramAPI(access_token=access_token)
-#         request.session['access_token'] = access_token
-#         print ("access token="+access_token)
-#     except Exception as e:
-#         print(e)
-#     return render_template("results.html")
+
+
+    return render_template ('results.html', user_longitude=user_longitude, 
+                            user_latitude=user_latitude, 
+                            results = foursquare_search_by_category(location, venue_type))
+
+
+@app.route('/venuepics')
+def picture_finder():
+    pass
+
+
+@app.route("/instagram")
+def instagram_connect():
+        	url = unauthenticated_api.get_authorize_url(scope=["likes","comments"])
+        	return '<a href="%s">Connect with Instagram</a>' % url
+
+
+
+
+
+
+@app.route('/oauth_callback')
+def on_callback(): 
+    code = request.args.get("code")
+    if not code:
+        return 'Missing code'
+    try:
+        access_token, user_info = unauthenticated_api.exchange_code_for_access_token(code)
+        if not access_token:
+            return 'Could not get access token'
+        api = client.InstagramAPI(access_token=access_token)
+        print api
+        request.session['access_token'] = access_token
+        print ("access token="+access_token)
+    except Exception as e:
+        print(e)
+    return render_template("results.html")
+
+
+
+
+
+
+
 
 # @app.route('/location_search')
 # def location_search(): 
@@ -97,24 +115,38 @@ def user_lat_long():
 
 #     content += ''.join(locations)
 #     return content
-#     # except Exception as e:
-#     #     print(e)   
+    # except Exception as e:
+    #     print(e)   
 
-# @app.route('/media_search')
-# def media_finder():
-# 	access_token="34946503.b8fc6f7.27686630c22b44eaad7754776d061fb7"
-# 	content = "<h2>Location Search</h2>"
+@app.route('/media_search')
+def media_finder():
+	access_token="34946503.b8fc6f7.27686630c22b44eaad7754776d061fb7"
+	content = "<h2>Location Search</h2>"
 
-# 	api = client.InstagramAPI(access_token=access_token)
+	api = client.InstagramAPI(access_token=access_token)
         
-# 	media_search = api.media_search(lat="40.731032",lng="-73.985619",distance=1000)
+	media_search = api.media_search(lat="40.7050789",lng="-73.93364403",distance=100)
 
-# 	photos = []
-# 	for media in media_search:
-# 		photos.append('<img src="%s"/>' % media.get_standard_resolution_url())
-# 	content += ''.join(photos)
-#   	return content       
-#     # return "%s %s <br/>Remaining API Calls = %s/%s" % (get_nav(),content,api.x_ratelimit_remaining,api.x_ratelimit)
+        print type(media_search)
+        print media_search
+        print dir(media_search)
+
+
+	photos = []
+	for media in media_search:
+		photos.append('<img src="%s"/>' % media.get_standard_resolution_url())
+	content += ''.join(photos)
+    
+        return content
+
+
+
+
+    #'lat': 40.70507898542075, 'lng': -73.93364403923762
+
+    # location_search = api.location_search()
+  	       
+    # return "%s %s <br/>Remaining API Calls = %s/%s" % (get_nav(),content,api.x_ratelimit_remaining,api.x_ratelimit)
 
 
 

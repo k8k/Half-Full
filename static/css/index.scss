@@ -1,37 +1,31 @@
 $primary-color: #333;
-$primary-font: 'Josephin Sans';
-$margin-radius: 5px;
+$primary-font: 'Lato';
+$border-radius: 5px;
+
+$warm-cream:  #F3E7D1;
+$cool-cream:  #E4DACE;
+$true-beige:  #DFC8A9;
+$off-white:   #EFE7DA;
+$off-black:   #4E4945;
+$grey:        #6A6965;
 
 body {
 	font-family: $primary-font;
-  background-image: url("http://3.bp.blogspot.com/-ZPAG4LadOp8/Tr7QtSltB_I/AAAAAAAAAHM/kwKfDaFiHP8/s320/blog_pinkie_favicon.png");
+  background: $cool-cream;
+
 }
 h1 {
     color: $primary-color;
     font-family: Monoton;
     text-align: center;
     font-size: 45px;
-    border-radius: $margin-radius;
+    border-radius: $border-radius;
 }
 
 form {
 	font: $primary-font;
 	text-align: center;
-	border-radius: 5px;
-	line-height: 1.5;
-	    border: 5px solid white; 
-    -webkit-box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    -moz-box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    padding: 15px;
-    background: rgba(255,255,255,0.5);
-    margin: 0 0 10px 0;
+  color: $off-black;
 }
 
 #user-preferences-container {
@@ -45,17 +39,12 @@ form {
 }
 
 input {
-    border: 5px solid white; 
-    -webkit-box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    -moz-box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    box-shadow: 
-      inset 0 0 8px  rgba(0,0,0,0.1),
-            0 0 16px rgba(0,0,0,0.1); 
-    padding: 15px;
-    background: rgba(255,255,255,0.5);
-    margin: 0 0 10px 0;
+    border: 5px solid white;
+    border-radius: $border-radius;
+    height: 1.5em;
+
+}
+
+td {
+  margin-bottom: 10px;
 }

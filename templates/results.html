@@ -3,6 +3,12 @@
 	<head>
   		<meta charset="UTF-8">
   		<title>Half Full Results</title>
+
+          <link rel="shortcut icon" href="http://3.bp.blogspot.com/-ZPAG4LadOp8/Tr7QtSltB_I/AAAAAAAAAHM/kwKfDaFiHP8/s320/blog_pinkie_favicon.png" type="image/vnd.microsoft.icon">
+
+          <link href='http://fonts.googleapis.com/css?family=Lato:300,400|Monoton' rel='stylesheet' type='text/css'>
+
+          <link rel='stylesheet' href='../static/css/index.css'>
   	</head>
 
   	<body>
@@ -12,7 +18,42 @@
 
   	
   	<a href="/location_search">INSTAGRAM LOCATION LISTINGS</a><br>
-  	<a href="/media_search">INSTAGRAM NEARBY PHOTOS</a>
+  	<a href="/media_search">INSTAGRAM NEARBY PHOTOS</a><br>
+
+
+
+
+
+  <table>
+    <th>name</th>
+    <th>checkins</th>
+    <th>number of tips</th>
+    <th>total checkins evar</th>
+    <th>how many peeps have checked in here</th>
+    <th>id</th>
+
+    {% for i in results %}
+      
+    <tr>
+      <td><strong>{{  i['name']  }}</strong><br>
+          {{  i['location']['formattedAddress'][0] }}<br>
+          {{  i['location']['formattedAddress'][1] }}<br>
+       
+          <a href="{{  i['url']  }}">{{  i['url']  }}
+      </td>
+      <td>{{  i['hereNow']['count']  }}</td>
+      <td>{{  i['stats']['tipCount']  }}</td>
+      <td>{{  i['stats']['checkinsCount']  }}</td>
+      <td>{{  i['stats']['usersCount']  }}</td>
+      <td><strong>{{  i['id']  }}</strong></td>
+    </tr>
+
+
+    {% endfor %}
+
+
+  </table>
+  <br>
 
     {{ results }}
 
