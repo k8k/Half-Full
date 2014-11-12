@@ -23,13 +23,6 @@ class User(Base):
     occupation  = Column(String(40),    nullable=True)
     zipcode     = Column(String(15),    nullable=True)
 
-    # def __str__(self):
-    #     output = "ID: %r, EMAIL: %s, PASSWORD: %r,\n" % (self.id, self.email, 
-    #         self.password)
-    #     output += "AGE: %r, GENDER: %s, OCCUPATION: %s,\n" % (self.age, self.gender, 
-    #         self.occupation)
-    #     output += "ZIPCODE: %s" % self.zipcode
-    #     return output
 
 class Venue (Base):
     __tablename__ = "venues"
@@ -38,11 +31,6 @@ class Venue (Base):
     city        = Column(String(30),      nullable=True)
 
 
-    # def __str__(self):
-    #     new_date    = datetime.strftime(self.released_at, "%d-%b-%Y")
-    #     output      = "ID: %r, TITLE: %s,\n" %  (self.id, self.name)
-    #     output     += "RELEASED: %r, URL: %s" % (new_date, self.imdb_url)
-    #     return output
 
 class Status(Base):
     __tablename__ = "statuses"
@@ -57,24 +45,6 @@ class Status(Base):
 
     user        = relationship("User",
                     backref = backref("statuses",order_by = id))
-
-    # def __str__(self):
-    #     output  = "ID: %r, MOVIE ID: %r,\n" % (self.id, self.movie_id)
-    #     output += "USER ID: %r, RATING: %r" % (self.user_id, self.rating)
-    #     return output
-
-
-
-### End class declarations
-
-# def connect():
-#     global ENGINE
-#     global Session
-
-
-
-
-#     return Session()
 
 def main():
     """In case we need this for something"""

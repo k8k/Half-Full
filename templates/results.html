@@ -13,15 +13,6 @@
 
   	<body>
 
-  	{{user_latitude}}<br>
-    {{user_longitude}}<br>
-
-  	
-  	<a href="/location_search">INSTAGRAM LOCATION LISTINGS</a><br>
-  	<a href="/media_search">INSTAGRAM NEARBY PHOTOS</a><br>
-
-
-
 
 
   <table>
@@ -30,12 +21,12 @@
     <th>number of tips</th>
     <th>total checkins evar</th>
     <th>how many peeps have checked in here</th>
-    <th>id</th>
+    
 
     {% for i in results %}
       
     <tr>
-      <td><strong>{{  i['name']  }}</strong><br>
+      <td><strong><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></strong><br>
           {{  i['location']['formattedAddress'][0] }}<br>
           {{  i['location']['formattedAddress'][1] }}<br>
        
@@ -45,7 +36,7 @@
       <td>{{  i['stats']['tipCount']  }}</td>
       <td>{{  i['stats']['checkinsCount']  }}</td>
       <td>{{  i['stats']['usersCount']  }}</td>
-      <td><strong>{{  i['id']  }}</strong></td>
+      
     </tr>
 
 

@@ -27,7 +27,13 @@ input {
   border-radius: 5px;
   height: 1.5em; }
 
+.typeahead {
+  width: 200px; }
+
 td {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  padding: 20px;
+  text-align: center;
+  border: black  1px; }
 
 /*# sourceMappingURL=index.css.map */

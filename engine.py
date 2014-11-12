@@ -2,45 +2,59 @@ from flask import Flask, render_template, request
 import os
 from instagram import client
 import requests
-# from GOOGGOOG import user_venue_search
 from foursquare_engine import foursquare_search_by_category
 import instagram_engine
 
+
+
 app = Flask(__name__)
-app.secret_key= 'katekuchinproject'
+app.secret_key= os.environ.get("APP_SECRET_KEY")
 
-
+#Google Maps API Key for Typeahead & Lat Long
 GOOGLE_MAPS_EMBED_KEY = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
 
+# Instagram Configuration
 CONFIG = {
 
-    'client_id': 'b8fc6f7c1c4d4d438b797bca091f80a4',
-    'client_secret': '8207a32e412b4cc2b25c96bdf79c7188',
-    'redirect_uri': 'http://localhost:5000/oauth_callback'
+    'client_id': os.environ.get("INSTAGRAM_CLIENT_ID"),
+    'client_secret': os.environ.get("INSTAGRAM_CLIENT_SECRET"),
+    'redirect_uri': os.environ.get("INSTAGRAM_REDIRECT_URI")
 }
 
 unauthenticated_api = client.InstagramAPI(**CONFIG)
 
+
+
 @app.route("/", methods = ['POST', 'GET'])
-def half_full_home():   
+def half_full_home():
+    """Home page. Basic search box with venue category options"""
+    
     return render_template("index.html")
 
-# @app.route("/location", methods=['POST', 'GET'])
-# def user_location():
-#     return user_venue_search()
 
-@app.route("/location", methods = ['POST'])
+
+
+@app.route("/search", methods = ['POST'])
 def user_lat_long():
+    """Take user inputted address and convert to lat-long"""
+
+    # Getting Lat/Long coordinates from Address user is searching for
     r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?sensor=false&key=AIzaSyDjesZT-7Vc5qErTJjS2tDIvxLQdYBxOEY&address=" +\
     request.form['user_location'])
     user_latitude = r.json()['results'][0]['geometry']['location']['lat']
     user_longitude = r.json()['results'][0]['geometry']['location']['lng']
     user_longitude = str(user_longitude)
     user_latitude = str(user_latitude)
+
+    # Defining User Location as a string, to pass to foursquare engine
+    location = user_latitude + ',' + user_longitude
     
+
+    # Set venue_type as false, making it optional
     venue_type = False
 
-    location = user_latitude + ',' + user_longitude
+    # Checking venue-type. Translation Layer - will transfer to a DB
+    # to dynamically update after MVP is complete
     if request.form['venue-type'] == 'restaurant':
         venue_type = '4d4b7105d754a06374d81259'
     elif request.form['venue-type'] == 'bar':
@@ -50,53 +64,46 @@ def user_lat_long():
 
 
 
-
-
-
     return render_template ('results.html', user_longitude=user_longitude, 
                             user_latitude=user_latitude, 
                             results = foursquare_search_by_category(location, venue_type), 
                             )
 
 
-@app.route('/venuepics')
-def picture_finder():
-    # pass
+@app.route('/venuepics/<id>')
+def instagram_picture_finder(id):
+    """renders recent instagram photos from a specific venue"""
 
-
-    return render_template ('results.html', instagram_pics = instagram_engine.location_search(foursquareid))
-
-
-
-
-
-
-@app.route("/instagram")
-def instagram_connect():
-        	url = unauthenticated_api.get_authorize_url(scope=["likes","comments"])
-        	return '<a href="%s">Connect with Instagram</a>' % url
+    return render_template ('listing.html', 
+                            photos=instagram_engine.location_search(id))
 
 
 
 
 
 
-@app.route('/oauth_callback')
-def on_callback(): 
-    code = request.args.get("code")
-    if not code:
-        return 'Missing code'
-    try:
-        access_token, user_info = unauthenticated_api.exchange_code_for_access_token(code)
-        if not access_token:
-            return 'Could not get access token'
-        api = client.InstagramAPI(access_token=access_token)
-        print api
-        request.session['access_token'] = access_token
-        print ("access token="+access_token)
-    except Exception as e:
-        print(e)
-    return render_template("results.html")
+
+
+
+
+
+
+# @app.route('/oauth_callback')
+# def on_callback(): 
+#     code = request.args.get("code")
+#     if not code:
+#         return 'Missing code'
+#     try:
+#         access_token, user_info = unauthenticated_api.exchange_code_for_access_token(code)
+#         if not access_token:
+#             return 'Could not get access token'
+#         api = client.InstagramAPI(access_token=access_token)
+#         print api
+#         request.session['access_token'] = access_token
+#         print ("access token="+access_token)
+#     except Exception as e:
+#         print(e)
+#     return render_template("results.html")
 
 
 
@@ -128,27 +135,28 @@ def on_callback():
     # except Exception as e:
     #     print(e)   
 
-@app.route('/media_search')
-def media_finder():
-	access_token="34946503.b8fc6f7.27686630c22b44eaad7754776d061fb7"
-	content = "<h2>Location Search</h2>"
+# @app.route('/media_search')
+# def media_finder():
+# 	access_token="34946503.b8fc6f7.27686630c22b44eaad7754776d061fb7"
+# 	content = "<h2>Location Search</h2>"
 
-	api = client.InstagramAPI(access_token=access_token)
+# 	api = client.InstagramAPI(access_token=access_token)
         
-	media_search = api.media_search(lat="40.7050789",lng="-73.93364403",distance=100)
+# 	media_search = api.media_search(lat="40.7050789",lng="-73.93364403",distance=100)
 
-        print type(media_search)
-        print media_search
-        print dir(media_search)
+#         print type(media_search)
+#         print media_search
+#         print dir(media_search)
 
 
-	photos = []
-	for media in media_search:
-		photos.append('<img src="%s"/>' % media.get_standard_resolution_url())
-	content += ''.join(photos)
+# 	photos = []
+# 	for media in media_search:
+# 		photos.append('<img src="%s"/>' % media.get_standard_resolution_url())
+# 	content += ''.join(photos)
     
 
-        return content
+#         print content
+#         return content
 
 
 
