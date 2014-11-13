@@ -57,16 +57,16 @@ def update_db_from_twilio(venue_name, city, busy_status):
                                                     })
     likely_venues = likely_places['venues']
 
-    print "IS THIS A GOOD ANSWER ?? %r, %r " % (likely_venues[0]['name'], likely_venues[0]['location']['formattedAddress'])
-    print " if not, text the following numbers for which venue is correct: \n"
-    print "1: %r, %r:" % (likely_venues[1]['name'], likely_venues[1]['location']['formattedAddress'])
-    print "2: %r, %r:" % (likely_venues[2]['name'], likely_venues[2]['location']['formattedAddress'])
-    print "3: %r, %r:" % (likely_venues[3]['name'], likely_venues[3]['location']['formattedAddress'])
-    print "4: %r, %r:" % (likely_venues[4]['name'], likely_venues[4]['location']['formattedAddress'])
-    print "5: %r, %r:" % (likely_venues[5]['name'], likely_venues[5]['location']['formattedAddress'])
+    # print "IS THIS A GOOD ANSWER ?? %r, %r " % (likely_venues[0]['name'], likely_venues[0]['location']['formattedAddress'])
+    # print " if not, text the following numbers for which venue is correct: \n"
+    # print "1: %r, %r:" % (likely_venues[1]['name'], likely_venues[1]['location']['formattedAddress'])
+    # print "2: %r, %r:" % (likely_venues[2]['name'], likely_venues[2]['location']['formattedAddress'])
+    # print "3: %r, %r:" % (likely_venues[3]['name'], likely_venues[3]['location']['formattedAddress'])
+    # print "4: %r, %r:" % (likely_venues[4]['name'], likely_venues[4]['location']['formattedAddress'])
+    # print "5: %r, %r:" % (likely_venues[5]['name'], likely_venues[5]['location']['formattedAddress'])
     return likely_venues
-
-print update_db_from_twilio('Starbucks', 'Berkeley, CA', 'SLAMMED')
+#
+# print update_db_from_twilio('Starbucks', 'Berkeley, CA', 'SLAMMED')
 
 
 

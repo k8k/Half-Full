@@ -2,8 +2,10 @@ from flask import Flask, render_template, request
 import os
 from instagram import client
 import requests
-from foursquare_engine import foursquare_search_by_category
+from foursquare_engine import foursquare_search_by_category, update_db_from_twilio
 import instagram_engine
+import twilio.twiml
+from twilio.rest import TwilioRestClient
 
 
 
@@ -22,6 +24,11 @@ CONFIG = {
 }
 
 unauthenticated_api = client.InstagramAPI(**CONFIG)
+
+# Twilio Keys, pulled in from system environment
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER')
 
 
 
@@ -78,6 +85,77 @@ def instagram_picture_finder(id):
                             photos=instagram_engine.location_search(id))
 
 
+
+@app.route("/twilio", methods=['GET', 'POST'])
+def half_full_report():
+
+    # message = "Starbucks: San Francisco: Slammed"
+    # from_number = request.values.get('From')
+
+    body = request.values.get('Body')
+    from_number = request.values.get('From')
+    print "FROM %r" % from_number
+    print body
+    
+    print body
+    body = body.split(": ")
+    venue_name = body[0].lower()
+    city = body[1].lower()
+    busy_status = body[2].lower()
+    print venue_name
+    print city
+    print busy_status
+
+    venues = update_db_from_twilio(venue_name, city, busy_status)
+
+
+
+    print "thanks for that report about %r at  %r" % (venues[0]['name'], venues[0]['location']['formattedAddress'][0])
+    
+    # print type(venues)
+
+    # venue_dictionary = {}
+    # for i in range(len(venues)):
+    #     venue_dictionary[(venues[i]['location']['formattedAddress'][0])] = venues[i]['name']
+
+    # venue_list = []
+    # for i in range(len(venues)):
+    #     venue_list.append({venues[i]['location']['formattedAddress'][0]: venues[i]['name']})
+
+    # print venue_list
+
+    if "half full" in busy_status:
+
+        message = """Thanks for letting  us know that %s at %s is a Safe Zone. If you meant one of the below locations instead, simply reply to this text with the corresponding number.\n1: %s, %s \n2: %s, %s \n3: %s, %s \n4: %s, %s\n
+        """ % (venues[0]['name'], venues[0]['location']['formattedAddress'][0],
+            venues[1]['name'], venues[1]['location']['formattedAddress'][0],
+            venues[2]['name'], venues[2]['location']['formattedAddress'][0],
+            venues[3]['name'], venues[3]['location']['formattedAddress'][0],
+            venues[4]['name'], venues[4]['location']['formattedAddress'][0])
+
+    elif "slammed" in busy_status:
+
+        message = """Thanks for letting  us know that %s at %s is a THE WORST. If you meant one of the below locations instead, simply reply to this text with the corresponding number.\n1: %s, %s \n2: %s, %s \n3: %s, %s \n4: %s, %s\n
+        """ % (venues[0]['name'], venues[0]['location']['formattedAddress'][0],
+            venues[1]['name'], venues[1]['location']['formattedAddress'][0],
+            venues[2]['name'], venues[2]['location']['formattedAddress'][0],
+            venues[3]['name'], venues[3]['location']['formattedAddress'][0],
+            venues[4]['name'], venues[4]['location']['formattedAddress'][0])
+
+    
+    else:
+        message = """we didn't get that! you said %s in %s was %s, please
+                    respond with 'venue name: the city its in: and either SLAMMED
+                    or HALF FULL.' (ex) 'Blue Bottle: San Francisco, CA: SLAMMED' 
+                    """ % (venue_name, city, busy_status)
+
+
+
+
+    resp=twilio.twiml.Response()
+
+    resp.message(message)
+    return str(resp)
 
 
 
