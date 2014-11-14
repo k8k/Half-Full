@@ -8,6 +8,7 @@ from sqlalchemy import ForeignKey
 
 ENGINE = None
 Session = None
+ENGINE = create_engine("sqlite:///halffull.db", echo=False)
 
 Base = declarative_base()
 # Base.query = session.query_property()
@@ -28,7 +29,7 @@ class Venue (Base):
     __tablename__ = "venues"
     id          = Column(Integer,       primary_key = True)
     name        = Column(String(120),   nullable=False)
-    city        = Column(String(30),      nullable=True)
+    city        = Column(String(30),    nullable=True)
 
 
 

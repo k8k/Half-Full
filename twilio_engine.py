@@ -1,13 +1,13 @@
-# import os
-# from foursquare_engine import update_db_from_twilio
-# from twilio.rest import TwilioRestClient
-# from flask import Flask, request
-# import twilio.twiml
+import os
+from foursquare_engine import update_db_from_twilio
+from twilio.rest import TwilioRestClient
+from flask import Flask, request
+import twilio.twiml
 
-# # Pull in configuration from system environment variables
-# TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
-# TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
-# TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER')
+# Pull in configuration from system environment variables
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER')
 
 # # create an authenticated client that can make requests to Twilio for your
 # # account.

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import os
 from instagram import client
 import requests
@@ -10,7 +10,7 @@ from twilio.rest import TwilioRestClient
 
 
 app = Flask(__name__)
-app.secret_key= os.environ.get("APP_SECRET_KEY")
+app.secret_key= 'katescoolproject'
 
 #Google Maps API Key for Typeahead & Lat Long
 GOOGLE_MAPS_EMBED_KEY = os.environ.get("GOOGLE_MAPS_EMBED_KEY")
@@ -88,75 +88,86 @@ def instagram_picture_finder(id):
 
 @app.route("/twilio", methods=['GET', 'POST'])
 def half_full_report():
+    counter = session.get('counter', 0)
+    counter += 1
+    session['counter'] = counter
 
-    # message = "Starbucks: San Francisco: Slammed"
-    # from_number = request.values.get('From')
+    HELP_MESSAGE="We didn't get that! please respond with 'venue name: the city its in: SLAMMED / HALF FULL.\n(ex) 'Blue Bottle: San Francisco, CA: SLAMMED'. "
+
 
     body = request.values.get('Body')
     from_number = request.values.get('From')
+    response = twilio.twiml.Response()
     print "FROM %r" % from_number
-    print body
-    
-    print body
-    body = body.split(": ")
-    venue_name = body[0].lower()
-    city = body[1].lower()
-    busy_status = body[2].lower()
-    print venue_name
-    print city
-    print busy_status
+
+    try:
+        body = body.split(": ")
+        venue_name = body[0].lower()
+        city = body[1].lower()
+        busy_status = body[2].lower()
+      
+    except IndexError:
+        with response.message() as message:
+            message.body = "{0}".format(HELP_MESSAGE)
+        return str(response)
+
+
 
     venues = update_db_from_twilio(venue_name, city, busy_status)
 
+    ALTERNATE_OPTIONS = []
+    for i in range(len(venues)):
+        ALTERNATE_OPTIONS.append(((venues[i]['name']).encode(), venues[i]['location']['formattedAddress'][0]))
+    ALTERNATE_OPTIONS = list(enumerate(ALTERNATE_OPTIONS, start=1))
 
+    ALTERNATE_STRING = ''
+    for i in range(1, len(ALTERNATE_OPTIONS)):
+        ALTERNATE_STRING = ALTERNATE_STRING + str(ALTERNATE_OPTIONS[i][0]) + ": " + ALTERNATE_OPTIONS[i][1][0] + ", " + ALTERNATE_OPTIONS[i][1][1] + "\n"
 
-    print "thanks for that report about %r at  %r" % (venues[0]['name'], venues[0]['location']['formattedAddress'][0])
+    ALTERNATE_INTRO = """If you meant one of the places below instead, just reply to this text with the corresponding number!"""
     
-    # print type(venues)
+    PRIMARY_VENUE_NAME = (venues[0]['name']).encode()
+    PRIMARY_VENUE_ADDRESS = (venues[0]['location']['formattedAddress'][0]).encode()
+    print "ADDRESS %r" % PRIMARY_VENUE_ADDRESS
+    print "NAME %r" % PRIMARY_VENUE_NAME
 
-    # venue_dictionary = {}
-    # for i in range(len(venues)):
-    #     venue_dictionary[(venues[i]['location']['formattedAddress'][0])] = venues[i]['name']
+    print type(PRIMARY_VENUE_NAME)
+    print type(PRIMARY_VENUE_ADDRESS) 
 
-    # venue_list = []
-    # for i in range(len(venues)):
-    #     venue_list.append({venues[i]['location']['formattedAddress'][0]: venues[i]['name']})
+    SLAMMED_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is THE WORST. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
+    SAFE_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is a Safe Zone. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
 
-    # print venue_list
-
-    if "half full" in busy_status:
-
-        message = """Thanks for letting  us know that %s at %s is a Safe Zone. If you meant one of the below locations instead, simply reply to this text with the corresponding number.\n1: %s, %s \n2: %s, %s \n3: %s, %s \n4: %s, %s\n
-        """ % (venues[0]['name'], venues[0]['location']['formattedAddress'][0],
-            venues[1]['name'], venues[1]['location']['formattedAddress'][0],
-            venues[2]['name'], venues[2]['location']['formattedAddress'][0],
-            venues[3]['name'], venues[3]['location']['formattedAddress'][0],
-            venues[4]['name'], venues[4]['location']['formattedAddress'][0])
-
-    elif "slammed" in busy_status:
-
-        message = """Thanks for letting  us know that %s at %s is a THE WORST. If you meant one of the below locations instead, simply reply to this text with the corresponding number.\n1: %s, %s \n2: %s, %s \n3: %s, %s \n4: %s, %s\n
-        """ % (venues[0]['name'], venues[0]['location']['formattedAddress'][0],
-            venues[1]['name'], venues[1]['location']['formattedAddress'][0],
-            venues[2]['name'], venues[2]['location']['formattedAddress'][0],
-            venues[3]['name'], venues[3]['location']['formattedAddress'][0],
-            venues[4]['name'], venues[4]['location']['formattedAddress'][0])
 
     
+
+    if len(venues) > 1:
+        if 'slammed' in busy_status:
+            with response.message() as message:
+                message.body = "{0}\n{1}\n{2}".format(SLAMMED_CONFIRMATION_MESSAGE,
+                                                ALTERNATE_INTRO, ALTERNATE_STRING)
+
+        elif 'half' in busy_status:
+            with response.message() as message:
+                message.body = "{0}\n{1}\n{2}".format(SAFE_CONFIRMATION_MESSAGE,
+                                                ALTERNATE_INTRO, ALTERNATE_STRING)
+
+
+    elif len(venues) == 1:
+        if 'slammed' in busy_status:
+            with response.message() as message:
+                message.body = "{0}".format(SLAMMED_CONFIRMATION_MESSAGE)
+                                            
+        elif 'half' in busy_status:
+            with response.message() as message:
+                message.body = "{0}".format(SAFE_CONFIRMATION_MESSAGE)
+
     else:
-        message = """we didn't get that! you said %s in %s was %s, please
-                    respond with 'venue name: the city its in: and either SLAMMED
-                    or HALF FULL.' (ex) 'Blue Bottle: San Francisco, CA: SLAMMED' 
-                    """ % (venue_name, city, busy_status)
+        with response.message() as message:
+            message.body = "{0}".format(HELP_MESSAGE)
+        
 
 
-
-
-    resp=twilio.twiml.Response()
-
-    resp.message(message)
-    return str(resp)
-
+    return unicode(response).encode("utf-8")
 
 
 
