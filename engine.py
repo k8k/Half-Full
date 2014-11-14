@@ -88,86 +88,141 @@ def instagram_picture_finder(id):
 
 @app.route("/twilio", methods=['GET', 'POST'])
 def half_full_report():
+    
+
     counter = session.get('counter', 0)
     counter += 1
     session['counter'] = counter
 
-    HELP_MESSAGE="We didn't get that! please respond with 'venue name: the city its in: SLAMMED / HALF FULL.\n(ex) 'Blue Bottle: San Francisco, CA: SLAMMED'. "
 
+    print counter
 
-    body = request.values.get('Body')
-    from_number = request.values.get('From')
-    response = twilio.twiml.Response()
+    HELP_MESSAGE    ="We didn't get that! please respond with 'venue name: the city its in: SLAMMED / HALF FULL.\n(ex) 'Blue Bottle: San Francisco, CA: SLAMMED'. "
+
+    
+
+    body            = request.values.get('Body')
+    from_number     = request.values.get('From')
+    response        = twilio.twiml.Response()
     print "FROM %r" % from_number
 
-    try:
-        body = body.split(": ")
-        venue_name = body[0].lower()
-        city = body[1].lower()
-        busy_status = body[2].lower()
-      
-    except IndexError:
+    print "WHAT THE FUCK IS HAPPENING"
+
+    if counter == 0:
+        print "UH OH!!!!!!!!!!!!!!"
+    
+    if counter == 1:
+
+        try:
+            body        = body.split(": ")
+            venue_name  = body[0].lower()
+            city        = body[1].lower()
+            busy_status = body[2].lower()
+          
+        except IndexError:
+            with response.message() as message:
+                message.body = "{0}".format(HELP_MESSAGE)
+                session.clear()
+            return str(response)
+
+
+
+        venues = update_db_from_twilio(venue_name, city, busy_status)
+       
+
+        print venues
+        # UNICODE BUG THAT NEEDS TO BE FIXED LIVES HERE # 
+
+        ALTERNATE_OPTIONS = []        
+        for i in range(len(venues)):
+            ALTERNATE_OPTIONS.append(((venues[i]['name']).encode(), venues[i]['location']['formattedAddress'][0], venues[i]['id']))
+        ALTERNATE_OPTIONS = list(enumerate(ALTERNATE_OPTIONS))
+
+
+        print "LIST %r" % type(ALTERNATE_OPTIONS)
+        session['ALTERNATE_OPTIONS'] = ALTERNATE_OPTIONS
+
+        ALTERNATE_STRING = ''
+        for i in range(1, len(ALTERNATE_OPTIONS)):
+            ALTERNATE_STRING = ALTERNATE_STRING + str(ALTERNATE_OPTIONS[i][0]) + ": " + ALTERNATE_OPTIONS[i][1][0] + ", " + ALTERNATE_OPTIONS[i][1][1] + "\n"
+
+        ALTERNATE_INTRO = """If you meant one of the places below instead, just reply to this text with the corresponding number!"""
+        
+        PRIMARY_VENUE_NAME = (venues[0]['name']).encode()
+        PRIMARY_VENUE_ADDRESS = (venues[0]['location']['formattedAddress'][0]).encode()
+        
+        print "ADDRESS %r" % PRIMARY_VENUE_ADDRESS
+        print "NAME %r" % PRIMARY_VENUE_NAME
+
+        print type(PRIMARY_VENUE_NAME)
+        print type(PRIMARY_VENUE_ADDRESS) 
+
+        SLAMMED_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is THE WORST. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
+        SAFE_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is a Safe Zone. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
+
+
+        
+        print "are you here ??"
+        if len(venues) > 1:
+            if 'slammed' in busy_status:
+                with response.message() as message:
+                    message.body = "{0}\n{1}\n{2}".format(SLAMMED_CONFIRMATION_MESSAGE,
+                                                    ALTERNATE_INTRO, ALTERNATE_STRING)
+
+            elif 'half' in busy_status:
+                with response.message() as message:
+                    message.body = "{0}\n{1}\n{2}".format(SAFE_CONFIRMATION_MESSAGE,
+                                                    ALTERNATE_INTRO, ALTERNATE_STRING)
+
+
+        elif len(venues) == 1:
+            if 'slammed' in busy_status:
+                with response.message() as message:
+                    message.body = "{0}".format(SLAMMED_CONFIRMATION_MESSAGE)
+                                                
+            elif 'half' in busy_status:
+                with response.message() as message:
+                    message.body = "{0}".format(SAFE_CONFIRMATION_MESSAGE)
+
+        else:
+            with response.message() as message:
+                message.body = "{0}".format(HELP_MESSAGE)
+            
+
+
+        return unicode(response).encode("utf-8")
+
+    elif counter == 2:
+
+        print "YOU ARE HERE IN COUNTER 2"
+        ALTERNATE_OPTIONS = session.get('ALTERNATE_OPTIONS', 0)
+        
+        body = int(body)
+
+        response_list = []
+        for i in ALTERNATE_OPTIONS:
+            response_list.append(i[1])
+
+
+        updated_response_message = """Got it, you meant %s.""" % response_list[body][0]
+
         with response.message() as message:
-            message.body = "{0}".format(HELP_MESSAGE)
-        return str(response)
+                    message.body = "{0}".format(updated_response_message)
 
 
+        session.clear()
+        return unicode(response).encode("utf-8")
 
-    venues = update_db_from_twilio(venue_name, city, busy_status)
-
-    ALTERNATE_OPTIONS = []
-    for i in range(len(venues)):
-        ALTERNATE_OPTIONS.append(((venues[i]['name']).encode(), venues[i]['location']['formattedAddress'][0]))
-    ALTERNATE_OPTIONS = list(enumerate(ALTERNATE_OPTIONS, start=1))
-
-    ALTERNATE_STRING = ''
-    for i in range(1, len(ALTERNATE_OPTIONS)):
-        ALTERNATE_STRING = ALTERNATE_STRING + str(ALTERNATE_OPTIONS[i][0]) + ": " + ALTERNATE_OPTIONS[i][1][0] + ", " + ALTERNATE_OPTIONS[i][1][1] + "\n"
-
-    ALTERNATE_INTRO = """If you meant one of the places below instead, just reply to this text with the corresponding number!"""
-    
-    PRIMARY_VENUE_NAME = (venues[0]['name']).encode()
-    PRIMARY_VENUE_ADDRESS = (venues[0]['location']['formattedAddress'][0]).encode()
-    print "ADDRESS %r" % PRIMARY_VENUE_ADDRESS
-    print "NAME %r" % PRIMARY_VENUE_NAME
-
-    print type(PRIMARY_VENUE_NAME)
-    print type(PRIMARY_VENUE_ADDRESS) 
-
-    SLAMMED_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is THE WORST. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
-    SAFE_CONFIRMATION_MESSAGE = """Thanks for letting us know that %s at %s is a Safe Zone. We'll let the other misanthropes know.""" % (PRIMARY_VENUE_NAME, PRIMARY_VENUE_ADDRESS)
-
-
-    
-
-    if len(venues) > 1:
-        if 'slammed' in busy_status:
-            with response.message() as message:
-                message.body = "{0}\n{1}\n{2}".format(SLAMMED_CONFIRMATION_MESSAGE,
-                                                ALTERNATE_INTRO, ALTERNATE_STRING)
-
-        elif 'half' in busy_status:
-            with response.message() as message:
-                message.body = "{0}\n{1}\n{2}".format(SAFE_CONFIRMATION_MESSAGE,
-                                                ALTERNATE_INTRO, ALTERNATE_STRING)
-
-
-    elif len(venues) == 1:
-        if 'slammed' in busy_status:
-            with response.message() as message:
-                message.body = "{0}".format(SLAMMED_CONFIRMATION_MESSAGE)
-                                            
-        elif 'half' in busy_status:
-            with response.message() as message:
-                message.body = "{0}".format(SAFE_CONFIRMATION_MESSAGE)
 
     else:
-        with response.message() as message:
-            message.body = "{0}".format(HELP_MESSAGE)
-        
+        print counter
+        # counter = 0
+        session.clear()
+        print "NEW %r" % counter
+        return "WTF %r" % counter
 
 
-    return unicode(response).encode("utf-8")
+
 
 
 
