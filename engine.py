@@ -6,6 +6,8 @@ from foursquare_engine import foursquare_search_by_category, update_db_from_twil
 import instagram_engine
 import twilio.twiml
 from twilio.rest import TwilioRestClient
+from user_report_model import Status, Session as SQLsession, connect
+from datetime import datetime
 # from twilio_engine import new_user_report, corrected_report
 
 
@@ -61,6 +63,8 @@ def user_lat_long():
     # Set venue_type as false, making it optional
     venue_type = False
 
+
+
     # Checking venue-type. Translation Layer - will transfer to a DB
     # to dynamically update after MVP is complete
     if request.form['venue-type'] == 'restaurant':
@@ -98,19 +102,6 @@ def half_full_report():
     # Test to make sure counter is behaving as expected
     print counter
 
-    # Global Variables used in response messages
-
-    # HELP_MESSAGE    ="We didn't get that! please respond with 'venue name: the city its in: SLAMMED / HALF FULL.\n(ex) 'Blue Bottle: San Francisco, CA: SLAMMED'. "
-    # ALTERNATE_INTRO = """If you meant one of the places below instead, just reply to this text with the corresponding number."""
-
-    
-    # Getting information from incoming text and builing Response object for later
-
-    # body            = request.values.get('Body')
-    # response        = twilio.twiml.Response()
-
-    # Check to see if this is the first message in the conversation. If so, assume
-    # it is a tip about a venue.
     HELP_MESSAGE    ="We didn't get that! please respond with 'venue name: the city its in: SLAMMED / HALF FULL.\n(ex) 'Blue Bottle: San Francisco, CA: SLAMMED'. "
     ALTERNATE_INTRO = """If you meant one of the places below instead, just reply to this text with the corresponding number."""
 
@@ -137,6 +128,36 @@ def half_full_report():
             # calling function from foursquare_engine that will query the foursquare
         # API using the parameters defined in the user's incoming test message
         venues = update_db_from_twilio(venue_name, city, busy_status)
+        print venues
+
+        if 'half' in busy_status:
+            status_code=0
+        elif 'slammed' in busy_status:
+            status_code=1
+
+        session['status_code']=status_code
+
+
+        sqlsession = connect()
+
+        s = Status()
+        s.foursquare_id =  venues[0]['id']
+        s.status = status_code
+        s.time = datetime.utcnow()
+
+
+
+        print "FOURSQUARE ID %r" % s.foursquare_id
+        print "STATUS CODE %r" % s.status
+        print "DATE TIME%r" % s.time
+        
+        print type(sqlsession)
+        sqlsession.add(s)
+
+        session['first_id'] = s.id
+        sqlsession.commit()
+
+
        
         # TEST to make sure venues are coming out correctly
         # print venues
@@ -226,6 +247,8 @@ def half_full_report():
     def corrected_report():
         
         ALTERNATE_OPTIONS = session.get('ALTERNATE_OPTIONS', 0)
+        status_code = session.get('status_code', 0)
+        first_id = session.get('first_id', 0)
             
         alternate_enumerated_options = ['1','2','3']
 
@@ -237,8 +260,27 @@ def half_full_report():
                 response_list.append(i[1])
 
 
-            updated_response_message = """Got it, you meant %s.""" % response_list[body][0]
+            updated_response_message = """Got it, you meant %s at %s.""" % (response_list[body][0],
+                                                                            response_list[body][1])
+                
+            sqlsession = connect()
 
+            sqlsession.query(Status).filter_by(id=first_id).delete()
+
+            s = Status()
+            s.foursquare_id =  response_list[body][2]
+            s.status = status_code
+            s.time = datetime.utcnow()
+
+            print "FOURSQUARE ID %r" % s.foursquare_id
+            print "STATUS CODE %r" % s.status
+            print "DATE TIME%r" % s.time
+            
+            print type(sqlsession)
+            sqlsession.add(s)
+
+
+            sqlsession.commit()
             with response.message() as message:
                         message.body = "{0}".format(updated_response_message)
             session.clear()
@@ -247,7 +289,7 @@ def half_full_report():
             try:
                 body = int(BODY)
                 with response.message as message:
-                    message.body = "Sorry! %r is not a valid option." % body
+                    message.body = "Sorry! %r is not a valid option. Please pick 1, 2, or 3." % body
             except ValueError:
                 new_user_report()
                 session.clear()
@@ -262,8 +304,27 @@ def half_full_report():
     if counter == 1:
         return new_user_report()
     if counter == 2:
-        print "YOU ARE HERE"
         return corrected_report()
+    if counter == 3:
+        return corrected_report()
+    if counter > 3:
+        with response.message as message:
+            message.body = "Huh, not quite sure what you mean. If you're trying to report a venue, please respond with 'Venue Name: City: Slammed/Half Full'."""
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         # Split message body on colons to parse out informatio to add to the
         # Hot Tip Database
 
