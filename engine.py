@@ -8,7 +8,9 @@ import twilio.twiml
 from twilio.rest import TwilioRestClient
 from user_report_model import Status, Session as SQLsession, connect
 from datetime import datetime
+from user_reports_engine import expire_statuses
 # from twilio_engine import new_user_report, corrected_report
+
 
 
 
@@ -39,6 +41,10 @@ TWILIO_NUMBER = os.environ.get('TWILIO_NUMBER')
 def half_full_home():
     """Home page. Basic search box with venue category options"""
     
+    
+
+    expire_statuses()
+
     return render_template("index.html")
 
 
@@ -74,6 +80,18 @@ def user_lat_long():
     elif request.form['venue-type'] == 'cafe':
         venue_type = '4bf58dd8d48988d1e0931735'
 
+    results_check = foursquare_search_by_category(location, venue_type)
+    foursq_ids_in_results = []
+    for i in results_check:
+        foursq_ids_in_results.append(i['id'])
+
+    sqlsession = connect()
+    for i in foursq_ids_in_results:
+        status_query = sqlsession.query(Status).filter_by(foursquare_id=i).all()
+    
+    print "STATUS QUERY %r" % status_query
+
+    # print "CHECK %r" % results_check
 
 
     return render_template ('results.html', user_longitude=user_longitude, 
@@ -88,6 +106,10 @@ def instagram_picture_finder(id):
 
     return render_template ('listing.html', 
                             photos=instagram_engine.location_search(id))
+
+
+
+
 
 
 
@@ -136,14 +158,17 @@ def half_full_report():
             status_code=1
 
         session['status_code']=status_code
+        print status_code
 
 
         sqlsession = connect()
 
-        s = Status()
-        s.foursquare_id =  venues[0]['id']
-        s.status = status_code
-        s.time = datetime.utcnow()
+        s                       = Status()
+        s.venue_name            = venues[0]['name']
+        s.foursquare_id         = venues[0]['id']
+        s.status                = status_code
+        s.time                  = datetime.utcnow()
+        s.expiration_status     = 'Fresh'
 
 
 
@@ -154,8 +179,9 @@ def half_full_report():
         print type(sqlsession)
         sqlsession.add(s)
 
-        session['first_id'] = s.id
+        
         sqlsession.commit()
+        session['first_id'] = s.id
 
 
        
@@ -248,6 +274,11 @@ def half_full_report():
         
         ALTERNATE_OPTIONS = session.get('ALTERNATE_OPTIONS', 0)
         status_code = session.get('status_code', 0)
+        
+        print "STATUS CODE IN SESSION %r" % status_code
+        print type(status_code)
+
+
         first_id = session.get('first_id', 0)
             
         alternate_enumerated_options = ['1','2','3']
@@ -267,10 +298,12 @@ def half_full_report():
 
             sqlsession.query(Status).filter_by(id=first_id).delete()
 
-            s = Status()
-            s.foursquare_id =  response_list[body][2]
-            s.status = status_code
-            s.time = datetime.utcnow()
+            s                   = Status()
+            s.venue_name        = response_list[body][0]
+            s.foursquare_id     = response_list[body][2]
+            s.status            = status_code
+            s.time              = datetime.utcnow()
+            s.expiration_status = 'Fresh'
 
             print "FOURSQUARE ID %r" % s.foursquare_id
             print "STATUS CODE %r" % s.status

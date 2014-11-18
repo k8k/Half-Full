@@ -30,9 +30,11 @@ def connect():
 class Status(Base):
     __tablename__       = "statuses"
     id                  = Column(Integer,       primary_key = True)
-    foursquare_id       = Column(String,       nullable    = False)
+    venue_name          = Column(String,        nullable    = True)
+    foursquare_id       = Column(String,        nullable    = False)
     status              = Column(Integer,       nullable    = False)
     time                = Column(DateTime,      nullable    = False)
+    expiration_status   = Column(String,        nullable    = False)
 
  
 def main():
