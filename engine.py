@@ -9,6 +9,18 @@ from twilio.rest import TwilioRestClient
 from user_report_model import Status, Session as SQLsession, connect
 from datetime import datetime
 from user_reports_engine import expire_statuses
+
+
+# from jinja2 import Environment, Undefined
+
+# def custom_in_list(item, list_to_check):
+#     if item in list_to_check:
+#         return True
+#     else:
+#         return False
+
+# env = Environment()
+# env.filters['custom_in_list'] = custom_in_list
 # from twilio_engine import new_user_report, corrected_report
 
 
@@ -80,30 +92,58 @@ def user_lat_long():
     elif request.form['venue-type'] == 'cafe':
         venue_type = '4bf58dd8d48988d1e0931735'
 
+    
+
+
+
+
     results_check = foursquare_search_by_category(location, venue_type)
+
     foursq_ids_in_results = []
     for i in results_check:
         foursq_ids_in_results.append(i['id'])
 
     print "\n*******************************"
+    print type(results_check)
+    print "\n********************************"
     print foursq_ids_in_results
     for i in foursq_ids_in_results:
         print i
         print type(i)
 
     sqlsession = connect()
+    
     status_query = []
     for i in foursq_ids_in_results:
         search_by_foursquare = sqlsession.query(Status).filter_by(foursquare_id=i).first()
         if search_by_foursquare != None:
             status_query.append(search_by_foursquare)
+            results_check.append(search_by_foursquare)
+            
+
+    print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
+    print "WHAT IS UP !!!!! DID DIS WORK %r" % results_check
+
+
+
+    # status_to_override = None
+    # for i in status_query:
+    #     for k in results_check:
+    #         if i.foursquare_id == k['id']:
+    #             status_to_override = i
+
 
 
     print "STATUS QUERY %r" % status_query
     print "*~*~*~*~*~*~**~*~\n\n\n\n\n\n\n\n\n %r" % status_query[0].venue_name
 
-  
+    matching_ids =[]
+    for i in status_query:
+        matching_ids.append(i.foursquare_id.encode())
 
+    print "MATCH IDS %r" % matching_ids
+
+    test_list = ['1', '2', '3']
 
     # print "CHECK %r" % results_check
 
@@ -112,7 +152,9 @@ def user_lat_long():
                     user_latitude           =user_latitude, 
                     results                 =foursquare_search_by_category(location, venue_type), 
                     foursq_ids_in_results   =foursq_ids_in_results,
-                    status_query            =status_query)
+                    status_query            =status_query,
+                    matching_ids            =matching_ids,
+                    test_list               =test_list)
 
 
 @app.route('/venuepics/<id>')

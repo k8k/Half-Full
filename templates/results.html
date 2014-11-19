@@ -32,39 +32,35 @@
       <td><strong><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></strong><br>
           {{  i['location']['formattedAddress'][0] }}<br>
           {{  i['location']['formattedAddress'][1] }}<br>
+          {{  i['id']  }}<br>
        
           <a href="{{  i['url']  }}">{{  i['url']  }}
       </td>
       <td>
-          {% for k in status_query %}
-            
 
+          {% if i['id'] in matching_ids %}
+          
+            {{ status_query[0].status }}
 
-            {% if i['foursqaure_id'] == .foursquare_id %}
-                <strong>HERE IS A THING !!!!!!</strong>
-            
-            {% endif %}
-
+          {% elif  i['hereNow']['count'] > 2  %}
+              TOO BIZZZYYYY
+          
+              {% elif i['hereNow']['count'] > 0 %}
+              MAYBE BIZZ
+              
+              {% else %}
+              SAFE!
+              
+              {% endif %}
           
           
           
-
-          {% else %}
-            
-            {% if  i['hereNow']['count'] > 2  %}
-            TOO BIZZZYYYY
-            {% elif i['hereNow']['count'] > 0 %}
-            MAYBE BIZZ
-            {% else %}
-            SAFE!
-            {% endif %}
-          
-          {% endif %}
 
       </td>
       <td>{{  i['hereNow']['count']  }}</td>
       <td>{{  i['stats']['checkinsCount']  }}</td>
       <td>{{  i['stats']['usersCount']  }}</td>
+
       
     </tr>
 
@@ -72,8 +68,19 @@
     {% endfor %}
 
 
+
   </table>
   <br>
+   
+   {%- if '4bc777e2af07a593103e7f2d' in matching_ids -%}
+   HELLO !!!
+   {%- endif -%}
+
+   
+
+
+
+    {{ matching_ids }}
 
 
 
