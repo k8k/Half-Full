@@ -43,7 +43,7 @@ def half_full_home():
     
     
 
-    expire_statuses()
+    # expire_statuses()
 
     return render_template("index.html")
 
@@ -85,19 +85,34 @@ def user_lat_long():
     for i in results_check:
         foursq_ids_in_results.append(i['id'])
 
-    sqlsession = connect()
+    print "\n*******************************"
+    print foursq_ids_in_results
     for i in foursq_ids_in_results:
-        status_query = sqlsession.query(Status).filter_by(foursquare_id=i).all()
-    
+        print i
+        print type(i)
+
+    sqlsession = connect()
+    status_query = []
+    for i in foursq_ids_in_results:
+        search_by_foursquare = sqlsession.query(Status).filter_by(foursquare_id=i).first()
+        if search_by_foursquare != None:
+            status_query.append(search_by_foursquare)
+
+
     print "STATUS QUERY %r" % status_query
+    print "*~*~*~*~*~*~**~*~\n\n\n\n\n\n\n\n\n %r" % status_query[0].venue_name
+
+  
+
 
     # print "CHECK %r" % results_check
 
 
     return render_template ('results.html', user_longitude=user_longitude, 
-                            user_latitude=user_latitude, 
-                            results = foursquare_search_by_category(location, venue_type), 
-                            )
+                    user_latitude           =user_latitude, 
+                    results                 =foursquare_search_by_category(location, venue_type), 
+                    foursq_ids_in_results   =foursq_ids_in_results,
+                    status_query            =status_query)
 
 
 @app.route('/venuepics/<id>')
