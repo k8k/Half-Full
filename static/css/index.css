@@ -1,22 +1,49 @@
 body {
   font-family: "Lato";
-  background: #E4DACE; }
+  background-image: url("../../static/img/bar.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; }
 
 h1 {
-  color: #333;
+  color: #EFE7DA;
   font-family: Monoton;
   text-align: center;
-  font-size: 45px;
-  border-radius: 5px; }
+  font-size: 100px;
+  padding: 15px; }
+
+#user-preferences-container {
+  background-color: #4E4945;
+  height: 400px;
+  width: 400px;
+  border-radius: 50%;
+  margin: auto; }
+
+h2 {
+  color: #EFE7DA;
+  font-family: Monoton;
+  text-align: center;
+  font-size: 20px; }
+
+.venue_results {
+  border: #6A6965 1px solid;
+  border-radius: 5px;
+  width: 25%;
+  height: 250px;
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #4E4945; }
 
 form {
   font: "Lato";
   text-align: center;
-  color: #4E4945; }
-
-#user-preferences-container {
-  margin: auto;
-  width: 50%; }
+  color: #EFE7DA;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em; }
 
 #header-container {
   margin: auto;
@@ -28,7 +55,7 @@ input {
   height: 1.5em; }
 
 .typeahead {
-  width: 200px; }
+  width: 250px; }
 
 td {
   margin-bottom: 10px;

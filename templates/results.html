@@ -17,6 +17,44 @@
   	<body>
 
 
+{% for i in results_check %}
+  <div class='venue_results'>
+    <h2 id='venue_name'>{{ i['name'] }}</h2>
+    <p id='venue-information'> {{  i['location']['formattedAddress'][0] }}<br>
+        {{  i['location']['formattedAddress'][1] }}<br>
+    </p>
+    {% for status in status_query %}
+      {% if status.foursquare_id == i['id'] %}
+        <p id='user_reported_status'>
+          {% if status.status ==  0 %}
+            Your fellow misanthropes report that this is safe!
+            {% elif status.status == 1 %}
+            Don't trust 4sq. This place is SLAMMED
+            {% endif %}
+          </p>
+      {% endif %}
+    {% endfor %}
+    
+lolololololololol
+
+
+
+    <p>
+      {% if i['user_rating'] == -1 %}
+          {% if i['hereNow']['count'] > 2 %}
+            AVOID.
+          {% elif i['hereNow']['count'] > 0 %}
+            Proceed With Caution.
+          {% else %}
+            Seems Safe.
+          {% endif %}
+      {% else %}
+      {{ i['user_rating']}}
+      {% endif %}
+    </div>
+    {% endfor %}
+
+
 
   <table>
     <th>NAME   </th>

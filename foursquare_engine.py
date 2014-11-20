@@ -45,7 +45,7 @@ def foursquare_search_by_category(latlng, category):
             if venues[i]['categories'][j]['id'] not in blacklist:
                 categorized_list_of_venues.append(venues[i])
 
-    print "THIS IS CATEGORY LIST %r" % categorized_list_of_venues
+    # print "THIS IS CATEGORY LIST %r" % categorized_list_of_venues
    
     return categorized_list_of_venues
 

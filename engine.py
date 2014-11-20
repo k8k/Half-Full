@@ -103,26 +103,52 @@ def user_lat_long():
     for i in results_check:
         foursq_ids_in_results.append(i['id'])
 
-    print "\n*******************************"
-    print type(results_check)
-    print "\n********************************"
-    print foursq_ids_in_results
-    for i in foursq_ids_in_results:
-        print i
-        print type(i)
+    # print "\n*******************************"
+    # print type(results_check)
+    # print "\n********************************"
+    # print foursq_ids_in_results
+    # for i in foursq_ids_in_results:
+    #     print i
+    #     print type(i)
 
     sqlsession = connect()
+
+    query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results))
+    status_query = query.all()
     
-    status_query = []
-    for i in foursq_ids_in_results:
-        search_by_foursquare = sqlsession.query(Status).filter_by(foursquare_id=i).first()
-        if search_by_foursquare != None:
-            status_query.append(search_by_foursquare)
-            results_check.append(search_by_foursquare)
+    print "\n\n\n\n\n\n\n\n\n\n\n\n"
+    print "RESULTS THING IT'S NEW %r" % status_query
+    
+    # status_query = []
+    # for i in foursq_ids_in_results:
+    #     search_by_foursquare = sqlsession.query(Status).filter_by(foursquare_id=i).first()
+    #     if search_by_foursquare != None:
+    #         status_query.append(search_by_foursquare)
+            
+        # print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n****************"
+    # for whatever in status_query:
+    #     print whatever.foursquare_id
+
+    #     for i in results_check:
+    #         print i
+        # print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n****************"
+
+
+    for i in results_check:
+
+        for k in status_query:
+            if i['id'] == k.foursquare_id:
+                i['user_rating'] = "BLAH!"
+                print "**** VENUE NAME !!! ***** %r" % k.venue_name
+                break
+            else:
+                print "**** VENUE NAME in else !!! ***** %r" % k.venue_name
+                i['user_rating'] = -1
+
             
 
     print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-    print "WHAT IS UP !!!!! DID DIS WORK %r" % results_check
+    
 
 
 
@@ -135,26 +161,25 @@ def user_lat_long():
 
 
     print "STATUS QUERY %r" % status_query
-    print "*~*~*~*~*~*~**~*~\n\n\n\n\n\n\n\n\n %r" % status_query[0].venue_name
+    # print "*~*~*~*~*~*~**~*~\n\n\n\n\n\n\n\n\n %r" % status_query[0].venue_name
 
     matching_ids =[]
     for i in status_query:
         matching_ids.append(i.foursquare_id.encode())
 
-    print "MATCH IDS %r" % matching_ids
+    # print "MATCH IDS %r" % matching_ids
 
     test_list = ['1', '2', '3']
 
     # print "CHECK %r" % results_check
 
 
-    return render_template ('results.html', user_longitude=user_longitude, 
-                    user_latitude           =user_latitude, 
-                    results                 =foursquare_search_by_category(location, venue_type), 
+    return render_template ('results.html',  
                     foursq_ids_in_results   =foursq_ids_in_results,
                     status_query            =status_query,
                     matching_ids            =matching_ids,
-                    test_list               =test_list)
+                    test_list               =test_list,
+                    results_check           =results_check)
 
 
 @app.route('/venuepics/<id>')
