@@ -92,57 +92,27 @@ def user_lat_long():
     elif request.form['venue-type'] == 'cafe':
         venue_type = '4bf58dd8d48988d1e0931735'
 
-    
-
-
-
-
     results_check = foursquare_search_by_category(location, venue_type)
 
     foursq_ids_in_results = []
     for i in results_check:
         foursq_ids_in_results.append(i['id'])
 
-    # print "\n*******************************"
-    # print type(results_check)
-    # print "\n********************************"
-    # print foursq_ids_in_results
-    # for i in foursq_ids_in_results:
-    #     print i
-    #     print type(i)
+    print "RESULTS %r" % results_check
 
     sqlsession = connect()
 
     query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results))
     status_query = query.all()
     
-    print "\n\n\n\n\n\n\n\n\n\n\n\n"
-    print "RESULTS THING IT'S NEW %r" % status_query
-    
-    # status_query = []
-    # for i in foursq_ids_in_results:
-    #     search_by_foursquare = sqlsession.query(Status).filter_by(foursquare_id=i).first()
-    #     if search_by_foursquare != None:
-    #         status_query.append(search_by_foursquare)
-            
-        # print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n****************"
-    # for whatever in status_query:
-    #     print whatever.foursquare_id
-
-    #     for i in results_check:
-    #         print i
-        # print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n****************"
-
 
     for i in results_check:
 
         for k in status_query:
             if i['id'] == k.foursquare_id:
-                i['user_rating'] = "BLAH!"
-                print "**** VENUE NAME !!! ***** %r" % k.venue_name
+                i['user_rating'] = k.status
                 break
             else:
-                print "**** VENUE NAME in else !!! ***** %r" % k.venue_name
                 i['user_rating'] = -1
 
             
