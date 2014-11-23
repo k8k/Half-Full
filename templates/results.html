@@ -18,27 +18,11 @@
 
 
 <div class="cards">
-  <div class="card">
-    <div class="card-image">
-      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains.png" alt="">
-    </div>
-    <div class="card-header">
-      First Card
-    </div>
-    <div class="card-copy">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, officiis sunt neque facilis culpa molestiae necessitatibus delectus veniam provident.</p>
-    </div>
-    <div class="card-stats">
-      <ul>
-        <li>98<span>Items</span></li>
-        <li>298<span>Things</span></li>
-        <li>923<span>Objects</span></li>
-      </ul>
-    </div>
+  
   </div>
 
   <div class="card">
-    <div class="ribbon-wrapper"><div class="ribbon">RIBBON</div></div>
+    <div class="ribbon-wrapper"><div class="ribbon">HALF FULL</div></div>
     <div class="card-image">
       <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-4.png" alt="">
     </div>
@@ -78,17 +62,69 @@
 </div>
 
 
+<div id='card-container'>
 
 {% for i in results_check %}
 
     <div class="card">
     <div class="card-image">
-     <div class="hover-tile-outer">
-  <div class="hover-tile-container">
-    <div class="hover-tile hover-tile-visible">
+
+      <div class="hover-tile-outer">
+    
+  
+    <div class="hover-tile-container">
+    {% if i['user_rating'] == -1 %}
+          {% if i['hereNow']['count'] > 2 %}
+              <div class="hover-tile hover-tile-visible-avoid" >
+                {{  i['name']  }}
+              </div>
+              <div class="hover-tile hover-tile-hidden-avoid">
+                <h4>Hidden Copy</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+              </div>
+          {% elif i['hereNow']['count'] > 0 %}
+              <div class="hover-tile hover-tile-visible-caution" >
+                {{  i['name']  }}
+              </div>
+              <div class="hover-tile hover-tile-hidden-caution">
+                <h4>Hidden Copy</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+              </div>
+          {% else %}
+              <div class="hover-tile hover-tile-visible-safe" >
+                {{  i['name']  }}
+              </div>
+              <div class="hover-tile hover-tile-hidden-safe">
+                <h4>Hidden Copy</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+              </div>
+          {% endif %}
+      {% else %}
+        {% if i['user_rating'] == 0 %}
+              <div class="ribbon-wrapper"><div class="ribbon">HALF FULL</div></div>
+              <div class="hover-tile hover-tile-visible-safe" >
+                {{  i['name']  }}
+              </div>
+              <div class="hover-tile hover-tile-hidden-safe">
+                <h4>Hidden Copy</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+              </div>
+        {% elif i['user_rating'] == 1 %}
+              <div class="hover-tile hover-tile-visible-avoid" >
+                {{  i['name']  }}
+              </div>
+              <div class="hover-tile hover-tile-hidden-avoid">
+                <h4>Hidden Copy</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+              </div>
+        {% endif %}
+      {% endif %}
+
+
+    <div class="hover-tile hover-tile-visible-avoid" >
       {{  i['name']  }}
     </div>
-    <div class="hover-tile hover-tile-hidden">
+    <div class="hover-tile hover-tile-hidden-avoid">
       <h4>Hidden Copy</h4>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
     </div>
@@ -146,123 +182,11 @@
 {% endfor %}
 </div>
 
+</div>
+</div>
 
 
 
-<!-- 
-{% for i in results_check %}
-
-
-    <h2 id='venue_name'><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></h2>
-    <p id='venue-information'> {{  i['location']['formattedAddress'][0] }}<br>
-        {{  i['location']['formattedAddress'][1] }}<br>
-    
-     <a href="{{  i['url']  }}">{{  i['url']  }}</a>
-    </p>
-   
-    {% for status in status_query %}
-      {% if status.foursquare_id == i['id'] %}
-        <p id='user_reported_status'>
-          {% if status.status ==  0 %}
-            Your fellow misanthropes report that this is safe!
-            {% elif status.status == 1 %}
-            Don't trust 4sq. This place is SLAMMED
-            {% endif %}
-          </p>
-      {% endif %}
-
-    {% endfor %}
-    
-lolololololololol
-
-
-
-    <p>
-      {% if i['user_rating'] == -1 %}
-          {% if i['hereNow']['count'] > 2 %}
-            AVOID.
-          {% elif i['hereNow']['count'] > 0 %}
-            Proceed With Caution.
-          {% else %}
-            Seems Safe.
-          {% endif %}
-      {% else %}
-      {{ i['user_rating']}}
-      {% endif %}
-    </div>
-    {% endfor %}
-
-
-
-  <table>
-    <th>NAME   </th>
-    <th>RATING   </th>
-    <th>HERE NOW   </th>
-    <th>TOTAL CHECKINS EVER   </th>
-    <th>TOTAL PPL CHECKED IN EVER   </th>
-    
-
-    {% for i in results_check %}
-      
-    <tr>
-      <td><strong><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></strong><br>
-          {{  i['location']['formattedAddress'][0] }}<br>
-          {{  i['location']['formattedAddress'][1] }}<br>
-          {{  i['id']  }}<br>
-       
-          <a href="{{  i['url']  }}">{{  i['url']  }}
-      </td>
-      <td>
-
-          {% if i['id'] in matching_ids %}
-          
-            {{ status_query[0].status }}
-
-          {% elif  i['hereNow']['count'] > 2  %}
-              TOO BIZZZYYYY
-          
-              {% elif i['hereNow']['count'] > 0 %}
-              MAYBE BIZZ
-              
-              {% else %}
-              SAFE!
-              
-              {% endif %}
-          
-          
-          
-
-      </td>
-      <td>{{  i['hereNow']['count']  }}</td>
-      <td>{{  i['stats']['checkinsCount']  }}</td>
-      <td>{{  i['stats']['usersCount']  }}</td>
-
-      
-    </tr>
-
-
-    {% endfor %}
-
-
-
-  </table>
-  <br>
-   
-   {%- if '4bc777e2af07a593103e7f2d' in matching_ids -%}
-   HELLO !!!
-   {%- endif -%}
- -->
-   
-
-
-<!-- 
-    {{ matching_ids }}
-
-
-
-    {{ results }}
-
-    {{ picture }} -->
 
   </body>
 

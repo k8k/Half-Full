@@ -235,6 +235,19 @@ html {
   -moz-box-sizing: inherit;
   box-sizing: inherit; }
 
+#buttons {
+  width: 50%;
+  height: 70%;
+  margin: auto;
+  padding-top: 10%; }
+
+form {
+  background-color: #4E4945;
+  padding: 25px;
+  width: 50%;
+  margin: auto;
+  border-radius: 5px; }
+
 header.navigation {
   background-color: #6A6965;
   border-bottom: 1px solid #504f4c;
@@ -434,9 +447,8 @@ header.navigation {
       header.navigation .search-bar .search-and-submit input[type=search] {
         background: #777671;
         border: 1px solid #5d5c59;
-        padding: .6em .8em;
-        font-size: .9em;
-        font-style: italic;
+        padding: .8inputem 1em;
+        font-size: 1.2em;
         color: rgba(255, 255, 255, 0.7);
         border-radius: 6px;
         margin: 0; }
@@ -485,7 +497,8 @@ header.navigation {
 
 body {
   font-family: "Lato";
-  margin: 0; }
+  margin: 0;
+  background-color: #4E4945; }
 
 h1 {
   color: #EFE7DA;
@@ -530,8 +543,13 @@ form {
 
 #header-container {
   width: 100%;
+  background-color: #4E4945;
   background-image: url("../../static/img/bar.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
   height: 600px; }
+  #header-container img {
+    opacity: 0.5; }
 
 #half-full-container {
   background-color: #4E4945; }
@@ -553,8 +571,6 @@ td {
 .hover-tile-outer {
   background-size: cover;
   background-position: bottom;
-  background: url("/images/mountains.png");
-  background-color: #477DCA;
   border: 1px solid #DDD;
   height: 150px;
   margin-bottom: 1.5;
@@ -579,17 +595,44 @@ td {
     color: white;
     height: inherit;
     padding: 1em 1.5em; }
-  .hover-tile-outer .hover-tile-visible {
+  .hover-tile-outer .hover-tile-visible-avoid {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2em;
+    font-weight: 300;
+    padding-top: 1.5em;
+    text-align: center;
+    background-color: #970005; }
+  .hover-tile-outer .hover-tile-hidden-avoid {
+    background: rgba(151, 0, 5, 0.5); }
+    .hover-tile-outer .hover-tile-hidden-avoid h4 {
+      margin-bottom: .5em; }
+    .hover-tile-outer .hover-tile-hidden-avoid p {
+      color: rgba(255, 255, 255, 0.7); }
+  .hover-tile-outer .hover-tile-visible-caution {
     color: rgba(255, 255, 255, 0.7);
     font-size: 2em;
     font-weight: 200;
     padding-top: 1.5em;
-    text-align: center; }
-  .hover-tile-outer .hover-tile-hidden {
-    background: rgba(0, 0, 0, 0.5); }
-    .hover-tile-outer .hover-tile-hidden h4 {
+    text-align: center;
+    background-color: #D0711D; }
+  .hover-tile-outer .hover-tile-hidden-caution {
+    background: rgba(208, 113, 29, 0.5); }
+    .hover-tile-outer .hover-tile-hidden-caution h4 {
       margin-bottom: .5em; }
-    .hover-tile-outer .hover-tile-hidden p {
+    .hover-tile-outer .hover-tile-hidden-caution p {
+      color: rgba(255, 255, 255, 0.7); }
+  .hover-tile-outer .hover-tile-visible-safe {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2em;
+    font-weight: 200;
+    padding-top: 1.5em;
+    text-align: center;
+    background-color: #2B6D69; }
+  .hover-tile-outer .hover-tile-hidden-safe {
+    background: rgba(43, 109, 105, 0.5); }
+    .hover-tile-outer .hover-tile-hidden-safe h4 {
+      margin-bottom: .5em; }
+    .hover-tile-outer .hover-tile-hidden-safe p {
       color: rgba(255, 255, 255, 0.7); }
 
 .cards:after {
@@ -613,12 +656,12 @@ td {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 31.76157%; }
+      width: 82.94039%; }
       .card:last-child {
         margin-right: 0; }
-      .card:nth-child(3n) {
+      .card:nth-child(5n) {
         margin-right: 0; }
-      .card:nth-child(3n+1) {
+      .card:nth-child(5n+1) {
         clear: left; } }
   .card .card-image {
     overflow: hidden;
@@ -639,7 +682,7 @@ td {
     top: -1px;
     right: -1px; }
     .card .ribbon-wrapper .ribbon {
-      font-size: .8em;
+      font-size: .65em;
       font-weight: 800;
       text-align: center;
       -webkit-transform: rotate(45deg);
@@ -820,5 +863,10 @@ td {
   visibility: visible; }
 .modal .modal-state:checked + .modal-window .modal-inner {
   top: 0; }
+
+#card-container {
+  width: 50%;
+  height: 100%;
+  margin: auto; }
 
 /*# sourceMappingURL=index.css.map */

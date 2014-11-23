@@ -13,7 +13,42 @@ $cool-cream:  #E4DACE;
 $true-beige:  #DFC8A9;
 $off-white:   #EFE7DA;
 $off-black:   #4E4945;
+
 $grey:        #6A6965;
+$light-teal:  #479F91;
+$dark-teal:   #2B6D69;
+
+$coral:       #FF5954;
+$dark-coral:  #FF1935;
+$crimson:     #D81639;
+$burgundy:    #970005;
+
+$texas-rose:  #FFA355;
+$ochre:       #D0711D;
+
+
+
+
+#buttons {
+  width: 50%;
+  height: 70%;
+  margin: auto;
+  padding-top: 10%;
+
+
+  
+
+}
+
+form {
+  background-color: $off-black;
+  padding: 25px;
+  width: 50%;
+  margin: auto;
+  border-radius: $border-radius
+
+
+}
 
 
 header.navigation {
@@ -304,9 +339,9 @@ header.navigation {
       input[type=search] {
         background: $navigation-search-background;
         border: $navigation-search-border;
-        padding: .6em .8em;
-        font-size: .9em;
-        font-style: italic;
+        padding: .8inputem 1em;
+        font-size: 1.2em;
+     
         color: $navigation-color;
         border-radius: $base-border-radius * 2;
         margin: 0;
@@ -351,6 +386,7 @@ header.navigation {
 body {
 	font-family: $primary-font;
   margin: 0; 
+  background-color: $off-black;
 
 }
 h1 {
@@ -407,8 +443,15 @@ form {
 
 #header-container {
 	width: 100%;
+  background-color: $off-black;
   background-image: url("../../static/img/bar.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
   height: 600px;
+
+  img {
+    opacity: 0.5;
+  }
   }
 
 #half-full-container {
@@ -433,13 +476,14 @@ td {
   border: black  1px;
 }
 
+
+
+
 .hover-tile-outer {
   $hover-tile-height: 150px;
 
   background-size: cover;
   background-position: bottom;
-  background: url("/images/mountains.png");
-  background-color: $base-accent-color;
   border: 1px solid $base-border-color;
   height: $hover-tile-height;
   margin-bottom: $base-line-height;
@@ -466,16 +510,18 @@ td {
     padding: 1em 1.5em;
   }
 
-  .hover-tile-visible {
+  .hover-tile-visible-avoid {
     color: transparentize(white, .3);
     font-size: 2em;
-    font-weight: 200;  
+    font-weight: 300;  
     padding-top: 1.5em;
     text-align: center;
+    background-color: $burgundy;
+
   }
 
-  .hover-tile-hidden {
-    background: transparentize(black, .5);
+  .hover-tile-hidden-avoid {
+    background: transparentize($burgundy, .5);
     h4 {
       margin-bottom: .5em;
     }
@@ -483,6 +529,47 @@ td {
       color: transparentize(white, .3);
     }
   }
+
+    .hover-tile-visible-caution {
+    color: transparentize(white, .3);
+    font-size: 2em;
+    font-weight: 200;  
+    padding-top: 1.5em;
+    text-align: center;
+    background-color: $ochre;
+
+  }
+
+  .hover-tile-hidden-caution {
+    background: transparentize($ochre, .5);
+    h4 {
+      margin-bottom: .5em;
+    }
+    p {
+      color: transparentize(white, .3);
+    }
+  }
+  .hover-tile-visible-safe {
+    color: transparentize(white, .3);
+    font-size: 2em;
+    font-weight: 200;  
+    padding-top: 1.5em;
+    text-align: center;
+    background-color: $dark-teal;
+
+  }
+
+  .hover-tile-hidden-safe {
+    background: transparentize($dark-teal, .5);
+    h4 {
+      margin-bottom: .5em;
+    }
+    p {
+      color: transparentize(white, .3);
+    }
+  }
+
+
 }
 
 
@@ -514,8 +601,8 @@ td {
   position: relative;
 
   @include media($large-screen) {
-    @include span-columns(4);  
-    @include omega(3n);
+    @include span-columns(10);  
+    @include omega(5n);
   }
 
   .card-image {
@@ -541,7 +628,7 @@ td {
     right: -1px;
 
     .ribbon {
-      font-size: .8em;
+      font-size: .65em;
       font-weight: 800;
       text-align: center;
       @include transform(rotate(45deg));
@@ -772,3 +859,8 @@ td {
 
 // Based on code by Kasper Mikiewicz
 
+#card-container {
+  width: 50%;
+  height: 100%;
+  margin:auto;
+}
