@@ -154,10 +154,11 @@ def user_lat_long():
                     open_venues             =open_venues,
                     )
 
-@app.route('/venuehours/<id>')
-def venue_opening_hours(id):
+@app.route('/venueinfo/<id>')
+def venue_more_infomration(id):
 
-    return render_template (hours=venue_hours(id))
+    return render_template (hours   =venue_hours(id),
+                            photos  =instagram_engine.location_search(id))
 
 @app.route('/venuepics/<id>')
 def instagram_picture_finder(id):
