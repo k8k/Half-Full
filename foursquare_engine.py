@@ -20,8 +20,8 @@ def foursquare_search_by_category(latlng, category):
 
     results_dictionary =    {'ll': latlng,
                             'verified' : True,
-                            'intent': 'checkin', 
-                            'radius': '100',
+                            'intent': 'browse', 
+                            'radius': '1000',
                             'limit': '15'}
     
     # Check to see if there is a specified category - if so add to search
@@ -62,6 +62,41 @@ def update_db_from_twilio(venue_name, city, busy_status):
     return likely_venues
 #
 # print update_db_from_twilio('Starbucks', 'Berkeley, CA', 'SLAMMED')
+
+
+def venue_hours(venue_id):
+    full_venue_info = client.venues(venue_id)
+
+
+    if 'hours' in client.venues(venue_id)['venue']:
+        opening_hours=client.venues(venue_id)['venue']['hours'] 
+    else:
+        opening_hours = None
+
+    return opening_hours
+
+print venue_hours('40a55d80f964a52020f31ee3')
+
+
+# venues()
+# venues.add()
+# venues.categories()
+# venues.explore()
+# venues.search()
+# venues.trending()
+# venues.events()
+# venues.herenow()
+# venues.listed()
+# venues.menu()
+# venues.photos()
+# venues.similar()
+# venues.tips()
+# venues.edit()
+# venues.flag()
+# venues.edit()
+# venues.proposeedit()
+# venues.setrole()
+
 
 
 

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-	<head>
-  		<meta charset="UTF-8">
-  		<title>Half Full Results</title>
+  <head>
+		<meta charset="UTF-8">
+		<title>Half Full Results</title>
 
           <link rel="shortcut icon" href="http://3.bp.blogspot.com/-ZPAG4LadOp8/Tr7QtSltB_I/AAAAAAAAAHM/kwKfDaFiHP8/s320/blog_pinkie_favicon.png" type="image/vnd.microsoft.icon">
 
@@ -12,144 +12,123 @@
 
    
 
-  	</head>
+	</head>
 
-  	<body>
+	<body>
 
-
-<div class="cards">
-  
-  </div>
-
-  <div class="card">
-    <div class="ribbon-wrapper"><div class="ribbon">HALF FULL</div></div>
-    <div class="card-image">
-      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-4.png" alt="">
-    </div>
-    <div class="card-header">
-      Another Card
-    </div>
-    <div class="card-copy">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, officiis sunt neque facilis culpa molestiae necessitatibus delectus veniam provident.</p>
-    </div>
-    <div class="card-stats">
-      <ul>
-        <li>98<span>Items</span></li>
-        <li>298<span>Things</span></li>
-        <li>923<span>Objects</span></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-image">
-      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-3.png" alt="">
-    </div>
-    <div class="card-header">
-      The Last Card
-    </div>
-    <div class="card-copy">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, officiis sunt neque facilis culpa molestiae necessitatibus delectus veniam provident.</p>
-    </div>
-    <div class="card-stats">
-      <ul>
-        <li>98<span>Items</span></li>
-        <li>298<span>Things</span></li>
-        <li>923<span>Objects</span></li>
-      </ul>
-    </div>
-  </div>
-</div>
+  {% extends 'index.html' %}
+  {% block body %}
 
 
-<div id='card-container'>
+    <div id="spacer">
+    </div>
+    <div id='card-container'> 
+  {% for i in open_venues %}
+   
 
-{% for i in results_check %}
 
     <div class="card">
-    <div class="card-image">
-
-      <div class="hover-tile-outer">
-    
-  
-    <div class="hover-tile-container">
-    {% if i['user_rating'] == -1 %}
-          {% if i['hereNow']['count'] > 2 %}
+      <div class="card-image">
+        <div class="hover-tile-outer">
+        <div class="hover-tile-container">
+          {% if i['user_rating'] == -1 %}
+            {% if i['hereNow']['count'] > 2 %}
+              
               <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
               </div>
+
               <div class="hover-tile hover-tile-hidden-avoid">
-                <h4>Hidden Copy</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h4>{{ i['categories']['name'] }}</h4>
+                <p>{{ i['formattedPhone'] }}</p>
               </div>
-          {% elif i['hereNow']['count'] > 0 %}
+
+            {% elif i['hereNow']['count'] > 0 %}
+             
               <div class="hover-tile hover-tile-visible-caution" >
                 {{  i['name']  }}
               </div>
+
               <div class="hover-tile hover-tile-hidden-caution">
-                <h4>Hidden Copy</h4>
+                <h4>{{ i['name']}}</h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
               </div>
-          {% else %}
+
+            {% else %}
+
               <div class="hover-tile hover-tile-visible-safe" >
                 {{  i['name']  }}
               </div>
+
               <div class="hover-tile hover-tile-hidden-safe">
-                <h4>Hidden Copy</h4>
+                <h4>{{ i['name'] }}</h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
               </div>
-          {% endif %}
-      {% else %}
-        {% if i['user_rating'] == 0 %}
-              <div class="ribbon-wrapper"><div class="ribbon">HALF FULL</div></div>
+
+            {% endif %}
+        {% else %}
+          {% if i['user_rating'] == 0 %}
+              <div class="ribbon-wrapper">
+                <div class="ribbon">HALF FULL</div>
+              </div>
+              
               <div class="hover-tile hover-tile-visible-safe" >
                 {{  i['name']  }}
               </div>
+
               <div class="hover-tile hover-tile-hidden-safe">
-                <h4>Hidden Copy</h4>
+                <h4>{{ i['name'] }}</h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
               </div>
+
         {% elif i['user_rating'] == 1 %}
+              
               <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
               </div>
+
               <div class="hover-tile hover-tile-hidden-avoid">
-                <h4>Hidden Copy</h4>
+                <h4>{{ i['name'] }}</h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
               </div>
+
         {% endif %}
       {% endif %}
 
+            <div class="hover-tile hover-tile-visible-avoid" >
+              {{  i['name']  }}
+            </div>
+          <div class="hover-tile hover-tile-hidden-avoid">
+            <h4>{{ i['name'] }}</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="hover-tile hover-tile-visible-avoid" >
-      {{  i['name']  }}
-    </div>
-    <div class="hover-tile hover-tile-hidden-avoid">
-      <h4>Hidden Copy</h4>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
-    </div>
-  </div>
-</div>
-    </div>
     <div class="card-header">
        {% if i['user_rating'] == -1 %}
+
           {% if i['hereNow']['count'] > 2 %}
-            AVOID.
+              <strong>AVOID.</strong>
           {% elif i['hereNow']['count'] > 0 %}
-            Proceed With Caution.
+              <strong>Proceed With Caution.</strong>
           {% else %}
-            Seems Safe.
+              <strong>Seems Safe.</strong>
           {% endif %}
+
       {% else %}
+
         {% if i['user_rating'] == 0 %}
-        Your fellow misanthropes report this place is safe.
+            <strong>Your fellow misanthropes report this place is safe.</strong>
         {% elif i['user_rating'] == 1 %}
-        AVOID AT ALL COSTS.
+            <strong>AVOID AT ALL COSTS.</strong>
         {% endif %}
-      {% endif %}</p>
+      {% endif %}
+
     </div>
     <div class="card-copy">
-      <p>
+      
        
     </div>
     
@@ -158,33 +137,52 @@
         <li>{{ ((i['location']['distance'])/0.75)|int }}<span>Steps Away</span></li>
         <li>298<span>Things</span></li>
         <li><div class="modal">
-  <label for="modal-1">
-    <div class="btn js-btn">Click for Modal</div>
-  </label>
-  <input class="modal-state" id="modal-1" type="checkbox" />
-  <div class="modal-window">
-    <div class="modal-inner">
-      <label class="modal-close" for="modal-1"></label>
-      <h2>{{  i['name']  }}</h2>
-      <p class="intro">{{  i['location']['formattedAddress'][0] }}<br>
-        {{  i['location']['formattedAddress'][1] }}<br>
-      </p>
-      <p class="body">Body text lorem ipsum dolor ipsum dolor sit sit possimus amet, consectetur adipisicing elit. Itaque, placeat, explicabo, veniam quos aperiam molestias eriam molestias molestiae suscipit ipsum enim quasi sit possimus quod atque nobis voluptas earum odit accusamus quibusdam.</p>
-    </div>
-  </div>
-</div>
-</li>
+              <label for="modal-1">
+                <div id='instapics' class="btn js-btn">More Info
+            </div>
+            </label>
+            <input class="modal-state" id="modal-1" id={{ i['id'] }} type="checkbox"/>
+            <div class="modal-window">
+            <div class="modal-inner">
+              <label class="modal-close" for="modal-1"></label>
+              <h3>{{  i['name']  }}</h3>
+              <p class="intro">
+                {{  i['location']['formattedAddress'][0] }}<br>
+                {{  i['location']['formattedAddress'][1] }}<br>
+              </p>
+
+              <p class="body"><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></p>
+              
+              <div id='insta_container'></div>
+              <p class="body">Body text lorem ipsum dolor ipsum dolor sit sit possimus amet, consectetur adipisicing elit. Itaque, placeat, explicabo, veniam quos aperiam molestias eriam molestias molestiae suscipit ipsum enim quasi sit possimus quod atque nobis voluptas earum odit accusamus quibusdam.</p>
+              </div>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
 
 
 {% endfor %}
+
 </div>
 
 </div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  
+<script>
+$('#instapics').click(
+  function(evt) {
+   
+    alert("you clicked me!");
+
+  });
+
+</script>
+{% endblock %}
 
 
 

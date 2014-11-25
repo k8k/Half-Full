@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session
 import os
 from instagram import client
 import requests
-from foursquare_engine import foursquare_search_by_category, update_db_from_twilio
+from foursquare_engine import foursquare_search_by_category, update_db_from_twilio, venue_hours
 import instagram_engine
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -98,6 +98,23 @@ def user_lat_long():
     for i in results_check:
         foursq_ids_in_results.append(i['id'])
 
+    open_venues = []
+    for i in results_check:
+        if venue_hours(i['id']) is not None:
+            if venue_hours(i['id'])['isOpen']:
+                open_venues.append(i)
+    
+
+
+
+  
+    print "THESE PLACES ARE OPEN %r" % open_venues
+    print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+
+
+    # Write an if statement that will return only venues that are open
+
+
     print "RESULTS %r" % results_check
 
     sqlsession = connect()
@@ -107,7 +124,7 @@ def user_lat_long():
     
 
     for i in results_check:
-
+        i['user_rating'] = -1
         for k in status_query:
             if i['id'] == k.foursquare_id:
                 i['user_rating'] = k.status
@@ -118,16 +135,6 @@ def user_lat_long():
             
 
     print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-    
-
-
-
-    # status_to_override = None
-    # for i in status_query:
-    #     for k in results_check:
-    #         if i.foursquare_id == k['id']:
-    #             status_to_override = i
-
 
 
     print "STATUS QUERY %r" % status_query
@@ -137,20 +144,20 @@ def user_lat_long():
     for i in status_query:
         matching_ids.append(i.foursquare_id.encode())
 
-    # print "MATCH IDS %r" % matching_ids
-
-    test_list = ['1', '2', '3']
-
-    # print "CHECK %r" % results_check
 
 
     return render_template ('results.html',  
                     foursq_ids_in_results   =foursq_ids_in_results,
                     status_query            =status_query,
                     matching_ids            =matching_ids,
-                    test_list               =test_list,
-                    results_check           =results_check)
+                    results_check           =results_check,
+                    open_venues             =open_venues,
+                    )
 
+@app.route('/venuehours/<id>')
+def venue_opening_hours(id):
+
+    return render_template (hours=venue_hours(id))
 
 @app.route('/venuepics/<id>')
 def instagram_picture_finder(id):

@@ -41,7 +41,7 @@ $ochre:       #D0711D;
 }
 
 form {
-  background-color: $off-black;
+  background-color: transparentize($off-black,.1);
   padding: 25px;
   width: 50%;
   margin: auto;
@@ -420,7 +420,7 @@ h2 {
   height: 300px;
   margin: auto;
   margin-bottom: 20px;
-  background-color: $off-black;
+  background-color: transparentize($off-black, .5);
   color: $off-white;
 }
 
@@ -447,6 +447,7 @@ form {
   background-image: url("../../static/img/bar.jpg");
   background-repeat: no-repeat;
   background-position: center;
+  border-radius: $border-radius;
   height: 600px;
 
   img {
@@ -521,7 +522,7 @@ td {
   }
 
   .hover-tile-hidden-avoid {
-    background: transparentize($burgundy, .5);
+    background: transparentize($burgundy, .25);
     h4 {
       margin-bottom: .5em;
     }
@@ -541,7 +542,7 @@ td {
   }
 
   .hover-tile-hidden-caution {
-    background: transparentize($ochre, .5);
+    background: transparentize($ochre, .25);
     h4 {
       margin-bottom: .5em;
     }
@@ -560,7 +561,7 @@ td {
   }
 
   .hover-tile-hidden-safe {
-    background: transparentize($dark-teal, .5);
+    background: transparentize($dark-teal, .25);
     h4 {
       margin-bottom: .5em;
     }
@@ -595,6 +596,7 @@ td {
   background-color: $card-background;
   border-radius: $base-border-radius;
   border: $card-border;
+  margin: auto;
   margin-bottom: $base-spacing;
   cursor: pointer;
   box-shadow: 0 2px 4px darken($base-background-color, 10);
@@ -798,17 +800,17 @@ td {
 
     @include media($medium-screen) {
       padding: $modal-padding;
-      width: 60%;
-      max-height: 60%;
-      margin-top: 10em;
+      width: 70%;
+      max-height: 80%;
+      margin-top: 4em;
     }
 
     @include media($large-screen) {
-      width: 50%;
-      margin-top: 10em;
+      width: 70%;
+      margin-top: 4em;
     }
 
-    h1 {
+    h3 {
       color: $base-font-color;
       margin-bottom: .6em;
       text-align: left;
@@ -821,16 +823,16 @@ td {
       text-align: left;
 
       &.intro {
-        color: $blue;
-        line-height: 1.6em;
+        color: $crimson;
+        line-height: 1.4em;
       }
 
       &.body { 
-        color: $base-font-color;
-        line-height: 1.45em;
+        color: $off-black;
+        line-height: 1.25em;
 
         @include media($medium-screen) {
-          @include columns(2 8em);
+          @include columns(2 6urlem);
         }
       }
     }
@@ -860,7 +862,21 @@ td {
 // Based on code by Kasper Mikiewicz
 
 #card-container {
-  width: 50%;
-  height: 100%;
+  width: 70%;
   margin:auto;
+
+}
+
+#spacer {
+  height: 50px;
+}
+
+#testoutter {
+  height: 1000px;
+  background-color: red;
+}
+
+#testinner {
+  height: 20px;
+  background-color: blue;
 }

@@ -242,7 +242,7 @@ html {
   padding-top: 10%; }
 
 form {
-  background-color: #4E4945;
+  background-color: rgba(78, 73, 69, 0.9);
   padding: 25px;
   width: 50%;
   margin: auto;
@@ -524,7 +524,7 @@ h2 {
   height: 300px;
   margin: auto;
   margin-bottom: 20px;
-  background-color: #4E4945;
+  background-color: rgba(78, 73, 69, 0.5);
   color: #EFE7DA; }
 
 form {
@@ -547,6 +547,7 @@ form {
   background-image: url("../../static/img/bar.jpg");
   background-repeat: no-repeat;
   background-position: center;
+  border-radius: 5px;
   height: 600px; }
   #header-container img {
     opacity: 0.5; }
@@ -603,7 +604,7 @@ td {
     text-align: center;
     background-color: #970005; }
   .hover-tile-outer .hover-tile-hidden-avoid {
-    background: rgba(151, 0, 5, 0.5); }
+    background: rgba(151, 0, 5, 0.75); }
     .hover-tile-outer .hover-tile-hidden-avoid h4 {
       margin-bottom: .5em; }
     .hover-tile-outer .hover-tile-hidden-avoid p {
@@ -616,7 +617,7 @@ td {
     text-align: center;
     background-color: #D0711D; }
   .hover-tile-outer .hover-tile-hidden-caution {
-    background: rgba(208, 113, 29, 0.5); }
+    background: rgba(208, 113, 29, 0.75); }
     .hover-tile-outer .hover-tile-hidden-caution h4 {
       margin-bottom: .5em; }
     .hover-tile-outer .hover-tile-hidden-caution p {
@@ -629,7 +630,7 @@ td {
     text-align: center;
     background-color: #2B6D69; }
   .hover-tile-outer .hover-tile-hidden-safe {
-    background: rgba(43, 109, 105, 0.5); }
+    background: rgba(43, 109, 105, 0.75); }
     .hover-tile-outer .hover-tile-hidden-safe h4 {
       margin-bottom: .5em; }
     .hover-tile-outer .hover-tile-hidden-safe p {
@@ -647,6 +648,7 @@ td {
   background-color: #f7f7f7;
   border-radius: 3px;
   border: 1px solid #DDD;
+  margin: auto;
   margin-bottom: 1.5em;
   cursor: pointer;
   box-shadow: 0 2px 4px #e6e6e6;
@@ -824,14 +826,14 @@ td {
   @media screen and (min-width: 40em) {
     .modal .modal-inner {
       padding: 3em;
-      width: 60%;
-      max-height: 60%;
-      margin-top: 10em; } }
+      width: 70%;
+      max-height: 80%;
+      margin-top: 4em; } }
   @media screen and (min-width: 53.75em) {
     .modal .modal-inner {
-      width: 50%;
-      margin-top: 10em; } }
-  .modal .modal-inner h1 {
+      width: 70%;
+      margin-top: 4em; } }
+  .modal .modal-inner h3 {
     color: #333;
     margin-bottom: .6em;
     text-align: left;
@@ -841,16 +843,16 @@ td {
     max-width: 100% !important;
     text-align: left; }
     .modal .modal-inner p.body.intro, .modal .modal-inner p.intro.intro {
-      color: #477DCA;
-      line-height: 1.6em; }
+      color: #D81639;
+      line-height: 1.4em; }
     .modal .modal-inner p.body.body, .modal .modal-inner p.intro.body {
-      color: #333;
-      line-height: 1.45em; }
+      color: #4E4945;
+      line-height: 1.25em; }
       @media screen and (min-width: 40em) {
         .modal .modal-inner p.body.body, .modal .modal-inner p.intro.body {
-          -webkit-columns: 2 8em;
-          -moz-columns: 2 8em;
-          columns: 2 8em; } }
+          -webkit-columns: 2 6urlem;
+          -moz-columns: 2 6urlem;
+          columns: 2 6urlem; } }
   .modal .modal-inner a.cta {
     color: white;
     display: inline-block;
@@ -865,8 +867,18 @@ td {
   top: 0; }
 
 #card-container {
-  width: 50%;
-  height: 100%;
+  width: 70%;
   margin: auto; }
+
+#spacer {
+  height: 50px; }
+
+#testoutter {
+  height: 1000px;
+  background-color: red; }
+
+#testinner {
+  height: 20px;
+  background-color: blue; }
 
 /*# sourceMappingURL=index.css.map */
