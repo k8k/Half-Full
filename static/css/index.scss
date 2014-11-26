@@ -682,12 +682,11 @@ td {
   $card-stats-color: lighten($base-accent-color, 10);
 
   @include transition (all 0.2s ease-in-out);
-  background-color: $card-background;
+  background-color: $off-white;
   border-radius: $base-border-radius;
   border: $card-border;
   margin: auto;
   margin-bottom: $base-spacing;
-  cursor: pointer;
   box-shadow: 0 2px 4px darken($base-background-color, 10);
   position: relative;
 
@@ -1013,4 +1012,95 @@ div.spacer {
   margin:auto;
   padding: 20px;
   border-radius: $border-radius;
+}
+
+
+
+.accordion-tabs {
+  $tab-border-color: $base-border-color;
+  $tab-border: 1px solid $tab-border-color;
+  $tab-content-background: lighten($light-gray, 10);
+  $tab-active-background: $tab-content-background;
+  $tab-inactive-color: $base-background-color;
+  $tab-inactive-hover-color: darken($light-gray, 5);
+  $tab-mode: $medium-screen;
+
+  @include clearfix;
+  margin-bottom: $base-spacing;
+
+  @include media(max-width $tab-mode) {
+    border: $tab-border;
+    border-radius: $base-border-radius;
+  }
+
+  .tab-header-and-content {
+    @include media($tab-mode) {
+      display: inline;
+    }
+
+    &:first-child .tab-link {
+      border-top-left-radius: $base-border-radius;
+      border-top-right-radius: $base-border-radius;
+
+      @include media(max-width $tab-mode) {
+        border-top: 0;
+      }
+    }
+
+    &:last-child .tab-link {
+      @include media(max-width $tab-mode) {
+        border-bottom-left-radius: $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
+    }
+  }
+
+  .tab-link {
+    background-color: $tab-inactive-color;
+    border-top: $tab-border;
+    color: $dark-gray;
+    display: block;
+    font-weight: bold;
+    padding: $base-spacing/2 $gutter/2;
+
+    @include media($tab-mode) {
+      @include inline-block;
+      border-top-left-radius: $base-border-radius;
+      border-top-right-radius: $base-border-radius;
+      border-top: 0;
+    }
+
+    &:hover {
+      color: $base-link-color;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.is-active {
+      background-color: $tab-active-background;
+
+      @include media($tab-mode) {
+        background-color: $tab-active-background;
+        border: $tab-border;
+        border-bottom-color: $tab-active-background;
+        margin-bottom: -1px;
+      }
+    }
+  }
+
+  .tab-content {
+    background: $tab-content-background;
+    display: none;
+    padding: $base-spacing $gutter;
+
+    @include media($tab-mode) {
+      border-bottom-left-radius: $base-border-radius;
+      border-bottom-right-radius: $base-border-radius;
+      border-top-right-radius: $base-border-radius;
+      border: $tab-border;
+      float: left;
+    }
+  }
 }

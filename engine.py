@@ -11,6 +11,7 @@ from datetime import datetime
 from user_reports_engine import expire_statuses
 from geocoder import Geocoder
 from venuetype import VenueType
+from specificsearch import SearchForVenue
 
 # from jinja2 import Environment, Undefined
 
@@ -116,16 +117,15 @@ def venue_more_information(id):
                             info    =venue_info(id))
 
 
-@app.route("/searchforvenue/<id>")
-def specific_venue_search(id):
-    search_venue    = request.form.get('search_venue', 'bar 355')
-    search_city     = request.form.get('search_city', 'oakland, CA')
+@app.route("/searchforvenue/", methods=['POST'])
+def specific_venue_search():
 
-    id = specific_search(search_venue, search_city)
+    venue_search = SearchForVenue(request.form['search_venue'], request.form['search_city']).fetch()
     
-    return render_template ('listing.html',
-                            photos  =instagram_engine.location_search(id),
-                            info    =venue_info(id))
+    return render_template ('results.html',
+                            foursquare_venues_by_latlong=venue_search,
+                            )
+
 
 
 

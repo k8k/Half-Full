@@ -110,13 +110,23 @@
 
     </div>
     <div class="card-copy">
-      {{ i['contact']['formattedPhone'] }}
+      <div class="radial-progress">
+        <div class="circle">
+          <div class="fill"></div>
+        </div>
+      </div>
        
     </div>
     
     <div class="card-stats">
       <ul>
-        <li>{{ ((i['location']['distance'])/0.75)|int }}<span>Steps Away</span></li>
+        {% if (((i['location']['distance'])/0.75)|int) == 0 %}
+            <li>{{ i['location']['city'] }}</li>
+            {% else %}
+            <li>
+            {{ ((i['location']['distance'])/0.75)|int }}
+          <span>Steps Away</span></li>
+          {% endif %}
         <li>{{ i['stats']['checkinsCount']}}<span>Checkins Ever</span></li>
         <li><a href='/venueinfo/{{  i["id"]  }}'> <button>More Info</button></a>
         </li>

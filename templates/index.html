@@ -40,11 +40,11 @@
       </ul>
     </div>
     <div class="navigation-tools">
-      <form id='user-search-form' action="/searchforvenue/", method='get'>
+      <form id='user-search-form' action="/searchforvenue/", method='post'>
       <div class="search-bar">
         <div class="search-and-submit">
-          <input type='search' id='search_venue' placeholder='Venue Name'/>
-          <input type="search" id="search_city" placeholder="City"/>
+          <input type='search' name='search_venue' placeholder='Venue Name'/>
+          <input type="search" name="search_city" placeholder="City"/>
           <button type="submit">
             <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/search-icon.png" alt="Search Icon">
           </button>
@@ -91,9 +91,8 @@
   
 
 
-
-
   <!-- JavaScript -->
+
   		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>		
 		  <script src="../static/js/index.js" type="text/javascript"></script>  
 		  <script type="text/javascript" src="static/js/jquery.autocomplete.js"></script>

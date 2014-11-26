@@ -702,12 +702,11 @@ td {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
-  background-color: #f7f7f7;
+  background-color: #EFE7DA;
   border-radius: 3px;
   border: 1px solid #DDD;
   margin: auto;
   margin-bottom: 1.5em;
-  cursor: pointer;
   box-shadow: 0 2px 4px #e6e6e6;
   position: relative; }
   @media screen and (min-width: 53.75em) {
