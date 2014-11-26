@@ -19,7 +19,14 @@
       <div id="instagram-container">
   <ul>
     {% for i in photos %}
-    <li><a href="#"><img src="{{ i.get_standard_resolution_url() }}"></a></li>
+      {% if i.get_standard_resolution_url()[-4:] == '.jpg' %}
+        <li><a href="#"><img src="{{ i.get_standard_resolution_url() }}"></a></li>
+      {% elif i.get_standard_resolution_url()[-4:] == '.mp4' %}
+        <li><a href="#"><video>
+        <source src="{{ i.get_standard_resolution_url() }}" type="video/mp4"></a>
+        </video>
+        </li>
+      {% endif %}
     {% endfor %}
    </ul>
 </div>
@@ -36,6 +43,7 @@
 </div>
 
 <br>
+
 
 
 

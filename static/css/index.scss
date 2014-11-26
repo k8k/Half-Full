@@ -977,6 +977,18 @@ li img {
   width:200px;
 }
 
+li video {
+  float: left;
+  margin: 5px;
+  border: 2px solid #333;
+  border-radius: 5px;
+ -moz-transition: all 0.2s ease-in-out;
+ -webkit-transition: all 0.2s ease-in-out;
+ transition: all 0.2s ease-in-out;
+  height:200px;
+  width:200px;
+}
+
 li img:hover {
 border: 3px solid $light-teal;
 }
