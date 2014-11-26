@@ -1,32 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-		<meta charset="UTF-8">
-		<title>Half Full Results</title>
-
-          <link rel="shortcut icon" href="http://3.bp.blogspot.com/-ZPAG4LadOp8/Tr7QtSltB_I/AAAAAAAAAHM/kwKfDaFiHP8/s320/blog_pinkie_favicon.png" type="image/vnd.microsoft.icon">
-
-          <link href='http://fonts.googleapis.com/css?family=Lato:300,400|Monoton' rel='stylesheet' type='text/css'>
-
-          <link rel='stylesheet' href='../static/css/index.css'>
-
-   
-
-	</head>
-
-	<body>
-
   {% extends 'index.html' %}
   {% block body %}
 
 
-    <div id="spacer">
-    </div>
-    <div id='class-container'> 
+
+<div class="spacer" style='height: 50px;'></div>
+  <div class='card-container' style="width: 60%; margin: auto"> 
+
+    
+
   {% for i in open_venues %}
-   
-
-
     <div class="card">
       <div class="card-image">
         <div class="hover-tile-outer">
@@ -128,15 +110,15 @@
 
     </div>
     <div class="card-copy">
-      
+      {{ i['contact']['formattedPhone'] }}
        
     </div>
     
     <div class="card-stats">
       <ul>
         <li>{{ ((i['location']['distance'])/0.75)|int }}<span>Steps Away</span></li>
-        <li>298<span>Things</span></li>
-        <li>><a href="/venuepics/{{  i['id']  }}"<button>More Info</button></a>
+        <li>{{ i['stats']['checkinsCount']}}<span>Checkins Ever</span></li>
+        <li><a href='/venueinfo/{{  i["id"]  }}'> <button>More Info</button></a>
         </li>
       </ul>
     </div>
@@ -147,8 +129,6 @@
 
 </div>
 
-</div>
-</div>
 
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  

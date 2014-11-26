@@ -923,19 +923,33 @@ td {
 .modal .modal-state:checked + .modal-window .modal-inner {
   top: 0; }
 
-#card-container {
-  width: 70%;
+#instagram-container {
+  width: 660px;
+  margin: 0 auto;
+  overflow: auto; }
+
+ul {
+  list-style-type: none; }
+
+li img {
+  float: left;
+  margin: 5px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  height: 200px;
+  width: 200px; }
+
+li img:hover {
+  border: 3px solid #479F91; }
+
+div.card-container {
+  width: 60%;
   margin: auto; }
 
-#spacer {
+div.spacer {
   height: 50px; }
-
-#testoutter {
-  height: 1000px;
-  background-color: red; }
-
-#testinner {
-  height: 20px;
-  background-color: blue; }
 
 /*# sourceMappingURL=index.css.map */

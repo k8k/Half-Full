@@ -16,9 +16,15 @@ def location_search(foursquare_id):
         
         # Stripping unnecessary info out of media_search list       
         media_search = media_search[0]
+
+        print dir(media_search[0])
+        print media_search[0].location
+
         
 
         return media_search
+
+print location_search('40a55d80f964a52020f31ee3')
 
 
 

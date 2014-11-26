@@ -2,14 +2,15 @@ from flask import Flask, render_template, request, session
 import os
 from instagram import client
 import requests
-from foursquare_engine import foursquare_search_by_category, update_db_from_twilio, venue_hours
+from foursquare_engine import foursquare_search_by_category, update_db_from_twilio, venue_hours, venue_info
 import instagram_engine
 import twilio.twiml
 from twilio.rest import TwilioRestClient
 from user_report_model import Status, Session as SQLsession, connect
 from datetime import datetime
 from user_reports_engine import expire_statuses
-
+from geocoder import Geocoder
+from venuetype import VenueType
 
 # from jinja2 import Environment, Undefined
 
@@ -65,34 +66,18 @@ def half_full_home():
 @app.route("/search", methods = ['POST'])
 def user_lat_long():
     """Take user inputted address and convert to lat-long"""
-
-    # Getting Lat/Long coordinates from Address user is searching for
-    r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?sensor=false&key=AIzaSyDjesZT-7Vc5qErTJjS2tDIvxLQdYBxOEY&address=" +\
-    request.form['user_location'])
-    user_latitude = r.json()['results'][0]['geometry']['location']['lat']
-    user_longitude = r.json()['results'][0]['geometry']['location']['lng']
-    user_longitude = str(user_longitude)
-    user_latitude = str(user_latitude)
-
-    # Defining User Location as a string, to pass to foursquare engine
-    location = user_latitude + ',' + user_longitude
     
+    location = Geocoder(request.form.get('user_location', '37.80,122.27')).fetch()
 
-    # Set venue_type as false, making it optional
-    venue_type = False
+    venue_type = request.form.get('venue-type', 'bar')
+    print venue_type
 
-
-
-    # Checking venue-type. Translation Layer - will transfer to a DB
-    # to dynamically update after MVP is complete
-    if request.form['venue-type'] == 'restaurant':
-        venue_type = '4d4b7105d754a06374d81259'
-    elif request.form['venue-type'] == 'bar':
-        venue_type = '4d4b7105d754a06376d81259'
-    elif request.form['venue-type'] == 'cafe':
-        venue_type = '4bf58dd8d48988d1e0931735'
-
-    results_check = foursquare_search_by_category(location, venue_type)
+    venue_type = VenueType().get(venue_type)
+    
+    if venue_type is not None:
+        results_check = foursquare_search_by_category(location, venue_type)
+    else:
+        return "here"
 
     foursq_ids_in_results = []
     for i in results_check:
@@ -103,13 +88,6 @@ def user_lat_long():
         if venue_hours(i['id']) is not None:
             if venue_hours(i['id'])['isOpen']:
                 open_venues.append(i)
-    
-
-
-
-  
-    print "THESE PLACES ARE OPEN %r" % open_venues
-    print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
 
 
     # Write an if statement that will return only venues that are open
@@ -132,13 +110,6 @@ def user_lat_long():
             else:
                 i['user_rating'] = -1
 
-            
-
-    print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-
-
-    print "STATUS QUERY %r" % status_query
-    # print "*~*~*~*~*~*~**~*~\n\n\n\n\n\n\n\n\n %r" % status_query[0].venue_name
 
     matching_ids =[]
     for i in status_query:
@@ -156,16 +127,12 @@ def user_lat_long():
 
 @app.route('/venueinfo/<id>')
 def venue_more_infomration(id):
+    """detailed information about selected venue"""
 
-    return render_template (hours   =venue_hours(id),
-                            photos  =instagram_engine.location_search(id))
-
-@app.route('/venuepics/<id>')
-def instagram_picture_finder(id):
-    """renders recent instagram photos from a specific venue"""
-
-    return render_template ('listing.html', 
-                            photos=instagram_engine.location_search(id))
+    return render_template ('listing.html',
+                            hours   =venue_hours(id),
+                            photos  =instagram_engine.location_search(id),
+                            info    =venue_info(id))
 
 
 
@@ -207,7 +174,7 @@ def half_full_report():
             return str(response)
 
 
-            # calling function from foursquare_engine that will query the foursquare
+        # calling function from foursquare_engine that will query the foursquare
         # API using the parameters defined in the user's incoming test message
         venues = update_db_from_twilio(venue_name, city, busy_status)
         print venues
@@ -216,6 +183,13 @@ def half_full_report():
             status_code=0
         elif 'slammed' in busy_status:
             status_code=1
+        else:
+            with response.message() as message:
+                message.body = "{0}".format(HELP_MESSAGE)
+                session.clear()
+            return str(response)
+
+
 
         session['status_code']=status_code
         print status_code
@@ -407,10 +381,8 @@ def half_full_report():
 
 
 
-
-
-
-
+def specific_venue_search():
+    request.form.get('search_for_venue')
 
 
 

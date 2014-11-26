@@ -65,8 +65,6 @@ def update_db_from_twilio(venue_name, city, busy_status):
 
 
 def venue_hours(venue_id):
-    full_venue_info = client.venues(venue_id)
-
 
     if 'hours' in client.venues(venue_id)['venue']:
         opening_hours=client.venues(venue_id)['venue']['hours'] 
@@ -75,8 +73,15 @@ def venue_hours(venue_id):
 
     return opening_hours
 
-print venue_hours('40a55d80f964a52020f31ee3')
+def venue_info(venue_id):
+    full_venue_info = client.venues(venue_id)
 
+    return full_venue_info
+
+
+
+def specific_venue_search():
+    request.form.get('')
 
 # venues()
 # venues.add()
