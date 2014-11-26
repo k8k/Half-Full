@@ -298,17 +298,26 @@ html {
   margin: auto;
   padding-top: 10%; }
 
-form {
+.user-preferences-form {
   background-color: rgba(78, 73, 69, 0.9);
   padding: 25px;
   width: 50%;
   margin: auto;
   border-radius: 5px; }
 
+form {
+  font: "Lato";
+  text-align: center;
+  color: #EFE7DA;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em; }
+
 header.navigation {
   background-color: #6A6965;
   border-bottom: 1px solid #504f4c;
-  height: 60px;
+  height: 80px;
   width: 100%;
   z-index: 999; }
   header.navigation .navigation-wrapper {
@@ -327,11 +336,11 @@ header.navigation {
       clear: both; }
   header.navigation .logo {
     float: left;
-    max-height: 60px;
+    max-height: 80px;
     padding-left: 1em;
     padding-right: 2em; }
     header.navigation .logo img {
-      max-height: 60px;
+      max-height: 80px;
       padding: .8em 0; }
   header.navigation .navigation-menu-button {
     color: rgba(255, 255, 255, 0.7);
@@ -339,7 +348,7 @@ header.navigation {
     float: right;
     font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
     font-weight: 700;
-    line-height: 60px;
+    line-height: 80px;
     margin: 0;
     padding-right: 1em;
     text-transform: uppercase; }
@@ -371,7 +380,7 @@ header.navigation {
   header.navigation ul li.nav-link {
     background: #6A6965;
     display: block;
-    line-height: 60px;
+    line-height: 80px;
     overflow: hidden;
     padding-right: .8em;
     text-align: right;
@@ -381,7 +390,7 @@ header.navigation {
       header.navigation ul li.nav-link {
         background: transparent;
         display: inline;
-        line-height: 60px;
+        line-height: 80px;
         text-decoration: none;
         width: auto; } }
     header.navigation ul li.nav-link a {
@@ -454,7 +463,7 @@ header.navigation {
       padding-right: 0; }
       @media screen and (min-width: 53.75em) {
         header.navigation ul.submenu li {
-          line-height: 46.15385px; }
+          line-height: 61.53846px; }
           header.navigation ul.submenu li:first-child > a {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px; }
@@ -505,7 +514,7 @@ header.navigation {
         background: #777671;
         border: 1px solid #5d5c59;
         padding: .8inputem 1em;
-        font-size: 1.2em;
+        font-size: .8em;
         color: rgba(255, 255, 255, 0.7);
         border-radius: 6px;
         margin: 0; }
@@ -583,15 +592,6 @@ h2 {
   margin-bottom: 20px;
   background-color: rgba(78, 73, 69, 0.5);
   color: #EFE7DA; }
-
-form {
-  font: "Lato";
-  text-align: center;
-  color: #EFE7DA;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2em; }
 
 #navigation-bar {
   background-color: #4E4945;
@@ -810,7 +810,8 @@ td {
   display: block;
   max-width: 300px; }
 .modal input[type="checkbox"] {
-  display: none; }
+  display: none;
+  background-color: #4E4945 transparentize, 0.1; }
 .modal .modal-open {
   overflow: hidden; }
 .modal .modal-window {
@@ -951,5 +952,12 @@ div.card-container {
 
 div.spacer {
   height: 50px; }
+
+#checkbox-div {
+  background-color: rgba(78, 73, 69, 0.9);
+  width: 50%;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px; }
 
 /*# sourceMappingURL=index.css.map */

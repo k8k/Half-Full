@@ -40,15 +40,17 @@
       </ul>
     </div>
     <div class="navigation-tools">
+      <form id='user-search-form' action="/searchforvenue/", method='get'>
       <div class="search-bar">
         <div class="search-and-submit">
-          <input type="search" id="search_for_venue" placeholder="Enter Search" />
+          <input type='search' id='search_venue' placeholder='Venue Name'/>
+          <input type="search" id="search_city" placeholder="City"/>
           <button type="submit">
             <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/search-icon.png" alt="Search Icon">
           </button>
+        </form>
         </div>
       </div>
-      <a href="javascript:void(0)" class="sign-up">Sign Up</a>
     </div>
   </div>
 </header>
@@ -68,15 +70,19 @@
   
     
       <form id='user-preferences-form' action="/search", method='post'>
+          <div id='checkbox-div'>
           <input type="text" data-provide="typeahead" class="typeahead form-control" id="user-location" placeholder="Where Ya At?" name="user_location" required></input><br>
-          <br>
+          
+          
           <input type="checkbox" name="venue-type" value="bar">  Booze.   
           <input type="checkbox" name="venue-type" value="restaurant">  Food.   
           <input type="checkbox" name="venue-type" value="cafe">  Coffee.<br>
-          <input type="checkbox" name="venue-type" value="everything">Anything, as long as it's empty.<br>
+          <input type="checkbox" name="venue-type" value="everything">Anything, as long as it's empty.
+          <br>
           <br>
           
           <button type="submit" name="submit-button">Leave Me Alone</button>
+          </div>
       </form>
     
     </div>

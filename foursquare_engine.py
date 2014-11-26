@@ -64,6 +64,17 @@ def update_db_from_twilio(venue_name, city, busy_status):
 # print update_db_from_twilio('Starbucks', 'Berkeley, CA', 'SLAMMED')
 
 
+def specific_search(venue_name, venue_city):
+    search_result = client.venues.search(params=    {'query': venue_name,
+                                                    'near': venue_city,
+                                                    'verified': True,
+                                                    'intent': 'match',
+                                                    })
+    return search_result['venues'][0]['id']
+    #Foursquare ID of closest match for venue given search: venue name & city
+
+print specific_search('bar 355', 'oakland')
+
 def venue_hours(venue_id):
 
     if 'hours' in client.venues(venue_id)['venue']:
@@ -80,8 +91,7 @@ def venue_info(venue_id):
 
 
 
-def specific_venue_search():
-    request.form.get('')
+
 
 # venues()
 # venues.add()

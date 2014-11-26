@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 import os
 from instagram import client
 import requests
-from foursquare_engine import foursquare_search_by_category, update_db_from_twilio, venue_hours, venue_info
+from foursquare_engine import specific_search, foursquare_search_by_category, update_db_from_twilio, venue_hours, venue_info
 import instagram_engine
 import twilio.twiml
 from twilio.rest import TwilioRestClient
@@ -64,44 +64,34 @@ def half_full_home():
 
 
 @app.route("/search", methods = ['POST'])
-def user_lat_long():
-    """Take user inputted address and convert to lat-long"""
+def return_matching_venues():
+    """Take user location and venue type, check for existing reports in
+    database. If user report is in database that is 'Fresh,' then override
+    foursquare check-in information """
     
+    
+    #Get information from form and query Foursquare's API for matching venues
     location = Geocoder(request.form.get('user_location', '37.80,122.27')).fetch()
+    venue_type = VenueType().get(request.form.get('venue-type', 'bar'))
+    foursquare_venues_by_latlong = foursquare_search_by_category(location, venue_type)
 
-    venue_type = request.form.get('venue-type', 'bar')
-    print venue_type
 
-    venue_type = VenueType().get(venue_type)
-    
-    if venue_type is not None:
-        results_check = foursquare_search_by_category(location, venue_type)
-    else:
-        return "here"
 
+    #Get list of Foursquare IDs to check for matching entries in Database
     foursq_ids_in_results = []
-    for i in results_check:
+    for i in foursquare_venues_by_latlong:
         foursq_ids_in_results.append(i['id'])
 
-    open_venues = []
-    for i in results_check:
-        if venue_hours(i['id']) is not None:
-            if venue_hours(i['id'])['isOpen']:
-                open_venues.append(i)
-
-
-    # Write an if statement that will return only venues that are open
-
-
-    print "RESULTS %r" % results_check
-
+    #Connect to database
     sqlsession = connect()
 
+    #Check for venues in results that are in user-reported Database
     query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results))
     status_query = query.all()
     
-
-    for i in results_check:
+    #Create a dict object in results object "user_rating" to use for displaying
+    #user reported ratings in UI. If no user_rating default to -1
+    for i in foursquare_venues_by_latlong:
         i['user_rating'] = -1
         for k in status_query:
             if i['id'] == k.foursquare_id:
@@ -111,31 +101,31 @@ def user_lat_long():
                 i['user_rating'] = -1
 
 
-    matching_ids =[]
-    for i in status_query:
-        matching_ids.append(i.foursquare_id.encode())
-
-
 
     return render_template ('results.html',  
-                    foursq_ids_in_results   =foursq_ids_in_results,
-                    status_query            =status_query,
-                    matching_ids            =matching_ids,
-                    results_check           =results_check,
-                    open_venues             =open_venues,
+                    foursquare_venues_by_latlong    =foursquare_venues_by_latlong,
                     )
 
-@app.route('/venueinfo/<id>')
-def venue_more_infomration(id):
-    """detailed information about selected venue"""
+
+@app.route('/venueinfo/<id>', methods=['POST', 'GET'])
+def venue_more_information(id):
+    """Return detailed information about selected venue"""
 
     return render_template ('listing.html',
-                            hours   =venue_hours(id),
                             photos  =instagram_engine.location_search(id),
                             info    =venue_info(id))
 
 
+@app.route("/searchforvenue/<id>")
+def specific_venue_search(id):
+    search_venue    = request.form.get('search_venue', 'bar 355')
+    search_city     = request.form.get('search_city', 'oakland, CA')
 
+    id = specific_search(search_venue, search_city)
+    
+    return render_template ('listing.html',
+                            photos  =instagram_engine.location_search(id),
+                            info    =venue_info(id))
 
 
 
@@ -379,10 +369,6 @@ def half_full_report():
             message.body = "Huh, not quite sure what you mean. If you're trying to report a venue, please respond with 'Venue Name: City: Slammed/Half Full'."""
  
 
-
-
-def specific_venue_search():
-    request.form.get('search_for_venue')
 
 
 

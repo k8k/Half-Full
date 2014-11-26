@@ -6,6 +6,7 @@ $(document).ready(function () {
 
 
 function initialize() {
+
         var input = document.getElementById('user-location');
         var autocomplete = new google.maps.places.Autocomplete(input);
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -59,28 +60,13 @@ function initialize() {
 		displayKey: 'description',
 	});
 
-	// this creates event listener for location form
-
-	// $("#user-preferences-form").submit(searchForSpot);
 });
 
-// function for autocomplete from google autocomplete
 
-// function getSuggestions(query, cb) {
 
-// 	var service = new google.maps.places.AutocompleteService();
-// 	service.getQueryPredictions({ input: query }, function(predictions, status) {
-// 		if (status != google.maps.places.PlacesServiceStatus.OK) {
-// 			alert(status);
-// 			return;
-// 		}
-// 		console.log(predictions);
-// 		return cb(predictions);
 
-// 	});
 
-	
-// }
+
 
 $(document).ready(function() {
   var menu = $('#navigation-menu');
@@ -95,6 +81,7 @@ $(document).ready(function() {
       }
     });
   });
+
 
   // underline under the active nav item
   $(".nav .nav-link").click(function() {
