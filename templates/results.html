@@ -126,7 +126,7 @@
     <div class="card-stats">
       <ul>
         {% if (((i['location']['distance'])/0.75)|int) == 0 %}
-            <li>{{ i['location']['city'] }}<span>Ya Heard</span></li>
+            <li>{{ i['location']['city'] }}<span>{{ i['location']['formattedAddress'][0] }}</span></li>
             {% else %}
             <li>
             {{ ((i['location']['distance'])/0.75)|int }}
