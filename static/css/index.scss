@@ -124,8 +124,19 @@ $ochre:       #D0711D;
   padding-top: 10%;
 
 
+
 }
 
+
+#homechoice {
+  width: 30%;
+  height: 30%;
+  margin: auto;
+  margin-top: 10%;
+  background-color: transparentize($off-black,.1);
+
+
+}
 .user-preferences-form {
   background-color: transparentize($off-black,.1);
   padding: 25px;
@@ -164,6 +175,8 @@ header.navigation {
   $navigation-submenu-padding: 1em;
   $navigation-submenu-width: 12em;
   $horizontal-bar-mode: $large-screen;
+  position:fixed;
+  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
 
   background-color: $navigation-background;
   border-bottom: 1px solid darken($navigation-background, 10);
@@ -677,8 +690,8 @@ td {
   $card-background: lighten($card-border-color, 10);
   $card-header-background: $card-background;
   $card-hover-background: lighten($card-background, 5);
-  $card-image-background: #DBD199;
-  $card-image-hover-background: lighten($card-image-background, 5);
+  $card-image-background: transparent;
+  $card-image-hover-background: transparent;
   $card-stats-color: lighten($base-accent-color, 10);
 
   @include transition (all 0.2s ease-in-out);
@@ -691,18 +704,16 @@ td {
   position: relative;
 
   @include media($large-screen) {
-    @include span-columns(10);  
+    @include span-columns(12);  
     @include omega(5n);
   }
 
   .card-image {
     overflow: hidden;
-    max-height: 150px;
+    max-height: 200px;
 
     img {
       width: 100%;
-      @include transition (all 0.2s ease-in-out);
-      background: $card-image-background;
       border-top-left-radius: $base-border-radius;
       border-top-right-radius: $base-border-radius;
     }
@@ -739,6 +750,8 @@ td {
     border-bottom: $card-border;
     border-radius: $base-border-radius $base-border-radius 0 0;
     font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
     padding: $base-spacing/3 $gutter/2;
   }
 
@@ -754,7 +767,7 @@ td {
 
     ul li {
       display: inline;
-      color: $card-stats-color;
+      color: $dark-teal;
       font-weight: 800;
       font-size: 1.2em;
       float: left;
@@ -783,11 +796,11 @@ td {
     background-color: $card-hover-background;
     
     .card-image img {
-      background: $card-image-hover-background;
+      background: transparent;
     }
   
     .card-header {
-      background-color: $card-hover-background;
+      background-color: transparent;
     }
   }
 
@@ -1012,6 +1025,7 @@ div.spacer {
   margin:auto;
   padding: 20px;
   border-radius: $border-radius;
+  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
 }
 
 
@@ -1104,3 +1118,61 @@ div.spacer {
     }
   }
 }
+
+.accordion {
+  $accordion-menu-border-color: $base-border-color;
+  $accordion-menu-color: $base-font-color;
+  $accordion-menu-border: 1px solid $accordion-menu-border-color;
+  $accordion-menu-background: lighten($accordion-menu-border-color, 10);
+  $accordion-menu-hover: lighten($accordion-menu-background, 2);
+  $accordion-menu-sub-background: darken($accordion-menu-background, 5);
+  $accordion-menu-sub-inset: darken($accordion-menu-sub-background, 6);
+  $accordion-menu-sub-hover: lighten($accordion-menu-sub-background, 2);
+  $accordion-menu-list-padding: $base-spacing/2 $gutter;
+  
+  background-color: $accordion-menu-background;
+  border: $accordion-menu-border;
+  margin-bottom: $base-spacing;
+
+  li {
+    border-bottom: $accordion-menu-border;
+
+    > a {
+      color: $accordion-menu-color;
+      padding: $accordion-menu-list-padding;
+      display: block;
+    }
+
+    &:last-child {
+      border: none;
+    }
+
+    &:hover {
+      background-color: $accordion-menu-hover;
+    }
+  }
+
+  ul.submenu {
+    display: none;
+
+
+    li {
+      background-color: $accordion-menu-sub-background;
+
+      &:first-child {
+        border-top: $accordion-menu-border;
+        box-shadow: inset 0 1px 1px $accordion-menu-sub-inset;
+      }
+
+      &:hover {
+        background-color: $accordion-menu-sub-hover;
+      }
+    }
+  }
+
+  .is-expanded {
+    display: block;
+    padding-bottom: 0;
+  }
+}
+

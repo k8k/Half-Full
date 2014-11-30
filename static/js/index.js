@@ -5,6 +5,7 @@ $(document).ready(function () {
 
 
 
+
 function initialize() {
 
         var input = document.getElementById('user-location');
@@ -95,3 +96,6 @@ $(document).ready(function() {
 
 
 $("#submit-button").submit(console.log("click!"));
+
+
+

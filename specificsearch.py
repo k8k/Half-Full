@@ -1,28 +1,95 @@
 import foursquare
 import os
+from user_report_model import Status, Session as SQLsession, connect
+import constants as c
 
-
-FOURSQUARE_CLIENT_ID=os.environ.get('FOURSQUARE_CLIENT_ID')
-FOURSQUARE_CLIENT_SECRET=os.environ.get('FOURSQUARE_CLIENT_SECRET')
-# Construct the client object
-client = foursquare.Foursquare(client_id=FOURSQUARE_CLIENT_ID, client_secret=FOURSQUARE_CLIENT_SECRET)
 
 class SearchForVenue(object):
 	"""docstring for SearchForVenue"""
-	def __init__(self, venuename,venuecity):
+	def __init__(self):
 		super(SearchForVenue, self).__init__()
-		self.venuename = venuename
-		self.venuecity = venuecity
+		self.client 	= foursquare.Foursquare(client_id=c.FOURSQUARE_CLIENT_ID, client_secret=c.FOURSQUARE_CLIENT_SECRET)
+
 		
-	def fetch(self):
-		likely_places = client.venues.search(params={'query': self.venuename,
-                                                    'near': self.venuecity,
-                                                    'verified': True,
-                                                    'intent': 'checkin',
-                                                    })
-		likely_venues = likely_places['venues']
+	def search_by_name_city(self, venuename, venuecity):
+		likely_venues = self.likely_venues(venuename, venuecity)
 		for i in likely_venues:
 			i['location']['distance'] = 0
 			i['user_rating'] = -1
 
 		return likely_venues
+
+	def likely_venues(self, venuename, venuecity):
+		likely_places = self.client.venues.search(params={'query': venuename,
+													'near': venuecity,
+													'verified': True,
+													'intent': 'checkin',
+													})
+		likely_venues = likely_places['venues']
+
+		return likely_venues
+
+
+
+	def venues_with_user_status(self, location, venue_type):
+		foursquare_venues_by_latlong = self.foursquare_search_by_category(location, venue_type)
+
+		#Dict comprehension of Foursquare IDs to check for matching entries in Database
+		foursq_ids_in_results = {i['id'] : i for i in foursquare_venues_by_latlong}
+		
+		
+		#Connect to database & check for venues that are in user-reported DB
+		sqlsession = connect()
+		query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
+		status_query = query.all()
+
+		ids_statuses = {i.foursquare_id : i.status for i in status_query}
+
+
+		#Create a dict object in results object "user_rating" to use for displaying
+		#user reported ratings in UI. If no user_rating default to -1
+		for four_id in foursq_ids_in_results.keys():
+			if four_id in ids_statuses.keys():
+				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]                
+			else:
+				foursq_ids_in_results[four_id]['user_rating'] = -1
+
+		return foursq_ids_in_results.values()
+
+
+	def foursquare_search_by_category(self, latlng, category):
+
+	# Create a list of venue categories to exclude from results
+
+		blacklist = []
+
+	# Create a dictionary that will be used to search 4sq DB of venues
+
+		results_dictionary =	{'ll': latlng,
+								'verified' : True,
+								'intent': 'browse', 
+								'radius': '1000',
+								'limit': '15'}
+		
+		# Check to see if there is a specified category - if so add to search
+		# dictionary
+
+		if category != False:
+			results_dictionary['categoryId'] = category  
+
+		places_by_category = self.client.venues.search(params=results_dictionary)
+
+		# Drilling down to "venues" within the 4q objects that are returned
+		# to remove excess information and simplify later code
+
+		venues = places_by_category['venues']
+		
+		# Creating a list of venues that meet the specified search criteria
+
+		categorized_list_of_venues = []
+		for i in range(len(venues)):
+			for j in range(len(venues[i]['categories'])):
+				if venues[i]['categories'][j]['id'] not in blacklist:
+					categorized_list_of_venues.append(venues[i])
+	   
+		return categorized_list_of_venues

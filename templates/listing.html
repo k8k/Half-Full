@@ -4,16 +4,19 @@
 
 
 
-<div class="spacer" style='height: 50px;'></div>
+<div class="spacer" style='height: 100px;'></div>
 
 
 <div class='card-container' style="width: 60%; margin: auto;"> 
   <div class="card">
     <div class="card-image">
       <img src="{{ photos[0].get_standard_resolution_url() }}" alt="">
+      <div class="card-title">
+        {{ instainfo }}
+      </div>
     </div>
     <div class="card-header">
-      First Card
+      {{ instainfo }}
     </div>
     <div class="card-copy">
       <div id="instagram-container">
@@ -29,6 +32,8 @@
       {% endif %}
     {% endfor %}
    </ul>
+
+   {{ info }}
 </div>
       </p>
     </div>

@@ -298,6 +298,13 @@ html {
   margin: auto;
   padding-top: 10%; }
 
+#homechoice {
+  width: 30%;
+  height: 30%;
+  margin: auto;
+  margin-top: 10%;
+  background-color: rgba(78, 73, 69, 0.9); }
+
 .user-preferences-form {
   background-color: rgba(78, 73, 69, 0.9);
   padding: 25px;
@@ -315,6 +322,8 @@ form {
   font-size: 1.2em; }
 
 header.navigation {
+  position: fixed;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
   background-color: #6A6965;
   border-bottom: 1px solid #504f4c;
   height: 80px;
@@ -714,7 +723,7 @@ td {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 82.94039%; }
+      width: 100%; }
       .card:last-child {
         margin-right: 0; }
       .card:nth-child(5n) {
@@ -723,13 +732,9 @@ td {
         clear: left; } }
   .card .card-image {
     overflow: hidden;
-    max-height: 150px; }
+    max-height: 200px; }
     .card .card-image img {
       width: 100%;
-      -webkit-transition: all 0.2s ease-in-out;
-      -moz-transition: all 0.2s ease-in-out;
-      transition: all 0.2s ease-in-out;
-      background: #DBD199;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px; }
   .card .ribbon-wrapper {
@@ -764,6 +769,8 @@ td {
     border-bottom: 1px solid #DDD;
     border-radius: 3px 3px 0 0;
     font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
     padding: 0.5em 0.809em; }
   .card .card-copy {
     padding: 0.75em 0.809em;
@@ -774,7 +781,7 @@ td {
     overflow: auto; }
     .card .card-stats ul li {
       display: inline;
-      color: #6f99d5;
+      color: #2B6D69;
       font-weight: 800;
       font-size: 1.2em;
       float: left;
@@ -793,9 +800,9 @@ td {
   .card:hover {
     background-color: white; }
     .card:hover .card-image img {
-      background: #e2daac; }
+      background: transparent; }
     .card:hover .card-header {
-      background-color: white; }
+      background-color: transparent; }
   .card:active {
     background-color: #f7f7f7; }
     .card:active .card-header {
@@ -968,6 +975,94 @@ div.spacer {
   width: 50%;
   margin: auto;
   padding: 20px;
-  border-radius: 5px; }
+  border-radius: 5px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28); }
+
+.accordion-tabs {
+  margin-bottom: 1.5em; }
+  .accordion-tabs:after {
+    content: "";
+    display: table;
+    clear: both; }
+  @media screen and (max-width: 40em) {
+    .accordion-tabs {
+      border: 1px solid #DDD;
+      border-radius: 3px; } }
+  @media screen and (min-width: 40em) {
+    .accordion-tabs .tab-header-and-content {
+      display: inline; } }
+  .accordion-tabs .tab-header-and-content:first-child .tab-link {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px; }
+    @media screen and (max-width: 40em) {
+      .accordion-tabs .tab-header-and-content:first-child .tab-link {
+        border-top: 0; } }
+  @media screen and (max-width: 40em) {
+    .accordion-tabs .tab-header-and-content:last-child .tab-link {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px; } }
+  .accordion-tabs .tab-link {
+    background-color: white;
+    border-top: 1px solid #DDD;
+    color: #333;
+    display: block;
+    font-weight: bold;
+    padding: 0.75em 0.809em; }
+    @media screen and (min-width: 40em) {
+      .accordion-tabs .tab-link {
+        display: inline-block;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-top: 0; } }
+    .accordion-tabs .tab-link:hover {
+      color: #477DCA; }
+    .accordion-tabs .tab-link:focus {
+      outline: none; }
+    .accordion-tabs .tab-link.is-active {
+      background-color: #f7f7f7; }
+      @media screen and (min-width: 40em) {
+        .accordion-tabs .tab-link.is-active {
+          background-color: #f7f7f7;
+          border: 1px solid #DDD;
+          border-bottom-color: #f7f7f7;
+          margin-bottom: -1px; } }
+  .accordion-tabs .tab-content {
+    background: #f7f7f7;
+    display: none;
+    padding: 1.5em 1.618em; }
+    @media screen and (min-width: 40em) {
+      .accordion-tabs .tab-content {
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top-right-radius: 3px;
+        border: 1px solid #DDD;
+        float: left; } }
+
+.accordion {
+  background-color: #f7f7f7;
+  border: 1px solid #DDD;
+  margin-bottom: 1.5em; }
+  .accordion li {
+    border-bottom: 1px solid #DDD; }
+    .accordion li > a {
+      color: #333;
+      padding: 0.75em 1.618em;
+      display: block; }
+    .accordion li:last-child {
+      border: none; }
+    .accordion li:hover {
+      background-color: #fcfcfc; }
+  .accordion ul.submenu {
+    display: none; }
+    .accordion ul.submenu li {
+      background-color: #eaeaea; }
+      .accordion ul.submenu li:first-child {
+        border-top: 1px solid #DDD;
+        box-shadow: inset 0 1px 1px #dadada; }
+      .accordion ul.submenu li:hover {
+        background-color: #efefef; }
+  .accordion .is-expanded {
+    display: block;
+    padding-bottom: 0; }
 
 /*# sourceMappingURL=index.css.map */

@@ -4,25 +4,31 @@
 
 
 <div class="spacer" style='height: 50px;'></div>
-  <div class='card-container' style="width: 60%; margin: auto"> 
-
     
 
+
+<div class="spacer" style='height: 50px;'></div>
+  <div class='card-container' style="width: 60%; margin: auto"> 
+
+
   {% for i in foursquare_venues_by_latlong %}
+
+      
     <div class="card">
       <div class="card-image">
         <div class="hover-tile-outer">
         <div class="hover-tile-container">
+          
           {% if i['user_rating'] == -1 %}
             {% if i['hereNow']['count'] > 2 %}
               
-              <div class="hover-tile hover-tile-visible-avoid" >
+               <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
               </div>
 
               <div class="hover-tile hover-tile-hidden-avoid">
-                <h4>{{ i['categories']['name'] }}</h4>
-                <p>{{ i['formattedPhone'] }}</p>
+                <h4>{{ i['name'] }}</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
               </div>
 
             {% elif i['hereNow']['count'] > 0 %}
@@ -40,6 +46,7 @@
 
               <div class="hover-tile hover-tile-visible-safe" >
                 {{  i['name']  }}
+                
               </div>
 
               <div class="hover-tile hover-tile-hidden-safe">
@@ -77,13 +84,7 @@
         {% endif %}
       {% endif %}
 
-            <div class="hover-tile hover-tile-visible-avoid" >
-              {{  i['name']  }}
-            </div>
-          <div class="hover-tile hover-tile-hidden-avoid">
-            <h4>{{ i['name'] }}</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
-          </div>
+           
         </div>
       </div>
     </div>
@@ -96,13 +97,13 @@
           {% elif i['hereNow']['count'] > 0 %}
               <strong>Proceed With Caution.</strong>
           {% else %}
-              <strong>Seems Safe.</strong>
+              <strong>Half Full.</strong>
           {% endif %}
 
       {% else %}
 
         {% if i['user_rating'] == 0 %}
-            <strong>Your fellow misanthropes report this place is safe.</strong>
+            <strong>Your fellow misanthropes report this place is Half Full.</strong>
         {% elif i['user_rating'] == 1 %}
             <strong>AVOID AT ALL COSTS.</strong>
         {% endif %}
@@ -110,24 +111,20 @@
 
     </div>
     <div class="card-copy">
-      <div class="radial-progress">
-        <div class="circle">
-          <div class="fill"></div>
-        </div>
-      </div>
-       
+    
     </div>
     
     <div class="card-stats">
       <ul>
         {% if (((i['location']['distance'])/0.75)|int) == 0 %}
-            <li>{{ i['location']['city'] }}</li>
+            <li>{{ i['location']['city'] }}<span>Ya Heard</span></li>
             {% else %}
             <li>
             {{ ((i['location']['distance'])/0.75)|int }}
           <span>Steps Away</span></li>
           {% endif %}
         <li>{{ i['stats']['checkinsCount']}}<span>Checkins Ever</span></li>
+        <li>Report<span>Is {{ i['name'] }} Half Full?</span>
         <li><a href='/venueinfo/{{  i["id"]  }}'> <button>More Info</button></a>
         </li>
       </ul>
@@ -138,6 +135,11 @@
 {% endfor %}
 
 </div>
+
+
+
+
+
 
 
 
