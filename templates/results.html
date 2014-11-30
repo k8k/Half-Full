@@ -10,7 +10,6 @@
 <div class="spacer" style='height: 50px;'></div>
   <div class='card-container' style="width: 60%; margin: auto"> 
 
-
   {% for i in foursquare_venues_by_latlong %}
 
       
@@ -27,8 +26,10 @@
               </div>
 
               <div class="hover-tile hover-tile-hidden-avoid">
-                <h4>{{ i['name'] }}</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
             {% elif i['hereNow']['count'] > 0 %}
@@ -38,8 +39,10 @@
               </div>
 
               <div class="hover-tile hover-tile-hidden-caution">
-                <h4>{{ i['name']}}</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
             {% else %}
@@ -50,8 +53,10 @@
               </div>
 
               <div class="hover-tile hover-tile-hidden-safe">
-                <h4>{{ i['name'] }}</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
             {% endif %}
@@ -66,8 +71,10 @@
               </div>
 
               <div class="hover-tile hover-tile-hidden-safe">
-                <h4>{{ i['name'] }}</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
         {% elif i['user_rating'] == 1 %}
@@ -77,8 +84,10 @@
               </div>
 
               <div class="hover-tile hover-tile-hidden-avoid">
-                <h4>{{ i['name'] }}</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, hic, dolore, labore,provident eligendi fugiat ad exercitationem.</p>
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
         {% endif %}
