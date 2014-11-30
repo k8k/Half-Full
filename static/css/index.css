@@ -1038,30 +1038,31 @@ div.spacer {
         border: 1px solid #DDD;
         float: left; } }
 
-.accordion {
+.accordion-name {
   background-color: #f7f7f7;
   border: 1px solid #DDD;
   margin-bottom: 1.5em; }
-  .accordion li {
+  .accordion-name li {
     border-bottom: 1px solid #DDD; }
-    .accordion li > a {
+    .accordion-name li > a {
       color: #333;
       padding: 0.75em 1.618em;
       display: block; }
-    .accordion li:last-child {
+    .accordion-name li:last-child {
       border: none; }
-    .accordion li:hover {
+    .accordion-name li:hover {
       background-color: #fcfcfc; }
-  .accordion ul.submenu {
-    display: none; }
-    .accordion ul.submenu li {
+  .accordion-name ul.submenu {
+    display: none;
+    font-size: .7em; }
+    .accordion-name ul.submenu li {
       background-color: #eaeaea; }
-      .accordion ul.submenu li:first-child {
+      .accordion-name ul.submenu li:first-child {
         border-top: 1px solid #DDD;
         box-shadow: inset 0 1px 1px #dadada; }
-      .accordion ul.submenu li:hover {
+      .accordion-name ul.submenu li:hover {
         background-color: #efefef; }
-  .accordion .is-expanded {
+  .accordion-name .is-expanded {
     display: block;
     padding-bottom: 0; }
 

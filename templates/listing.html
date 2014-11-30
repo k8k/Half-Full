@@ -12,11 +12,46 @@
     <div class="card-image">
       <img src="{{ photos[0].get_standard_resolution_url() }}" alt="">
       <div class="card-title">
-        {{ instainfo }}
       </div>
     </div>
     <div class="card-header">
-      {{ instainfo }}
+
+
+
+
+      <ul class="accordion-name">
+        <li>
+          <a href="javascript:void(0)" class="js-accordion-trigger">{{ instainfo }}</a>
+          <ul class="submenu">
+            <li>
+              <a href="javascript:void(0)">Rating: {{ info['venue']['rating'] }}</a>
+            </li>
+         
+
+            <li>
+              <a href="javascript:void(0)">Open? {{ info['venue']['popular']['status'] }}</a><br>
+              <strong>Hours</strong><br>
+              
+              {% for i in info['venue']['popular']['timeframes'] %}
+                {{ i['days'] }}: {{ i['open'][0]['renderedTime']}}<br>
+              
+              {% endfor %}
+            </li>
+            <li>
+              <a href="javascript:void(0)"> {{ info['venue']['popular'] }}</a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"> {{ info['venue']['popular'] }}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+
+
+
+
+      
     </div>
     <div class="card-copy">
       <div id="instagram-container">
@@ -50,6 +85,15 @@
 <br>
 
 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  
+<script>
+$('.js-accordion-trigger').bind('click', function(e){
+  jQuery(this).parent().find('.submenu').slideToggle('fast'); 
+ // apply the toggle to the ul
+  jQuery(this).parent().toggleClass('is-expanded');
+  e.preventDefault();
+});
+</script>
 
 
 {%  endblock  %}

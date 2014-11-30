@@ -1119,7 +1119,7 @@ div.spacer {
   }
 }
 
-.accordion {
+.accordion-name {
   $accordion-menu-border-color: $base-border-color;
   $accordion-menu-color: $base-font-color;
   $accordion-menu-border: 1px solid $accordion-menu-border-color;
@@ -1154,6 +1154,7 @@ div.spacer {
 
   ul.submenu {
     display: none;
+    font-size: .7em;
 
 
     li {
