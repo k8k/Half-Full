@@ -37,3 +37,46 @@ class Geocoder(object):
 Half Full then uses the location string to query the Foursquare API, along with the category of venue the user selected. The resulting page lists venues that match the user's criteria, along with information about each venue and an indication of how full or empty the venue is expected to be.
 <img src="/static/img/ResultsPage.gif" alt="ResultsPage" style="width:80%;">
 </p>
+</p>
+If the user would rather search for a specific venue, they can do so from the top navigation bar.
+<img src="/static/img/SpecificVenueSearch.gif" alt="Specific Venue Search">
+</p>
+
+The results page when searching for a specific venue looks very similar to the general results page - the one small difference being that since the user doesn't provide an exact location for the specific search (just a city), the address and city are displayed where the distance away (measured in steps) is displayed on the general results page.
+<img src="/static/img/ResultsComparison.png">
+</p>
+<p>
+From the results page, the user can click through for more information, as well as to see Instagram pictures that have been recently taken at the location. 
+<img src="/static/img/SpecificVenue.gif" alt="Specific Venue Information">
+
+
+In order to get the Instagram pictures, Half Full uses the Foursquare ID of the venue and maps it to the Instagram ID, then queries the instagram API for recent media from that venue.
+
+```
+class InstagramSearch(object):
+        """docstring for InstagramSearch"""
+        def __init__(self):
+                super(InstagramSearch, self).__init__()
+                self.access_token       = c.INSTAGRAM_CONFIG['access_token']
+                
+
+        def recent_media_search(self,foursquare_id):
+                api = instagram_client.InstagramAPI(access_token=self.access_token)
+                
+                # Getting Instagram ID objects from Foursquare ID
+                instagram_id_info = api.location_search(foursquare_v2_id=foursquare_id)
+                instagram_id = int(instagram_id_info[0].id)
+                
+                # Searching for all media tagged at location, based on Instagram ID
+                media_search = api.location_recent_media(location_id=int(instagram_id))
+                
+                # Stripping unnecessary info out of media_search list       
+                media_search = media_search[0]
+
+                print dir(media_search[0])
+                print media_search[0].location
+
+                return media_search
+```
+</p>
+
