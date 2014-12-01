@@ -43,7 +43,7 @@ If the user would rather search for a specific venue, they can do so from the to
 </p>
 
 The results page when searching for a specific venue looks very similar to the general results page - the one small difference being that since the user doesn't provide an exact location for the specific search (just a city), the address and city are displayed where the distance away (measured in steps) is displayed on the general results page.
-<img src="/static/img/ResultsComparison.png">
+<img src="/static/img/ComparisonResult.png">
 </p>
 <p>
 From the results page, the user can click through for more information, as well as to see Instagram pictures that have been recently taken at the location. 
@@ -51,6 +51,7 @@ From the results page, the user can click through for more information, as well 
 
 
 In order to get the Instagram pictures, Half Full uses the Foursquare ID of the venue and maps it to the Instagram ID, then queries the instagram API for recent media from that venue.
+
 
 ```
 class InstagramSearch(object):
