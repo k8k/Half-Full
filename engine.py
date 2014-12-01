@@ -75,7 +75,9 @@ def specific_venue_search():
                             )
 
 
-
+@app.route("/about")
+def about_page():
+    return render_template ('about.html')
 
 
 @app.route("/twilio", methods=['GET', 'POST'])
