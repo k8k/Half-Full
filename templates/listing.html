@@ -14,35 +14,47 @@
       <div class="card-title">
       </div>
     </div>
-    <div class="card-header">
+    
 
 
 
 
-      <ul class="accordion-name">
+      <ul class="accordion-name" style="text-align:center; font-size:1.25em;">
         <li>
-          <a href="javascript:void(0)" class="js-accordion-trigger">{{ instainfo }}</a>
+          <a href="javascript:void(0)" style="" class="js-accordion-trigger">
+            {{ info['venue']['name'] }}</a>
           <ul class="submenu">
             <li>
-              <a href="javascript:void(0)">Rating: {{ info['venue']['rating'] }}</a>
+              <a href="javascript:void(0)"> {{ info['venue']['location']['formattedAddress'][0] }}<br>
+                {{ info['venue']['location']['formattedAddress'][1] }}</a>
             </li>
          
 
             <li>
-              <a href="javascript:void(0)">Open? {{ info['venue']['popular']['status'] }}</a><br>
+              <a href="javascript:void(0)">
               <strong>Hours</strong><br>
               
               {% for i in info['venue']['popular']['timeframes'] %}
                 {{ i['days'] }}: {{ i['open'][0]['renderedTime']}}<br>
               
               {% endfor %}
+              </a>
             </li>
-            <li>
-              <a href="javascript:void(0)"> {{ info['venue']['popular'] }}</a>
+
+          
+             <li>
+              <a href="javascript:void(0)"> {{ info['venue']['contact']['formattedPhone']}}<br>
+                <a href="{{ info['venue']['url'] }}">{{ info['venue']['url'] }}</a><br>
             </li>
-            <li>
-              <a href="javascript:void(0)"> {{ info['venue']['popular'] }}</a>
+              <li>
+              <a href="javascript:void(0)">
+
+               {% for i in info['venue']['tags'] %}
+                  : {{ i }} : 
+
+              {% endfor %}
             </li>
+            
           </ul>
         </li>
       </ul>
@@ -52,7 +64,7 @@
 
 
       
-    </div>
+    
     <div class="card-copy">
       <div id="instagram-container">
   <ul>
@@ -68,15 +80,14 @@
     {% endfor %}
    </ul>
 
-   {{ info }}
 </div>
       </p>
     </div>
     <div class="card-stats">
       <ul>
-        <li>98<span>Items</span></li>
-        <li>298<span>Things</span></li>
-        <li>923<span>Objects</span></li>
+        <li>{{ info['venue']['rating'] }}<span>Rating</span></li>
+        <li>{{ info['venue']['likes']['count'] }}<span>Likes</span></li>
+        <li>{{ info['venue']['hereNow']['count'] }}<span>Current Checkins</span></li>
       </ul>
     </div>
   </div>
