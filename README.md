@@ -37,25 +37,31 @@ class Geocoder(object):
 Half Full then uses the location string to query the Foursquare API, along with the category of venue the user selected. The resulting page lists venues that match the user's criteria, along with information about each venue and an indication of how full or empty the venue is expected to be.
 <img src="/static/img/ResultsPage.gif" alt="ResultsPage" style="width:80%;">
 </p>
-</p>
+<p>
+<br>
+<br>
 If the user would rather search for a specific venue, they can do so from the top navigation bar.
 <img src="/static/img/SpecificVenueSearch.gif" alt="Specific Venue Search">
 </p>
 
 The results page when searching for a specific venue looks very similar to the general results page - the one small difference being that since the user doesn't provide an exact location for the specific search (just a city), the address and city are displayed where the distance away (measured in steps) is displayed on the general results page.
-<img src="/static/img/ComparisonResult.png">
+<br>
+<img src="/static/img/ComparisonResult.png" width="50%">
+<br>
 </p>
 <p>
 From the results page, the user can click through for more information, as well as to see Instagram pictures that have been recently taken at the location. 
+<br>
 <img src="/static/img/SpecificVenue.gif" alt="Specific Venue Information">
-
+<br>
 
 In order to get the Instagram pictures, Half Full uses the Foursquare ID of the venue and maps it to the Instagram ID, then queries the instagram API for recent media from that venue.
-
+</p>
+<br>
 
 ```
 class InstagramSearch(object):
-        """docstring for InstagramSearch"""
+        """Query Instagram API for recent media"""
         def __init__(self):
                 super(InstagramSearch, self).__init__()
                 self.access_token       = c.INSTAGRAM_CONFIG['access_token']
@@ -79,5 +85,3 @@ class InstagramSearch(object):
 
                 return media_search
 ```
-</p>
-
