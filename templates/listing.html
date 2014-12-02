@@ -1,6 +1,5 @@
-
-  {% extends 'index.html' %}
-  {% block body %}
+{% extends 'index.html' %}
+{% block body %}
 
 
 
@@ -10,7 +9,12 @@
 <div class='card-container' style="width: 60%; margin: auto;"> 
   <div class="card">
     <div class="card-image">
-      <img src="{{ photos[0].get_standard_resolution_url() }}" alt="">
+
+      {% if photos == "No Media" %}
+      <img src="../static/img/bar.jpg" alt="Half Full Image">
+      {% else %}
+      <img src="{{ photos[0].get_standard_resolution_url() }}" alt="Most Recent Instagram Picture">
+      {% endif %}
       <div class="card-title">
       </div>
     </div>
@@ -33,11 +37,14 @@
             <li>
               <a href="javascript:void(0)">
               <strong>Hours</strong><br>
-              
+              {% if 'popular' in info['venue'] %}
               {% for i in info['venue']['popular']['timeframes'] %}
                 {{ i['days'] }}: {{ i['open'][0]['renderedTime']}}<br>
               
               {% endfor %}
+              {% else %}
+                No Hours Available for {{info['venue']['name'] }}
+            {% endif %}
               </a>
             </li>
 
@@ -68,16 +75,20 @@
     <div class="card-copy">
       <div id="instagram-container">
   <ul>
-    {% for i in photos %}
-      {% if i.get_standard_resolution_url()[-4:] == '.jpg' %}
+    {% if photos == "No Media" %}
+      <span id="noinsta">No Recent Instagram Photos</span>
+    {% else %}
+      {% for i in photos %}
+        {% if i.get_standard_resolution_url()[-4:] == '.jpg' %}
         <li><a href="#"><img src="{{ i.get_standard_resolution_url() }}"></a></li>
-      {% elif i.get_standard_resolution_url()[-4:] == '.mp4' %}
+       {% elif i.get_standard_resolution_url()[-4:] == '.mp4' %}
         <li><a href="#"><video>
         <source src="{{ i.get_standard_resolution_url() }}" type="video/mp4"></a>
         </video>
         </li>
-      {% endif %}
+        {% endif %}
     {% endfor %}
+    {% endif %}
    </ul>
 
 </div>
@@ -85,7 +96,11 @@
     </div>
     <div class="card-stats">
       <ul>
+        {% if info['venue']['rating'] %}
         <li>{{ info['venue']['rating'] }}<span>Rating</span></li>
+        {% else %}
+        <li>No<span>Ratings</span></li>
+        {% endif %}
         <li>{{ info['venue']['likes']['count'] }}<span>Likes</span></li>
         <li>{{ info['venue']['hereNow']['count'] }}<span>Current Checkins</span></li>
       </ul>

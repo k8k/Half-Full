@@ -2,6 +2,7 @@ import foursquare
 import os
 from user_report_model import Status, Session as SQLsession, connect
 import constants as c
+from datetime import datetime
 
 
 class SearchForVenue(object):
@@ -73,6 +74,8 @@ class SearchForVenue(object):
 
 		ids_statuses 	= {i.foursquare_id : i.status for i in status_query}
 		expiration_info	= {i.foursquare_id : i.expiration_status for i in status_query}
+		report_time		= {i.foursquare_id : i.time for i in status_query}
+		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/3600) for i in status_query}
 
 
 		#Create a dict object in results object "user_rating" to use for displaying
@@ -80,10 +83,14 @@ class SearchForVenue(object):
 		for four_id in foursq_ids_in_results.keys():
 			if four_id in ids_statuses.keys():
 				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
-				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]              
+				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]
+				foursq_ids_in_results[four_id]['report_time'] = report_time[four_id]
+				foursq_ids_in_results[four_id]['delta_time']  = delta_time[four_id]               
 			else:
 				foursq_ids_in_results[four_id]['user_rating'] 	= -1
 				foursq_ids_in_results[four_id]['expiration'] 	= "No Report"
+				foursq_ids_in_results[four_id]['report_time'] 	= "No Report"
+				foursq_ids_in_results[four_id]['delta_time'] 	= "No Report"
 
 		print foursq_ids_in_results.values()
 		return foursq_ids_in_results.values()

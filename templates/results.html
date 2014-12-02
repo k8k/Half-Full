@@ -18,7 +18,7 @@
         <div class="hover-tile-outer">
         <div class="hover-tile-container">
           
-          {% if i['user_rating'] == -1 %}
+          {% if i['user_rating'] == -1 or i['expiration'] == "Expired" %}
             {% if i['hereNow']['count'] > 2 %}
               
                <div class="hover-tile hover-tile-visible-avoid" >
@@ -60,7 +60,8 @@
               </div>
 
             {% endif %}
-        {% else %}
+
+        {% elif i['expiration'] == "Fresh" %}
           {% if i['user_rating'] == 0 %}
               <div class="ribbon-wrapper-safe">
                 <div class="ribbon">HALF FULL</div>
@@ -98,6 +99,55 @@
               </div>
 
         {% endif %}
+
+        {% else %}
+
+          {% if i['user_rating'] == 0 and i['hereNow']['count'] > 1 %}
+              <div class="hover-tile hover-tile-visible-caution" >
+                {{  i['name']  }}
+              </div>
+
+              <div class="hover-tile hover-tile-hidden-caution">
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
+              </div>
+            {% elif i['user_rating'] == 1 and i['hereNow']['count'] < 2 %}
+              <div class="hover-tile hover-tile-visible-caution" >
+                {{  i['name']  }}
+              </div>
+
+              <div class="hover-tile hover-tile-hidden-caution">
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
+              </div>
+            {% elif i['user_rating'] == 1 and i['hereNow']['count'] > 1 %}
+              <div class="hover-tile hover-tile-visible-avoid" >
+                {{  i['name']  }}
+              </div>
+
+              <div class="hover-tile hover-tile-hidden-avoid">
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
+              </div>
+            {% elif i['user_rating'] == 0 and i['hereNow']['count'] < 2 %}
+              <div class="hover-tile hover-tile-visible-safe" >
+                {{  i['name']  }}
+              </div>
+
+              <div class="hover-tile hover-tile-hidden-safe">
+                <h5>{{ i['location']['formattedAddress'][0] }}</h5>
+                <h5>{{ i['location']['formattedAddress'][1] }}</h5>
+                <p>{{ i['contact']['formattedPhone']}}
+                <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
+              </div>
+
+        {% endif %}
       {% endif %}
 
            
@@ -106,7 +156,8 @@
     </div>
 
     <div class="card-header">
-       {% if i['user_rating'] == -1 %}
+
+       {% if i['user_rating'] == -1 or i['expiration'] == "Expired" %}
 
           {% if i['hereNow']['count'] > 2 %}
               <strong>AVOID.</strong>
@@ -115,25 +166,50 @@
           {% else %}
               <strong>Half Full.</strong>
           {% endif %}
+      
+      {% elif i['expiration'] == "Fresh" %}
 
-      {% else %}
-
-        {% if i['user_rating'] == 0 and i['expiration'] == 'Fresh' %}
+        {% if i['user_rating'] == 0 %}
             <strong>Your fellow misanthropes report this place is Half Full.</strong>
-        {% elif i['user_rating'] == 0 and i['expiration'] == 'Expired' %}
-            <strong>Proceed with Caution?</strong>
         {% elif i['user_rating'] == 1 %}
             <strong>AVOID AT ALL COSTS.</strong>
         {% endif %}
-      {% endif %}
+
+      {% elif i['expiration'] == "Stale" %}
+        
+        {% if i['user_rating'] == 0 and i['hereNow']['count'] > 1 %}
+          <strong>Proceed With Caution. Looks busy now</strong>
+        {% elif i['user_rating'] == 1 and i['hereNow']['count'] < 2 %}
+          <strong>Proceed With Caution. Was slammed {{ i['delta_time'] }} hours ago.</strong>
+        {% elif i['user_rating'] == 1 and i['hereNow']['count'] > 1 %}
+          <strong>AVOID. Looks busy, and {{ i[time_delta] }} was reported to be slammed.
+          </strong>
+        {% elif i['user_rating'] == 0 and i['hereNow']['count'] < 2 %}
+          <strong>Seems Safe</strong>
+          {% endif %}
+        {% endif %}
+  
+
+
 
     </div>
+    
+
+
+
+
+
     <div class="card-copy">
 
     </div>
     
     <div class="card-stats">
       <ul>
+        {% if i['delta_time'] == "No Report" %}
+        <li>0<span>User Reports</span></li>
+        {% else %}
+        <li> {{ i['delta_time'] }}<span>Hours Ago</li>
+        {% endif %}
         {% if (((i['location']['distance'])/0.75)|int) == 0 %}
             <li>{{ i['location']['city'] }}<span>{{ i['location']['formattedAddress'][0] }}</span></li>
             {% else %}
@@ -146,18 +222,18 @@
           <form id="user-report-slammed" action="/updatedatabaseslammed" method="post">
             <input type="hidden" name="venue-name-slammed" value="{{ i['name'] }}">
             <input type="hidden" name="foursquare-id-slammed" value="{{ i['id'] }}">
-            <button type="submit" name="submit-button-slammed">Slammed</button>
+            <button type="submit" name="submit-button-slammed" id="slambtn">Slammed</button>
           </form>
         </li>
         <li>
             <form id="user-report-safe" action="/updatedatabasesafe" method="post">
             <input type="hidden" name="venue-name-safe" value="{{ i['name'] }}">
             <input type="hidden" name="foursquare-id-safe" value="{{ i['id'] }}">
-            <button type="submit" name="submit-button-safe">Half Full</button>
+            <button type="submit" name="submit-button-safe" id="safebtn">Half Full</button>
           </form>
         </li>
         
-        <li><a href='/venueinfo/{{  i["id"]  }}'> <button>More Info</button></a>
+        <li><a href='/venueinfo/{{  i["id"]  }}' id="infobtn"> <button>More Info</button></a>
         </li>
       </ul>
 

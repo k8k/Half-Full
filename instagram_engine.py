@@ -14,26 +14,31 @@ class InstagramSearch(object):
                 
                 # Getting Instagram ID objects from Foursquare ID
                 instagram_id_info = api.location_search(foursquare_v2_id=foursquare_id)
-                instagram_id = int(instagram_id_info[0].id)
+                try:
+                        instagram_id = int(instagram_id_info[0].id)
+                
+                except IndexError:
+                        media_search = "No Media"
+                        return media_search
                 
                 # Searching for all media tagged at location, based on Instagram ID
                 media_search = api.location_recent_media(location_id=int(instagram_id))
                 
                 # Stripping unnecessary info out of media_search list       
                 media_search = media_search[0]
+                if len(media_search) > 0:
+                        return media_search
+                else:
+                        media_search = "No Media"
+                        return media_search
 
-                print dir(media_search[0])
-                print media_search[0].location
-
-                return media_search
-
-        def venue_name(self, foursquare_id):
-                api = instagram_client.InstagramAPI(access_token=self.access_token)
+        # def venue_name(self, foursquare_id):
+        #         api = instagram_client.InstagramAPI(access_token=self.access_token)
                 
-                # Getting Instagram ID objects from Foursquare ID
-                instagram_id_info = api.location_search(foursquare_v2_id=foursquare_id)
-                return instagram_id_info[0].name
+        #         # Getting Instagram ID objects from Foursquare ID
+        #         instagram_id_info = api.location_search(foursquare_v2_id=foursquare_id)
+        #         return instagram_id_info[0].name
                
 
-print InstagramSearch().venue_name('40a55d80f964a52020f31ee3')
+
 

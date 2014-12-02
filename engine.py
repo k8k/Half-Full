@@ -23,6 +23,7 @@ app.secret_key= 'katescoolproject'
 @app.route("/", methods = ['POST', 'GET'])
 def half_full_home():
     """Home page. Basic search box with venue category options"""
+
     expire_statuses
     return render_template("index.html")
 
@@ -43,11 +44,12 @@ def return_matching_venues():
     database. If user report is in database that is 'Fresh,' then override
     foursquare check-in information """
     
-    
+    expire_statuses
     #Get information from form and query Foursquare's API for matching venues
     location = Geocoder(request.form.get('user_location', '37.80,122.27')).fetch()
     venue_type = VenueType[request.form.get('venue-type', 'bar')].value
     foursquare_venues_by_latlong = SearchForVenue().venues_with_user_status(location, venue_type)
+
 
     return render_template ('results.html',  
                     foursquare_venues_by_latlong    =foursquare_venues_by_latlong)
@@ -59,8 +61,7 @@ def venue_more_information(id):
 
     return render_template ('listing.html',
                             photos      = InstagramSearch().recent_media_search(id),
-                            info        = Venue(id).info(),
-                            instainfo   = InstagramSearch().venue_name(id))
+                            info        = Venue(id).info(),)
 
 
 @app.route("/searchforvenue", methods=['POST', 'GET'])

@@ -42,7 +42,7 @@ class Twilio(object):
             return str(response)
 
     def new_user_report(self,body,response):
-        body = filter(None, re.split("[:, ;]", body))
+        body = filter(None, re.split("[:, ;/-]", body))
 
         if body[-1] == 'slammed':
             status_code = 1
