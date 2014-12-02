@@ -118,8 +118,10 @@
 
       {% else %}
 
-        {% if i['user_rating'] == 0 %}
+        {% if i['user_rating'] == 0 and i['expiration'] == 'Fresh' %}
             <strong>Your fellow misanthropes report this place is Half Full.</strong>
+        {% elif i['user_rating'] == 0 and i['expiration'] == 'Expired' %}
+            <strong>Proceed with Caution?</strong>
         {% elif i['user_rating'] == 1 %}
             <strong>AVOID AT ALL COSTS.</strong>
         {% endif %}
@@ -127,14 +129,7 @@
 
     </div>
     <div class="card-copy">
-        <form id="user-report" action="/updatedatabase" method="post">
-            <span><input type="radio" name="venue-status-update" value="0">Half Full<br>
-            <input type="radio" name="venue-status-update" value="1">Slammed</span><br>
-            <input type="hidden" name="venue-name-update" value="{{ i['name'] }}">
-            <input type="hidden" name="foursquare-id-update" value="{{ i['id'] }}">
-            <button type="submit" name="submit-button-update">Report</button>
-          </form>
-    
+
     </div>
     
     <div class="card-stats">

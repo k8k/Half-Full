@@ -19,20 +19,8 @@ class SearchForVenue(object):
 
 		return likely_venues
 
-	def likely_venues(self, venuename, venuecity):
-		likely_places = self.client.venues.search(params={'query': venuename,
-													'near': venuecity,
-													'verified': True,
-													'intent': 'checkin',
-													})
-		likely_venues = likely_places['venues']
-
-		return likely_venues
-
-
-
-	def venues_with_user_status(self, location, venue_type):
-		foursquare_venues_by_latlong = self.foursquare_search_by_category(location, venue_type)
+	def specific_venue_status(self, venue, city):
+		foursquare_venues_by_latlong = self.search_by_name_city(venue,city)
 
 		#Dict comprehension of Foursquare IDs to check for matching entries in Database
 		foursq_ids_in_results = {i['id'] : i for i in foursquare_venues_by_latlong}
@@ -54,6 +42,50 @@ class SearchForVenue(object):
 			else:
 				foursq_ids_in_results[four_id]['user_rating'] = -1
 
+		return foursq_ids_in_results.values()
+
+	def likely_venues(self, venuename, venuecity):
+		likely_places = self.client.venues.search(params={'query': venuename,
+													'near': venuecity,
+													'verified': True,
+													'intent': 'checkin',
+													})
+		likely_venues = likely_places['venues']
+
+		return likely_venues
+
+	def test_user_input(self, venuecity):
+		test_search = self.likely_venues('test', venuecity)
+		return test_search
+
+
+	def venues_with_user_status(self, location, venue_type):
+		foursquare_venues_by_latlong = self.foursquare_search_by_category(location, venue_type)
+
+		#Dict comprehension of Foursquare IDs to check for matching entries in Database
+		foursq_ids_in_results = {i['id'] : i for i in foursquare_venues_by_latlong}
+		
+		
+		#Connect to database & check for venues that are in user-reported DB
+		sqlsession = connect()
+		query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
+		status_query = query.all()
+
+		ids_statuses 	= {i.foursquare_id : i.status for i in status_query}
+		expiration_info	= {i.foursquare_id : i.expiration_status for i in status_query}
+
+
+		#Create a dict object in results object "user_rating" to use for displaying
+		#user reported ratings in UI. If no user_rating default to -1
+		for four_id in foursq_ids_in_results.keys():
+			if four_id in ids_statuses.keys():
+				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
+				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]              
+			else:
+				foursq_ids_in_results[four_id]['user_rating'] 	= -1
+				foursq_ids_in_results[four_id]['expiration'] 	= "No Report"
+
+		print foursq_ids_in_results.values()
 		return foursq_ids_in_results.values()
 
 

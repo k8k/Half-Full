@@ -9,7 +9,6 @@ from datetime import datetime
 from user_reports_engine import expire_statuses
 from geocoder import Geocoder
 from specificsearch import SearchForVenue
-import constants as c
 from venue import Venue, VenueType
 from database_update import UpdateDatabase
 
@@ -24,7 +23,7 @@ app.secret_key= 'katescoolproject'
 @app.route("/", methods = ['POST', 'GET'])
 def half_full_home():
     """Home page. Basic search box with venue category options"""
-
+    expire_statuses
     return render_template("index.html")
 
 @app.route('/test')
@@ -70,7 +69,7 @@ def specific_venue_search():
     venue   = request.form.get('search_venue')
     city    = request.form.get('search_city')
 
-    venue_search = SearchForVenue().search_by_name_city(venue,city)
+    venue_search = SearchForVenue().specific_venue_status(venue,city)
     
     return render_template ('results.html',
                             foursquare_venues_by_latlong=venue_search,
@@ -87,8 +86,6 @@ def get_safe_report():
     venue_name      = request.form['venue-name-safe']
     foursquare_id   = request.form['foursquare-id-safe']
     venue_status    = '0'
-
-
     
     UpdateDatabase().add_new_rating(venue_name, foursquare_id ,venue_status)
 

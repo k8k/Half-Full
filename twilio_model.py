@@ -6,6 +6,7 @@ from specificsearch import SearchForVenue
 from user_report_model import Status, Session as SQLsession, connect
 from datetime import datetime
 from database_update import UpdateDatabase
+import re
 
 def update_db_from_twilio(venuename, venuecity):
     
@@ -40,31 +41,55 @@ class Twilio(object):
                 flasksession.clear()
             return str(response)
 
-    def new_user_report(self, body, response):
-        try:
-            body        = body.split(": ")
-            venue_name  = body[0].lower()
-            city        = body[1].lower()
-            busy_status = body[2].lower()
-        
-        except IndexError:
-            with response.message() as message:
-                message.body = "{0}".format(c.HELP_MESSAGE)
-                flasksession.clear()
-            return str(response)
+    def new_user_report(self,body,response):
+        body = filter(None, re.split("[:, ;]", body))
 
-        #querying foursquare for matching venues    
-        venues = update_db_from_twilio(venue_name, city)
-
-        if 'half' in busy_status:
-            status_code=0
-        elif 'slammed' in busy_status:
-            status_code=1
+        if body[-1] == 'slammed':
+            status_code = 1
+            body = body [:-1]
+        elif body[-1] == 'full':
+            status_code = 0
+            body = body[:-2]
         else:
             with response.message() as message:
                 message.body = "{0}".format(c.HELP_MESSAGE)
                 flasksession.clear()
-            return str(response)
+
+        print status_code
+        
+        try:
+            SearchForVenue().test_user_input(body[0]+' '+body[1])
+            city=body[0]+' '+body[1]
+            venue_name = body[2:]
+            print venue_name
+            venue_string = ''
+            for i in venue_name:
+                venue_string = venue_string+i +' '
+            venue_string = venue_string.strip()
+        except:
+            try:
+                SearchForVenue().test_user_input(body[0])
+                city = body[0]
+                venue_name = body[1:]
+                venue_string = ''
+                for i in venue_name:
+                    venue_string = venue_string+i +' '
+                venue_string = venue_string.strip()
+            except:
+                try:
+                    SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
+                    city=body[0]+' '+body[1]+' '+body[2]
+                    venue_name = body[3:]
+                    venue_string = ''
+                    for i in venue_name:
+                        venue_string = venue_string+i +' '
+                    venue_string = venue_string.strip()
+                except:
+                    with response.message() as message:
+                        message.body = "{0}".format(c.HELP_MESSAGE)
+                        flasksession.clear()  
+
+        venues = update_db_from_twilio(venue_string, city)
 
         flasksession['status_code']=status_code
         
@@ -99,11 +124,11 @@ class Twilio(object):
     # alternates offered if query only results in one response.
         if len(venues) > 1:
             with response.message() as message:
-                if 'slammed' in busy_status:
+                if status_code == 1:
                     message.body = "{0}\n{1}\n{2}".format(slammed_confirmation_message,
                                                 c.ALTERNATE_INTRO, alternate_string)
                     return unicode(response).encode("utf-8")
-                elif 'half' in busy_status:
+                elif status_code == 0:
                     message.body = "{0}\n{1}\n{2}".format(safe_confirmation_message,
                                                 c.ALTERNATE_INTRO, alternate_string)
                     return unicode(response).encode("utf-8")
@@ -111,17 +136,17 @@ class Twilio(object):
     # For queries that result in a single response. No alternates provided.
         elif len(venues) == 1:
             with response.message() as message:
-                if 'slammed' in busy_status:
+                if status_code == 1:
                     message.body = "{0}".format(slammed_confirmation_message)
-                elif 'half' in busy_status:
+                elif status_code == 0:
                     message.body = "{0}".format(safe_confirmation_message)
 
         else:
             with response.message() as message:
                 message.body = "{0}".format(c.HELP_MESSAGE)
 
-            flasksession.clear()
-
+        
+        flasksession.clear()
         return unicode(response).encode("utf-8")
 
             
