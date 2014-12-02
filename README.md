@@ -1,4 +1,4 @@
-Half Full
+<img src="/static/img/half-full-ss.png" alt="Half Full">
 =========
 #### Built by [Kate Kuchin](https://www.linkedin.com/in/katekuchin)
 Half Full is a web app for introverts, misanthropes, and people who people who might actually want a bit of elbow room at a bar. While there are many apps to help you find people, there are very few to help you avoid them: Half Full does just that.
