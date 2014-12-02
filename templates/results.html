@@ -62,12 +62,15 @@
             {% endif %}
         {% else %}
           {% if i['user_rating'] == 0 %}
-              <div class="ribbon-wrapper">
+              <div class="ribbon-wrapper-safe">
                 <div class="ribbon">HALF FULL</div>
               </div>
               
               <div class="hover-tile hover-tile-visible-safe" >
                 {{  i['name']  }}
+              </div>
+              <div class="ribbon-wrapper-safe">
+                <div class="ribbon">HALF FULL</div>
               </div>
 
               <div class="hover-tile hover-tile-hidden-safe">
@@ -78,11 +81,15 @@
               </div>
 
         {% elif i['user_rating'] == 1 %}
-              
+              <div class="ribbon-wrapper-avoid">
+                <div class="ribbon">SLAMMED</div>
+              </div>
               <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
               </div>
-
+              <div class="ribbon-wrapper-avoid">
+                <div class="ribbon">SLAMMED</div>
+              </div>
               <div class="hover-tile hover-tile-hidden-avoid">
                 <h5>{{ i['location']['formattedAddress'][0] }}</h5>
                 <h5>{{ i['location']['formattedAddress'][1] }}</h5>
@@ -120,6 +127,13 @@
 
     </div>
     <div class="card-copy">
+        <form id="user-report" action="/updatedatabase" method="post">
+            <span><input type="radio" name="venue-status-update" value="0">Half Full<br>
+            <input type="radio" name="venue-status-update" value="1">Slammed</span><br>
+            <input type="hidden" name="venue-name-update" value="{{ i['name'] }}">
+            <input type="hidden" name="foursquare-id-update" value="{{ i['id'] }}">
+            <button type="submit" name="submit-button-update">Report</button>
+          </form>
     
     </div>
     
@@ -133,10 +147,25 @@
           <span>Steps Away</span></li>
           {% endif %}
         <li>{{ i['stats']['checkinsCount']}}<span>Checkins Ever</span></li>
-        <li>Report<span>Is {{ i['name'] }} Half Full?</span>
+        <li>
+          <form id="user-report-slammed" action="/updatedatabaseslammed" method="post">
+            <input type="hidden" name="venue-name-slammed" value="{{ i['name'] }}">
+            <input type="hidden" name="foursquare-id-slammed" value="{{ i['id'] }}">
+            <button type="submit" name="submit-button-slammed">Slammed</button>
+          </form>
+        </li>
+        <li>
+            <form id="user-report-safe" action="/updatedatabasesafe" method="post">
+            <input type="hidden" name="venue-name-safe" value="{{ i['name'] }}">
+            <input type="hidden" name="foursquare-id-safe" value="{{ i['id'] }}">
+            <button type="submit" name="submit-button-safe">Half Full</button>
+          </form>
+        </li>
+        
         <li><a href='/venueinfo/{{  i["id"]  }}'> <button>More Info</button></a>
         </li>
       </ul>
+
     </div>
   </div>
 

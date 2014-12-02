@@ -148,7 +148,7 @@ $ochre:       #D0711D;
 }
 
 
-form {
+#user-preferences-form {
   font: $primary-font;
   text-align: center;
   color: $off-white;
@@ -719,9 +719,33 @@ td {
     }
   }
 
-  .ribbon-wrapper {
+  .ribbon-wrapper-safe {
     $ribbon-size: 85px;
-    $ribbon-background: $base-accent-color;
+    $ribbon-background: $light-teal;
+    @include size($ribbon-size);
+    overflow: hidden;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+
+    .ribbon {
+      font-size: .65em;
+      font-weight: 800;
+      text-align: center;
+      @include transform(rotate(45deg));
+      position: relative;
+      padding: 2px 7px;
+      left: -5px;
+      top: 15px;
+      width: 120px;
+      background-color: $ribbon-background;
+      color: white;
+      box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    }
+  }
+  .ribbon-wrapper-avoid {
+    $ribbon-size: 85px;
+    $ribbon-background: $coral;
     @include size($ribbon-size);
     overflow: hidden;
     position: absolute;
@@ -759,6 +783,7 @@ td {
     padding: $base-spacing/2 $gutter/2;
     font-size: .9em;
     line-height: 1.5em;
+    text-align: center;
   }
 
   .card-stats {

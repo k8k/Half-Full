@@ -312,7 +312,7 @@ html {
   margin: auto;
   border-radius: 5px; }
 
-form {
+#user-preferences-form {
   font: "Lato";
   text-align: center;
   color: #EFE7DA;
@@ -737,14 +737,14 @@ td {
       width: 100%;
       border-top-left-radius: 3px;
       border-top-right-radius: 3px; }
-  .card .ribbon-wrapper {
+  .card .ribbon-wrapper-safe {
     height: 85px;
     width: 85px;
     overflow: hidden;
     position: absolute;
     top: -1px;
     right: -1px; }
-    .card .ribbon-wrapper .ribbon {
+    .card .ribbon-wrapper-safe .ribbon {
       font-size: .65em;
       font-weight: 800;
       text-align: center;
@@ -758,7 +758,31 @@ td {
       left: -5px;
       top: 15px;
       width: 120px;
-      background-color: #477DCA;
+      background-color: #479F91;
+      color: white;
+      box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3); }
+  .card .ribbon-wrapper-avoid {
+    height: 85px;
+    width: 85px;
+    overflow: hidden;
+    position: absolute;
+    top: -1px;
+    right: -1px; }
+    .card .ribbon-wrapper-avoid .ribbon {
+      font-size: .65em;
+      font-weight: 800;
+      text-align: center;
+      -webkit-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      position: relative;
+      padding: 2px 7px;
+      left: -5px;
+      top: 15px;
+      width: 120px;
+      background-color: #FF5954;
       color: white;
       box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3); }
   .card .card-header {
@@ -775,7 +799,8 @@ td {
   .card .card-copy {
     padding: 0.75em 0.809em;
     font-size: .9em;
-    line-height: 1.5em; }
+    line-height: 1.5em;
+    text-align: center; }
   .card .card-stats {
     padding: 0.75em 0.809em;
     overflow: auto; }

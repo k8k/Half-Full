@@ -38,7 +38,7 @@ class Status(Base):
 
  
 def main():
-    """In case we need this for something"""
+
     pass
 
 if __name__ == "__main__":
