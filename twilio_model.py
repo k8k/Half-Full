@@ -59,7 +59,6 @@ class Twilio(object):
             SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
             city=body[0]+' '+body[1]+' '+body[2]
             venue_name = body[3:]
-            print venue_name
             venue_string = ''
             for i in venue_name:
                 venue_string = venue_string+i +' '
@@ -92,8 +91,8 @@ class Twilio(object):
         flasksession['status_code']=status_code
         
         flasksession['first_id'] = UpdateDatabase().add_new_rating(venues[0]['name'], venues[0]['id'], status_code)
-        print flasksession['first_id']
-            # UNICODE #
+        flasksession['first_id']
+
         alternate_options = []        
         for i in range(len(venues)):
             alternate_options.append(((venues[i]['name']).encode(), venues[i]['location']['formattedAddress'][0], venues[i]['id']))

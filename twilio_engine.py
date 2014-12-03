@@ -37,9 +37,7 @@ def new_user_report():
     # API using the parameters defined in the user's incoming test message
 	venues = update_db_from_twilio(venue_name, city, busy_status)
    
-    # TEST to make sure venues are coming out correctly
-	print venues
-    # UNICODE BUG THAT NEEDS TO BE FIXED LIVES HERE # 
+
 
 
     # List pulled from venues JSON object with Venue Name, Venue Address, 

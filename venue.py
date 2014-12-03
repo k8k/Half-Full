@@ -43,4 +43,3 @@ class VenueType(Enum):
 
 
 
-print Venue('40a55d80f964a52020f31ee3').info()
