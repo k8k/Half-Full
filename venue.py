@@ -2,6 +2,7 @@ import constants as c
 import foursquare
 from enum import Enum
 
+
 class Venue(object):
     """docstring for Venue"""
     def __init__(self, venue_id):
@@ -27,10 +28,12 @@ class VenueType(Enum):
     restaurant  = '4d4b7105d754a06374d81259'
     bar         = '4d4b7105d754a06376d81259'
     cafe        = '4bf58dd8d48988d1e0931735'
-    # potential coffee spots
+
+    # potential coffee shops
     coffee      = '4bf58dd8d48988d1e0931735'
     bakery      = '4bf58dd8d48988d16a941735'
     bagel_shop  = '4bf58dd8d48988d179941735'
+
     # bars
     nightlife   = '4d4b7105d754a06376d81259'
 

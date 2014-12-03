@@ -1,10 +1,7 @@
 {% extends 'index.html' %}
 {% block body %}
 
-
-
 <div class="spacer" style='height: 100px;'></div>
-
 
 <div class='card-container' style="width: 60%; margin: auto;"> 
   <div class="card">
@@ -19,10 +16,6 @@
       </div>
     </div>
     
-
-
-
-
       <ul class="accordion-name" style="text-align:center; font-size:1.25em;">
         <li>
           <a href="javascript:void(0)" style="" class="js-accordion-trigger">
@@ -32,7 +25,6 @@
               <a href="javascript:void(0)"> {{ info['venue']['location']['formattedAddress'][0] }}<br>
                 {{ info['venue']['location']['formattedAddress'][1] }}</a>
             </li>
-         
 
             <li>
               <a href="javascript:void(0)">
@@ -48,7 +40,6 @@
               </a>
             </li>
 
-          
              <li>
               <a href="javascript:void(0)"> {{ info['venue']['contact']['formattedPhone']}}<br>
                 <a href="{{ info['venue']['url'] }}">{{ info['venue']['url'] }}</a><br>
@@ -65,12 +56,6 @@
           </ul>
         </li>
       </ul>
-
-
-
-
-
-      
     
     <div class="card-copy">
       <div id="instagram-container">
@@ -80,9 +65,10 @@
     {% else %}
       {% for i in photos %}
         {% if i.get_standard_resolution_url()[-4:] == '.jpg' %}
-        <li><a href="#"><img src="{{ i.get_standard_resolution_url() }}"></a></li>
+        <li><a href=""><img src="{{ i.get_standard_resolution_url() }}"></a>
+        </li>
        {% elif i.get_standard_resolution_url()[-4:] == '.mp4' %}
-        <li><a href="#"><video>
+        <li><a href=""><video>
         <source src="{{ i.get_standard_resolution_url() }}" type="video/mp4"></a>
         </video>
         </li>
@@ -123,30 +109,4 @@ $('.js-accordion-trigger').bind('click', function(e){
 
 
 {%  endblock  %}
-<div style="background-color:white;">
-   {{ hours }} 
-  <br>
-  {{ info }}
-  <br>
-</div>
-
-
-
-      {% for i in photos %}
-        <img src="{{ i.get_standard_resolution_url() }}"><br>
-        LOCATION: {{ i.location }}<br>
-        CAPTION: {{ i. caption }}<br>
-        CREATED TIME: {{ i.created_time }}<br>
-        LIKE COUNT: {{ i.like_count }}<br>
-        LIKES: {{ i.likes }}<br>
-        COMMENT COUNT: {{ i.comment_count }}<br>
-      {% endfor %}
-
-      {% for i in hours %}
-        {{ i }}
-      {% endfor %}
-
-['__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', 'caption', 'comment_count', 'comments', 'created_time', 'filter', 'get_low_resolution_url', 'get_standard_resolution_url', 'get_thumbnail_url', 'id', 'images', 'like_count', 'likes', 'link', 'location', 'object_from_dictionary', 'tags', 'type', 'user', 'user_has_liked']
-
-  	</body>
 

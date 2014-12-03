@@ -1,9 +1,4 @@
-
-
-
 $(document).ready(function () {
-
-
 
 
 function initialize() {

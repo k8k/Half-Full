@@ -22,10 +22,9 @@ def connect():
 # Session = sessionmaker(bind=ENGINE)
 # ENGINE = create_engine("sqlite:///user-reports.db", echo=False)
 
-
 # Base.query = session.query_property()
 
-### Class declarations go here
+
 
 class Status(Base):
     __tablename__       = "statuses"

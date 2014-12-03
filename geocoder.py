@@ -1,7 +1,8 @@
 import requests
 
 class Geocoder(object):
-	"""Convert user-inputed location to lat long"""
+	"""Convert user-inputed location to lat long and translate that object
+	to a comma-delimited string that the Foursquare API can process"""
 	def __init__(self, user_location):
 		super(Geocoder, self).__init__()
 		self.user_location = user_location
@@ -14,5 +15,6 @@ class Geocoder(object):
 		user_latitude = str(user_latitude)
 
 		location = user_latitude + ',' + user_longitude
+		
 		return location
 

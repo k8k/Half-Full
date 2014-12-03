@@ -1122,4 +1122,32 @@ a {
   color: #4E4945;
   font-size: 1.5em; }
 
+.header-container {
+  padding-top: 50px; }
+
+#phone {
+  width: 60%;
+  margin: auto;
+  background-color: rgba(78, 73, 69, 0.9);
+  border-radius: 5px;
+  color: #EFE7DA; }
+
+#about-form {
+  font: "Lato";
+  text-align: center;
+  color: #EFE7DA;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  width: 90%; }
+
+#about-div {
+  background-color: rgba(78, 73, 69, 0.9);
+  width: 100%;
+  margin: auto;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28); }
+
 /*# sourceMappingURL=index.css.map */

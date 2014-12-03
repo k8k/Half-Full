@@ -2,11 +2,12 @@ from user_report_model import Status, Session as SQLsession, connect
 from datetime import datetime
 
 class UpdateDatabase(object):
-	"""docstring for UpdateDatabase"""
+	"""Updates the database to reflect user reports.
+
+	Is called by both the Twilio reporting mechanism as well as the UI."""
 	def __init__(self):
 		super(UpdateDatabase, self).__init__()
 
-		
 	def add_new_rating(self, venue_name, foursquare_id, status_code):
 		self.sqlsession 			= connect()
 		self.s 						= Status()

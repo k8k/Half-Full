@@ -55,7 +55,6 @@ class Twilio(object):
                 message.body = "{0}".format(c.HELP_MESSAGE)
                 flasksession.clear()
 
-        
         try:
             SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
             city=body[0]+' '+body[1]+' '+body[2]
@@ -117,7 +116,6 @@ class Twilio(object):
    
         slammed_confirmation_message    = """Thanks for letting us know that %s at %s is THE WORST. We'll let the other misanthropes know.""" % (primary_venue_name, primary_venue_address)
         safe_confirmation_message       = """Thanks for letting us know that %s at %s is a Safe Zone. We'll let the other misanthropes know.""" % (primary_venue_name, primary_venue_address)
-    # print len(venues)
 
     # Check to see if more than one venue in response. There will be no
     # alternates offered if query only results in one response.

@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class SearchForVenue(object):
-	"""docstring for SearchForVenue"""
+	"""Querying the Foursquare API for venues by lat long or by city and venue"""
 	def __init__(self):
 		super(SearchForVenue, self).__init__()
 		self.client 	= foursquare.Foursquare(client_id=c.FOURSQUARE_CLIENT_ID, client_secret=c.FOURSQUARE_CLIENT_SECRET)
@@ -32,16 +32,23 @@ class SearchForVenue(object):
 		query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
 		status_query = query.all()
 
-		ids_statuses = {i.foursquare_id : i.status for i in status_query}
+		ids_statuses 	= {i.foursquare_id : i.status for i in status_query}
+		expiration_info	= {i.foursquare_id : i.expiration_status for i in status_query}
+		report_time		= {i.foursquare_id : i.time for i in status_query}
+		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/3600) for i in status_query}
 
-
-		#Create a dict object in results object "user_rating" to use for displaying
-		#user reported ratings in UI. If no user_rating default to -1
+		# Adding information from user database into foursquare venue object
 		for four_id in foursq_ids_in_results.keys():
 			if four_id in ids_statuses.keys():
-				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]                
+				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
+				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]
+				foursq_ids_in_results[four_id]['report_time'] = report_time[four_id]
+				foursq_ids_in_results[four_id]['delta_time']  = delta_time[four_id]               
 			else:
-				foursq_ids_in_results[four_id]['user_rating'] = -1
+				foursq_ids_in_results[four_id]['user_rating'] 	= -1
+				foursq_ids_in_results[four_id]['expiration'] 	= "No Report"
+				foursq_ids_in_results[four_id]['report_time'] 	= "No Report"
+				foursq_ids_in_results[four_id]['delta_time'] 	= "No Report"
 
 		return foursq_ids_in_results.values()
 
@@ -78,8 +85,7 @@ class SearchForVenue(object):
 		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/3600) for i in status_query}
 
 
-		#Create a dict object in results object "user_rating" to use for displaying
-		#user reported ratings in UI. If no user_rating default to -1
+		# Adding information from user database into foursquare venue object
 		for four_id in foursq_ids_in_results.keys():
 			if four_id in ids_statuses.keys():
 				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
@@ -92,15 +98,14 @@ class SearchForVenue(object):
 				foursq_ids_in_results[four_id]['report_time'] 	= "No Report"
 				foursq_ids_in_results[four_id]['delta_time'] 	= "No Report"
 
-		print foursq_ids_in_results.values()
 		return foursq_ids_in_results.values()
 
 
 	def foursquare_search_by_category(self, latlng, category):
 
-	# Create a list of venue categories to exclude from results
+	# Create a list of venue categories to exclude from results (stripclubs)
 
-		blacklist = []
+		blacklist = ['4bf58dd8d48988d1d6941735']
 
 	# Create a dictionary that will be used to search 4sq DB of venues
 

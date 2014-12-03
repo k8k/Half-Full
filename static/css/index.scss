@@ -18,6 +18,7 @@ $grey:        #6A6965;
 $light-teal:  #479F91;
 $dark-teal:   #2B6D69;
 
+$light-coral: #FFB69F;
 $coral:       #FF5954;
 $dark-coral:  #FF1935;
 $crimson:     #D81639;
@@ -1243,3 +1244,35 @@ a {
   font-size: 1.5em;
 }
 
+
+.header-container {
+  padding-top: 50px;
+}
+
+#phone {
+  width: 60%;
+  margin: auto;
+  background-color: transparentize($off-black, .1);
+  border-radius: $border-radius;
+  color: $off-white;
+}
+// About Form
+#about-form {
+  font: $primary-font;
+  text-align: center;
+  color: $off-white;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  width: 90%;
+
+}
+#about-div {
+  background-color: transparentize($off-black, .1);
+  width: 100%;
+  margin:auto;
+  padding: 15px;
+  border-radius: $border-radius;
+  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}

@@ -2,11 +2,7 @@
   {% block body %}
 
 
-
 <div class="spacer" style='height: 50px;'></div>
-    
-
-
 <div class="spacer" style='height: 50px;'></div>
   <div class='card-container' style="width: 60%; margin: auto"> 
 
@@ -188,15 +184,8 @@
           <strong>Seems Safe</strong>
           {% endif %}
         {% endif %}
-  
-
-
 
     </div>
-    
-
-
-
 
 
     <div class="card-copy">
@@ -245,13 +234,6 @@
 
 </div>
 
-
-
-
-
-
-
-
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  
 <script>
 $('.safebtn').click(
@@ -270,34 +252,6 @@ $('.slambtn').click(
 
   });
 
-
 </script>
 {% endblock %}
-
-<div class="modal">
-              <label for="modal-1">
-                <div id='instapics' class="btn js-btn">More Info
-            </div>
-            </label>
-            <input class="modal-state" id="modal-1" id={{ i['id'] }} type="checkbox"/>
-            <div class="modal-window">
-            <div class="modal-inner">
-              <label class="modal-close" for="modal-1"></label>
-              <h3>{{  i['name']  }}</h3>
-              <p class="intro">
-                {{  i['location']['formattedAddress'][0] }}<br>
-                {{  i['location']['formattedAddress'][1] }}<br>
-              </p>
-
-              <p class="body"><a href="/venuepics/{{  i['id']  }}">{{  i['name']  }}</a></p>
-              
-              <div id='insta_container'></div>
-              <p class="body">Body text lorem ipsum dolor ipsum dolor sit sit possimus amet, consectetur adipisicing elit. Itaque, placeat, explicabo, veniam quos aperiam molestias eriam molestias molestiae suscipit ipsum enim quasi sit possimus quod atque nobis voluptas earum odit accusamus quibusdam.</p>
-              </div>
-            </div>
-          </div>
-
-  </body>
-
-</html>
 

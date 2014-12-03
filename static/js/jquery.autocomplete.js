@@ -5,7 +5,6 @@
 *  Ajax Autocomplete for jQuery is freely distributable under the terms of an MIT-style license.
 *  For details, see the web site: https://github.com/devbridge/jQuery-Autocomplete
 */
-
 /*jslint  browser: true, white: true, plusplus: true, vars: true */
 /*global define, window, document, jQuery, exports, require */
 
