@@ -18,7 +18,7 @@ One of my biggest pain points is wanting to leave my house, but not wanting to h
     - [Reporting in the UI](#reporting-in-the-UI)
     - [Reporting via Twilio](#reporting-via-twilio)
     - [Weighting reports](#weighting-reports)
-- [Cloning Half Full](#cloning-half-full)
+- [Thanks!](#thanks)
 
 #### Building Half Full
 Half Full was built in 4 weeks. Roughly, the breakdown of the project, week-by-week was:
@@ -163,6 +163,8 @@ The database is automatically updated with the information, which then is displa
 #### Reporting via Twilio
 Anticipating that users would most often make reports when they're out of the house, and often places without wifi or with slow data, Half Full includes a Twilio reporting mechanism that let's users easily report a venue by texting Half Full directly (at (209) 390-1996)
 
+<img src="/static/img/conversation1.png" alt="Initial Twilio Text Example">
+
 A user needs to simply text Half Full the city they are in, the name of the venue, and whether the venue is "Slammed" or "Half Full." While the user must send the information in that order(City, Venue Name, Slammed/Half Full), Half Full uses Regex to strip the message of any punctuation, and then interprets the message as follows:
  -  First, the status is identified, stored in a variable and then stripped from the body of the message
  -  Next, Half Full runs a test query using the first three words of the remaining message. If it is not able to geocode it, it runs the same test query with the first two words, and then finally the first. Once Foursquare is able to geocode the city, then that information it is stored in a variable and stripped from the body of the message.
@@ -197,3 +199,16 @@ A user needs to simply text Half Full the city they are in, the name of the venu
                         venue_string = venue_string+i +' '
                     venue_string = venue_string.strip()
 ``` 
+
+
+Once Half Full receives the text and has queried the Foursquare Venue API, the user report database is automatically updated with the best match from the Foursquare API.
+
+The user then receives a text message response, verifying that the report has been received. If there were more than one matching venues for their query, they can also reply to the message to alter their report.
+<img src="/static/img/conversation2.png" alt="Twilio Response Example">
+If a user chooses to alter their report, the initial entry in the database is deleted and it is replaced with the correct venue information.
+<img src="/static/img/conversation3.png" alt="Final Twilio Text Example">
+
+And voila! The user's entry is now updated in the database, and that information is immediately reflected on the Half Full UI.
+
+#### Thanks!
+Thanks for checking out my project -- if you have any feature ideas, any questsions at all about Half Full, or happen to work at OpenTable and feel like giving me access to your API, please shoot me an email: kate.kuchin@gmail.com
