@@ -1206,6 +1206,22 @@ a {
   color: $off-white;
 }
 
+.slambtn {
+  background-color: transparentize($burgundy, .3);
+  border: $burgundy 2px solid;
+  &:hover {
+    background-color: transparentize($crimson, .2);
+  }
+}
+
+.safebtn {
+  background-color: $light-teal;
+  border: $dark-teal 2px solid;
+  &:hover {
+    background-color: transparentize($light-teal, .2);
+  }
+}
+
 #slambtn {
   background-color: transparentize($burgundy, .3);
   border: $burgundy 2px solid;

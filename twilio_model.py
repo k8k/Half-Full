@@ -55,7 +55,6 @@ class Twilio(object):
                 message.body = "{0}".format(c.HELP_MESSAGE)
                 flasksession.clear()
 
-        print status_code
         
         try:
             SearchForVenue().test_user_input(body[0]+' '+body[1])

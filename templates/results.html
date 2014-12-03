@@ -222,14 +222,14 @@
           <form id="user-report-slammed" action="/updatedatabaseslammed" method="post">
             <input type="hidden" name="venue-name-slammed" value="{{ i['name'] }}">
             <input type="hidden" name="foursquare-id-slammed" value="{{ i['id'] }}">
-            <button type="submit" name="submit-button-slammed" id="slambtn">Slammed</button>
+            <button type="submit" name="submit-button-slammed" class="slambtn" id="slambtn">Slammed</button>
           </form>
         </li>
         <li>
             <form id="user-report-safe" action="/updatedatabasesafe" method="post">
             <input type="hidden" name="venue-name-safe" value="{{ i['name'] }}">
             <input type="hidden" name="foursquare-id-safe" value="{{ i['id'] }}">
-            <button type="submit" name="submit-button-safe" id="safebtn">Half Full</button>
+            <button type="submit" name="submit-button-safe" class="safebtn" id="safebtn">Half Full</button>
           </form>
         </li>
         
@@ -254,12 +254,22 @@
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  
 <script>
-$('#instapics').click(
+$('.safebtn').click(
+
   function(evt) {
    
-    alert("you clicked me!");
+    alert("Thanks for your report! We'll let everyone else know it's Half Full.");
 
   });
+
+$('.slambtn').click(
+
+  function(evt) {
+   
+    alert("Thanks for your report! We'll let everyone else know it's Slammed.");
+
+  });
+
 
 </script>
 {% endblock %}

@@ -1094,6 +1094,18 @@ div.spacer {
 a {
   color: #EFE7DA; }
 
+.slambtn {
+  background-color: rgba(151, 0, 5, 0.7);
+  border: #970005 2px solid; }
+  .slambtn:hover {
+    background-color: rgba(216, 22, 57, 0.8); }
+
+.safebtn {
+  background-color: #479F91;
+  border: #2B6D69 2px solid; }
+  .safebtn:hover {
+    background-color: rgba(71, 159, 145, 0.8); }
+
 #slambtn {
   background-color: rgba(151, 0, 5, 0.7);
   border: #970005 2px solid; }
