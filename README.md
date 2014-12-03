@@ -197,4 +197,3 @@ A user needs to simply text Half Full the city they are in, the name of the venu
                         venue_string = venue_string+i +' '
                     venue_string = venue_string.strip()
 ``` 
-<img src="/static/img/TwilioReport.gif" alt="Twilio Report">
