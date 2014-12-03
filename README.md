@@ -154,7 +154,7 @@ The first way users can report a venue is directly in the UI, on the results pag
 <img src="/static/img/report_slammed.png" alt="report-slammed">
 
 After the user makes the report, the are notified that Half Full has received their report:
-<img src="/static/img/notification_slammed.png" alt="notification-slammed">
+<img src="/static/img/notifcation_slammed.png" alt="notification-slammed">
 
 The database is automatically updated with the information, which then is displayed on the UI:
 
