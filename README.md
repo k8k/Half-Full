@@ -160,3 +160,40 @@ The database is automatically updated with the information, which then is displa
 
 <img src="/static/img/update_slammed.png" alt="update-slammed">
 
+#### Reporting via Twilio
+Anticipating that users would most often make reports when they're out of the house, and often places without wifi or with slow data, Half Full includes a Twilio reporting mechanism that let's users easily report a venue by texting Half Full directly (at (209) 390-1996)
+
+A user needs to simply text Half Full the city they are in, the name of the venue, and whether the venue is "Slammed" or "Half Full." While the user must send the information in that order(City, Venue Name, Slammed/Half Full), Half Full uses Regex to strip the message of any punctuation, and then interprets the message as follows:
+ -  First, the status is identified, stored in a variable and then stripped from the body of the message
+ -  Next, Half Full runs a test query using the first three words of the remaining message. If it is not able to geocode it, it runs the same test query with the first two words, and then finally the first. Once Foursquare is able to geocode the city, then that information it is stored in a variable and stripped from the body of the message.
+ -  Finally, the remaining message body is assumed to be the venue name, and it, along with the city name, are used to query for Foursquare API for matching venues.
+
+```
+        try:
+            SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
+            city=body[0]+' '+body[1]+' '+body[2]
+            venue_name = body[3:]
+            print venue_name
+            venue_string = ''
+            for i in venue_name:
+                venue_string = venue_string+i +' '
+            venue_string = venue_string.strip()
+        except:
+            try:
+                SearchForVenue().test_user_input(body[0]+' '+body[1])
+                city = body[0]+' '+body[1]
+                venue_name = body[2:]
+                venue_string = ''
+                for i in venue_name:
+                    venue_string = venue_string+i +' '
+                venue_string = venue_string.strip()
+            except:
+                try:
+                    SearchForVenue().test_user_input(body[0])
+                    city=body[0]
+                    venue_name = body[1:]
+                    venue_string = ''
+                    for i in venue_name:
+                        venue_string = venue_string+i +' '
+                    venue_string = venue_string.strip()
+``` 
