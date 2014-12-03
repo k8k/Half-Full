@@ -57,9 +57,9 @@ class Twilio(object):
 
         
         try:
-            SearchForVenue().test_user_input(body[0]+' '+body[1])
-            city=body[0]+' '+body[1]
-            venue_name = body[2:]
+            SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
+            city=body[0]+' '+body[1]+' '+body[2]
+            venue_name = body[3:]
             print venue_name
             venue_string = ''
             for i in venue_name:
@@ -67,18 +67,18 @@ class Twilio(object):
             venue_string = venue_string.strip()
         except:
             try:
-                SearchForVenue().test_user_input(body[0])
-                city = body[0]
-                venue_name = body[1:]
+                SearchForVenue().test_user_input(body[0]+' '+body[1])
+                city = body[0]+' '+body[1]
+                venue_name = body[2:]
                 venue_string = ''
                 for i in venue_name:
                     venue_string = venue_string+i +' '
                 venue_string = venue_string.strip()
             except:
                 try:
-                    SearchForVenue().test_user_input(body[0]+' '+body[1]+' '+body[2])
-                    city=body[0]+' '+body[1]+' '+body[2]
-                    venue_name = body[3:]
+                    SearchForVenue().test_user_input(body[0])
+                    city=body[0]
+                    venue_name = body[1:]
                     venue_string = ''
                     for i in venue_name:
                         venue_string = venue_string+i +' '
