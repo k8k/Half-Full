@@ -37,13 +37,14 @@ class QueryFoursquare(object):
 		return string_latlongs
 
 	def foursquare_query_sf(self):
-		query = self.lat_long_bounds(37.72, 37.8, -122.54,-122.38)
+		query = self.lat_long_bounds(37.73, 37.8, -122.54,-122.38)
 		print query
 		venues = []
 		for i in query:
-			venues.append(SearchForVenue().query_for_averages_db(i))
+			venues.append(SearchForVenue().foursquare_search_by_category(i,'4d4b7105d754a06376d81259'))
 
-		print venues[:3]
+		for i in venues:
+			print i['name']
 		return venues[:3]
 
 print SearchForVenue().query_for_averages_db('37.756479, -122.418717')
