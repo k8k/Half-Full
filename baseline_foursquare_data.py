@@ -89,7 +89,7 @@ class QueryFoursquare(object):
 		return string_latlongs
 
 	def foursquare_query_sf(self):
-		sf_coordinates = self.lat_long_bounds(37.73, 37.8, -122.54,-122.38)
+		sf_coordinates = self.lat_long_bounds(37.71, 37.82, -122.54,-122.38)
 		print sf_coordinates
 		venues = []
 		for i in sf_coordinates:
@@ -98,21 +98,23 @@ class QueryFoursquare(object):
 			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['coffee'].value))
 		
 
-		print venues
-		return venues
+		list_venues = []
+		for i in venues:
+			list_venues = list_venues + i
+		return list_venues
+
 
 	def test_query(self):
-		sf_coordinates = self.lat_long_bounds(37.73, 37.74, -122.54,-122.53)
-		print sf_coordinates
+		coordinates = self.lat_long_bounds(37.75, 37.79, -122.5,-122.46)
+		print coordinates
 		venues = []
-		for i in sf_coordinates:
+		for i in coordinates:
 			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['bar'].value))
 			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['restaurant'].value))
 			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['coffee'].value))
 		
 
 		list_venues = venues[0]+venues[1]+venues[2]
-		print list_venues
 		return list_venues
 
 	def update_venue_info(self):
@@ -137,4 +139,4 @@ class QueryFoursquare(object):
 			UpdateDatabase().add_new_checkins(venue_name, foursquare_id, checkins, time)
 
 QueryFoursquare().update_venue_info()
-QueryFoursquare().update_checkin_info()
+# QueryFoursquare().update_checkin_info()
