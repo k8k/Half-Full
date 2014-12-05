@@ -139,16 +139,18 @@ class SearchForVenue(object):
 		return categorized_list_of_venues
 
 
-	def query_for_averages_db(self, latlng):
+	def query_for_averages_db(self, latlng, category):
 		
 		params_dictionary =		{'ll': latlng,
 								'verified' : True,
 								'intent': 'checkin', 
 								'radius': '5000',
-								'limit': '100'}
+								'limit': '100',
+								'categoryId': category}
 
 		venues = self.client.venues.search(params=params_dictionary)
 		venues = venues['venues']
+		return venues
 
 
 

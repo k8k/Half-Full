@@ -6,6 +6,7 @@ from datetime import datetime
 import numpy as np
 import itertools
 from specificsearch import SearchForVenue
+from venue import VenueType
 
 
 class QueryFoursquare(object):
@@ -37,20 +38,19 @@ class QueryFoursquare(object):
 		return string_latlongs
 
 	def foursquare_query_sf(self):
-		query = self.lat_long_bounds(37.73, 37.8, -122.54,-122.38)
-		print query
+		sf_coordinates = self.lat_long_bounds(37.73, 37.8, -122.54,-122.38)
+		print sf_coordinates
 		venues = []
-		for i in query:
-			venues.append(SearchForVenue().foursquare_search_by_category(i,'4d4b7105d754a06376d81259'))
-
-		for i in venues:
-			print i['name']
-		return venues[:3]
-
-print SearchForVenue().query_for_averages_db('37.756479, -122.418717')
-print SearchForVenue().foursquare_search_by_category('37.756479, -122.418717','4d4b7105d754a06376d81259')
+		for i in sf_coordinates:
+			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['bar'].value))
+			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['restaurant'].value))
+			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['coffee'].value))
 
 
+		print len(venues)
+		return venues
 
+QueryFoursquare().foursquare_query_sf()
 
-
+sf_coordinates = QueryFoursquare().lat_long_bounds(37.73, 37.8, -122.54,-122.38)
+print len(sf_coordinates)
