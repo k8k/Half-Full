@@ -144,8 +144,8 @@ class SearchForVenue(object):
 		params_dictionary =		{'ll': latlng,
 								'verified' : True,
 								'intent': 'checkin', 
-								'radius': '5000',
-								'limit': '100',
+								'radius': '750',
+								'limit': '50',
 								'categoryId': category}
 
 		venues = self.client.venues.search(params=params_dictionary)

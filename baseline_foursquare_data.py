@@ -58,6 +58,9 @@ class UpdateDatabase(object):
 		self.sqlsession.add(self.c)
 		self.sqlsession.commit()
 
+	def commit_to_db(self):
+		return self.sqlsession.commit()
+
 
 
 class QueryFoursquare(object):
@@ -105,7 +108,7 @@ class QueryFoursquare(object):
 
 
 	def test_query(self):
-		coordinates = self.lat_long_bounds(37.75, 37.79, -122.5,-122.46)
+		coordinates = self.lat_long_bounds(37.75, 37.76, -122.5,-122.49)
 		print coordinates
 		venues = []
 		for i in coordinates:
@@ -119,6 +122,7 @@ class QueryFoursquare(object):
 
 	def update_venue_info(self):
 		venues = self.foursquare_query_sf()
+		self.sqlsession 	= connect()
 
 		for i in venues:
 			name 			= i['name']
@@ -126,17 +130,39 @@ class QueryFoursquare(object):
 			foursquare_id	= i['id']
 			latitude		= i['location']['lat']
 			longitude 		= i['location']['lng']
+			
 			UpdateDatabase().add_venue_info(name, category, foursquare_id, latitude, longitude)
+			self.sqlsession.add(self.c)
+
+		self.sqlsession.commit()
 
 	def update_checkin_info(self):
-		venues = self.foursquare_query_sf()
+		venues 						= self.foursquare_query_sf()
+		self.sqlsession 			= connect()
 
 		for i in venues:
-			venue_name 		= i['name']
-			foursquare_id	= i['id']
-			checkins		= i['hereNow']['count']
-			time			= datetime.utcnow()
-			UpdateDatabase().add_new_checkins(venue_name, foursquare_id, checkins, time)
+			venue_name 					= i['name']
+			foursquare_id				= i['id']
+			current_checkins			= i['hereNow']['count']
+			checkin_time				= datetime.utcnow()
 
-QueryFoursquare().update_venue_info()
-# QueryFoursquare().update_checkin_info()
+			self.c 						= Checkin()
+			self.c.venue_name			= venue_name
+			self.c.foursquare_id		= foursquare_id
+			self.c.current_checkins 	= current_checkins
+			self.c.checkin_time			= checkin_time
+			self.sqlsession.add(self.c)
+		
+		self.sqlsession.commit()
+			
+
+
+# QueryFoursquare().update_venue_info()
+QueryFoursquare().update_checkin_info()
+# UpdateDatabase().commit_to_db()
+
+
+
+
+
+
