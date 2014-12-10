@@ -73,12 +73,12 @@ class QueryFoursquare(object):
 		seed_lats	= np.arange(latmin,latmax,0.01).tolist()
 		latitudes 	= []
 		for i in seed_lats:
-			latitudes.append("{0:.2f}".format(i))
+			latitudes.append("{0:.3f}".format(i))
 
 		seed_longs	= np.arange(longmin,longmax,0.01).tolist()
 		longitudes 	= []
 		for i in seed_longs:
-			longitudes.append("{0:.2f}".format(i))
+			longitudes.append("{0:.3f}".format(i))
 
 		lat_longs = []
 		for i in latitudes:
@@ -93,7 +93,8 @@ class QueryFoursquare(object):
 
 	def foursquare_query_sf(self):
 		sf_coordinates = self.lat_long_bounds(37.71, 37.82, -122.54,-122.38)
-		print sf_coordinates
+		print len(sf_coordinates)
+		return sf_coordinates
 		venues = []
 		for i in sf_coordinates:
 			venues.append(SearchForVenue().query_for_averages_db(i, VenueType['bar'].value))
@@ -158,7 +159,7 @@ class QueryFoursquare(object):
 
 
 # QueryFoursquare().update_venue_info()
-QueryFoursquare().update_checkin_info()
+QueryFoursquare().foursquare_query_sf()
 # UpdateDatabase().commit_to_db()
 
 

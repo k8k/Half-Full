@@ -143,7 +143,7 @@ class SearchForVenue(object):
 		
 		params_dictionary =		{'ll': latlng,
 								'verified' : True,
-								'intent': 'checkin', 
+								'intent': 'search', 
 								'radius': '750',
 								'limit': '50',
 								'categoryId': category}
