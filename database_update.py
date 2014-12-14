@@ -1,4 +1,5 @@
-from user_report_model import Status, Session as SQLsession, connect
+# from user_report_model import Status, Session as SQLsession, connect
+from predictive_db_model import Status, Checkin, Venue, Session as SQLsession, connect
 from datetime import datetime
 
 class UpdateDatabase(object):

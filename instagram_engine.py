@@ -33,4 +33,18 @@ class InstagramSearch(object):
                         media_search = "No Media"
                         return media_search
 
+        def search_for_my_photos(self, user_id):
+                api = instagram_client.InstagramAPI(access_token=self.access_token)
+
+                media_search = api.user_recent_media(user_id)
+                media_search = media_search[0]
+                if len(media_search) > 0:
+                        return media_search
+                else:
+                        media_search = "No Media"
+                        return media_search
+
+print InstagramSearch().search_for_my_photos(34946503)
+
+
 

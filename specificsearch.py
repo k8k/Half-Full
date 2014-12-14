@@ -1,8 +1,10 @@
 import foursquare
 import os
-from user_report_model import Status, Session as SQLsession, connect
+# from user_report_model import Status, Session as SQLsession, connect
+from predictive_db_model import Status, Checkin, Venue, Session as SQLsession, connect
 import constants as c
 from datetime import datetime
+from collections import defaultdict
 
 
 class SearchForVenue(object):
@@ -25,32 +27,63 @@ class SearchForVenue(object):
 
 		#Dict comprehension of Foursquare IDs to check for matching entries in Database
 		foursq_ids_in_results = {i['id'] : i for i in foursquare_venues_by_latlong}
-		
-		
+
 		#Connect to database & check for venues that are in user-reported DB
-		sqlsession = connect()
-		query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
-		status_query = query.all()
+		sqlsession 		= connect()
+		statusquery 	= sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
+		status_query 	= statusquery.all()
+		checkinquery 	= sqlsession.query(Checkin).filter(Checkin.foursquare_id.in_(foursq_ids_in_results.keys()))
+		checkin_query	= checkinquery.all()
+		# print checkin_query
+
+		checkins_by_venue = []
+		for i in checkin_query:
+			checkins_by_venue.append((i.foursquare_id, i.current_checkins))
+
+		d = defaultdict(list)
+		for k,v in checkins_by_venue:
+			d[k].append(v)
+
+		checkins_by_venue = d.items()
+
+		avg_checkins = {i[0] : (sum(i[1])/len(i[1])) for i in checkins_by_venue}
 
 		ids_statuses 	= {i.foursquare_id : i.status for i in status_query}
 		expiration_info	= {i.foursquare_id : i.expiration_status for i in status_query}
 		report_time		= {i.foursquare_id : i.time for i in status_query}
-		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/3600) for i in status_query}
-
+		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/60) for i in status_query}
 		# Adding information from user database into foursquare venue object
 		for four_id in foursq_ids_in_results.keys():
 			if four_id in ids_statuses.keys():
-				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
-				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]
-				foursq_ids_in_results[four_id]['report_time'] = report_time[four_id]
-				foursq_ids_in_results[four_id]['delta_time']  = delta_time[four_id]               
+				foursq_ids_in_results[four_id]['user_rating'] 		= ids_statuses[four_id]
 			else:
-				foursq_ids_in_results[four_id]['user_rating'] 	= -1
-				foursq_ids_in_results[four_id]['expiration'] 	= "No Report"
-				foursq_ids_in_results[four_id]['report_time'] 	= "No Report"
-				foursq_ids_in_results[four_id]['delta_time'] 	= "No Report"
+				foursq_ids_in_results[four_id]['user_rating'] 		= -1
+			
+			if four_id in expiration_info.keys():
+				foursq_ids_in_results[four_id]['expiration']  		= expiration_info[four_id]
+			else:
+				foursq_ids_in_results[four_id]['expiration'] 		= "No Report"
+
+			if four_id in report_time.keys():
+				foursq_ids_in_results[four_id]['report_time'] 		= report_time[four_id]
+			else:
+				foursq_ids_in_results[four_id]['report_time'] 		= "No Report"
+
+			if four_id in delta_time.keys():
+				foursq_ids_in_results[four_id]['delta_time']  		= delta_time[four_id]
+
+			else:
+				foursq_ids_in_results[four_id]['delta_time'] 		= "No Report"
+
+			if four_id in avg_checkins.keys():
+				foursq_ids_in_results[four_id]['average_checkins'] 	= avg_checkins[four_id]
+			else:
+				foursq_ids_in_results[four_id]['average_checkins'] 	= "No Data"
+
+
 
 		return foursq_ids_in_results.values()
+
 
 	def likely_venues(self, venuename, venuecity):
 		likely_places = self.client.venues.search(params={'query': venuename,
@@ -75,29 +108,61 @@ class SearchForVenue(object):
 		
 		
 		#Connect to database & check for venues that are in user-reported DB
-		sqlsession = connect()
-		query = sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
-		status_query = query.all()
+		sqlsession 		= connect()
+		statusquery 	= sqlsession.query(Status).filter(Status.foursquare_id.in_(foursq_ids_in_results.keys()))
+		status_query 	= statusquery.all()
+		checkinquery 	= sqlsession.query(Checkin).filter(Checkin.foursquare_id.in_(foursq_ids_in_results.keys()))
+		checkin_query	= checkinquery.all()
+		# print checkin_query
+
+		checkins_by_venue = []
+		for i in checkin_query:
+			checkins_by_venue.append((i.foursquare_id, i.current_checkins))
+
+		d = defaultdict(list)
+		for k,v in checkins_by_venue:
+			d[k].append(v)
+
+		checkins_by_venue = d.items()
+
+		avg_checkins = {i[0] : (sum(i[1])/len(i[1])) for i in checkins_by_venue}
 
 		ids_statuses 	= {i.foursquare_id : i.status for i in status_query}
 		expiration_info	= {i.foursquare_id : i.expiration_status for i in status_query}
 		report_time		= {i.foursquare_id : i.time for i in status_query}
-		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/3600) for i in status_query}
-
+		delta_time		= {i.foursquare_id : int(((datetime.utcnow() - i.time).total_seconds())/60) for i in status_query}
 
 		# Adding information from user database into foursquare venue object
 		for four_id in foursq_ids_in_results.keys():
 			if four_id in ids_statuses.keys():
-				foursq_ids_in_results[four_id]['user_rating'] = ids_statuses[four_id]
-				foursq_ids_in_results[four_id]['expiration']  = expiration_info[four_id]
-				foursq_ids_in_results[four_id]['report_time'] = report_time[four_id]
-				foursq_ids_in_results[four_id]['delta_time']  = delta_time[four_id]               
+				foursq_ids_in_results[four_id]['user_rating'] 		= ids_statuses[four_id]
 			else:
-				foursq_ids_in_results[four_id]['user_rating'] 	= -1
-				foursq_ids_in_results[four_id]['expiration'] 	= "No Report"
-				foursq_ids_in_results[four_id]['report_time'] 	= "No Report"
-				foursq_ids_in_results[four_id]['delta_time'] 	= "No Report"
+				foursq_ids_in_results[four_id]['user_rating'] 		= -1
+			
+			if four_id in expiration_info.keys():
+				foursq_ids_in_results[four_id]['expiration']  		= expiration_info[four_id]
+			else:
+				foursq_ids_in_results[four_id]['expiration'] 		= "No Report"
 
+			if four_id in report_time.keys():
+				foursq_ids_in_results[four_id]['report_time'] 		= report_time[four_id]
+			else:
+				foursq_ids_in_results[four_id]['report_time'] 		= "No Report"
+
+			if four_id in delta_time.keys():
+				foursq_ids_in_results[four_id]['delta_time']  		= delta_time[four_id]
+
+			else:
+				foursq_ids_in_results[four_id]['delta_time'] 		= "No Report"
+
+			if four_id in avg_checkins.keys():
+				foursq_ids_in_results[four_id]['average_checkins'] 	= avg_checkins[four_id]
+			else:
+				foursq_ids_in_results[four_id]['average_checkins'] 	= "No Data"
+
+
+
+		print foursq_ids_in_results.values()
 		return foursq_ids_in_results.values()
 
 
@@ -112,8 +177,8 @@ class SearchForVenue(object):
 		results_dictionary =	{'ll': latlng,
 								'verified' : True,
 								'intent': 'checkin', 
-								'radius': '1000',
-								'limit': '15'}
+								'radius': '500',
+								'limit': '20'}
 		
 		# Check to see if there is a specified category - if so add to search
 		# dictionary

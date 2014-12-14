@@ -4,7 +4,8 @@ import twilio_model
 from instagram_engine import InstagramSearch
 import twilio.twiml
 from twilio.rest import TwilioRestClient
-from user_report_model import Status, Session as SQLsession, connect
+# from user_report_model import Status, Session as SQLsession, connect
+from predictive_db_model import Status, Checkin, Venue, Session as SQLSesstion, connect
 from datetime import datetime
 from user_reports_engine import expire_statuses
 from geocoder import Geocoder

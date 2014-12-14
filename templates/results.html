@@ -15,7 +15,7 @@
         <div class="hover-tile-container">
           
           {% if i['user_rating'] == -1 or i['expiration'] == "Expired" %}
-            {% if i['hereNow']['count'] > 2 %}
+            {% if i['hereNow']['count'] > i['average_checkins'] %}
               
                <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
@@ -28,7 +28,7 @@
                 <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
 
-            {% elif i['hereNow']['count'] > 0 %}
+            {% elif i['hereNow']['count'] == i['average_checkins'] %}
              
               <div class="hover-tile hover-tile-visible-caution" >
                 {{  i['name']  }}
@@ -98,7 +98,7 @@
 
         {% else %}
 
-          {% if i['user_rating'] == 0 and i['hereNow']['count'] > 1 %}
+          {% if i['user_rating'] == 0 and i['hereNow']['count'] - i['average_checkins'] > 1 %}
               <div class="hover-tile hover-tile-visible-caution" >
                 {{  i['name']  }}
               </div>
@@ -109,7 +109,7 @@
                 <p>{{ i['contact']['formattedPhone']}}
                 <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
-            {% elif i['user_rating'] == 1 and i['hereNow']['count'] < 2 %}
+            {% elif i['user_rating'] == 1 and i['hereNow']['count'] - i['average_checkins'] < 2 %}
               <div class="hover-tile hover-tile-visible-caution" >
                 {{  i['name']  }}
               </div>
@@ -120,7 +120,7 @@
                 <p>{{ i['contact']['formattedPhone']}}
                 <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
-            {% elif i['user_rating'] == 1 and i['hereNow']['count'] > 1 %}
+            {% elif i['user_rating'] == 1 and i['hereNow']['count'] - i['average_checkins'] > 1 %}
               <div class="hover-tile hover-tile-visible-avoid" >
                 {{  i['name']  }}
               </div>
@@ -131,7 +131,7 @@
                 <p>{{ i['contact']['formattedPhone']}}
                 <p><a href="{{ i['url'] }}">{{ i['url'] }}</a></p>
               </div>
-            {% elif i['user_rating'] == 0 and i['hereNow']['count'] < 2 %}
+            {% elif i['user_rating'] == 0 and i['hereNow']['count'] - i['average_checkins'] < 2 %}
               <div class="hover-tile hover-tile-visible-safe" >
                 {{  i['name']  }}
               </div>
@@ -155,33 +155,42 @@
 
        {% if i['user_rating'] == -1 or i['expiration'] == "Expired" %}
 
-          {% if i['hereNow']['count'] > 2 %}
-              <strong>AVOID.</strong>
-          {% elif i['hereNow']['count'] > 0 %}
-              <strong>Proceed With Caution.</strong>
+          {% if i['hereNow']['count'] > i['average_checkins'] %}
+              AVOID.<br>
+              <span style="font-size: 0.8em">More Checkins than Average.</span>
+          {% elif i['hereNow']['count'] == i['average_checkins'] %}
+              Proceed With Caution.<br>
+              <span style="font-size: 0.8em">Average Checkins.</span>
           {% else %}
-              <strong>Half Full.</strong>
+              HALF FULL.<br>
+              <span style="font-size: 0.8em">Fewer Checkins than Average.</span>
           {% endif %}
       
       {% elif i['expiration'] == "Fresh" %}
 
         {% if i['user_rating'] == 0 %}
-            <strong>Your fellow misanthropes report this place is Half Full.</strong>
+            HALF FULL.<br>
+            <span style="font-size: 0.8em">Reported {{ i['delta_time']}} Minutes Ago.</span>
         {% elif i['user_rating'] == 1 %}
-            <strong>AVOID AT ALL COSTS.</strong>
+            AVOID AT ALL COSTS<br>
+            <span style="font-size: 0.8em"> Reported to be Slammed {{ i['delta_time'] }} Minutes Ago.</span>
         {% endif %}
 
       {% elif i['expiration'] == "Stale" %}
         
-        {% if i['user_rating'] == 0 and i['hereNow']['count'] > 1 %}
-          <strong>Proceed With Caution. Looks busy now</strong>
-        {% elif i['user_rating'] == 1 and i['hereNow']['count'] < 2 %}
-          <strong>Proceed With Caution. Was slammed {{ i['delta_time'] }} hours ago.</strong>
-        {% elif i['user_rating'] == 1 and i['hereNow']['count'] > 1 %}
-          <strong>AVOID. Looks busy, and {{ i[time_delta] }} was reported to be slammed.
-          </strong>
-        {% elif i['user_rating'] == 0 and i['hereNow']['count'] < 2 %}
-          <strong>Seems Safe</strong>
+        {% if i['user_rating'] == 0 and i['hereNow']['count'] > i['average_checkins'] %}
+          Proceed With Caution.<br>
+          <span style="font-size: 0.8em">More Checkins than Average, but was Half Full {{ i['delta_time'] }} Minutes Ago.</span>
+        {% elif i['user_rating'] == 1 and i['hereNow']['count'] < i['average_checkins'] %}
+          Proceed With Caution.<br>
+          <span style="font-size: 0.8em">Fewer Checkins than Average, but was slammed {{ i['delta_time'] }} Minutes Ago.</span>
+        {% elif i['user_rating'] == 1 and i['hereNow']['count'] > i['average_checkins']%}
+          AVOID.<br>
+          <span style="font-size: 0.8em">More Checkins than Average, and was slammed {{ i['delta_time'] }} Minutes Ago.</span>
+          
+        {% elif i['user_rating'] == 0 and i['hereNow']['count'] < i['average_checkins'] %}
+          Seems Safe.<br>
+          <span style="font-size: 0.8em">Fewer Checkins than Average, and was Half Full {{ i['delta_time'] }} Minutes Ago.</span>
           {% endif %}
         {% endif %}
 
@@ -195,9 +204,18 @@
     <div class="card-stats">
       <ul>
         {% if i['delta_time'] == "No Report" %}
-        <li>0<span>User Reports</span></li>
-        {% else %}
-        <li> {{ i['delta_time'] }}<span>Hours Ago</li>
+        <li>No<span>User Reports</span></li>
+        {% else %} 
+          {% if i['delta_time'] > 10080 %}
+            <li> {{ i['delta_time'] // 60 }} Weeks<span>Last Report</li>
+          {% elif i['delta_time'] > 1440 %}
+            <li> {{ i['delta_time'] // 60 }} Days<span>Last Report</li>
+          {% elif i['delta_time'] > 120 %}
+            <li> {{ i['delta_time'] // 60 }} Hours<span>Last Report</li>
+          {% else %}
+            <li> {{ i['delta_time'] }} Mins<span>Last Report</li>
+          {% endif %}
+
         {% endif %}
         {% if (((i['location']['distance'])/0.75)|int) == 0 %}
             <li>{{ i['location']['city'] }}<span>{{ i['location']['formattedAddress'][0] }}</span></li>
@@ -236,7 +254,7 @@
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>  
 <script>
-$('.safebtn').click(
+  $('.safebtn').click(
 
   function(evt) {
    
@@ -252,6 +270,8 @@ $('.slambtn').click(
 
   });
 
-</script>
+</script> 
+
+
 {% endblock %}
 
